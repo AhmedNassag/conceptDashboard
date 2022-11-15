@@ -70,7 +70,6 @@ class AuthController extends Controller
                 }else{
                     return $this->sendError(trans('general.forget'));
                 }
-
             }else{
 
                 return $this->sendError(trans('general.forget'));

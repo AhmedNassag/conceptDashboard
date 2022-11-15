@@ -336,6 +336,14 @@ use Illuminate\Support\Facades\Route;
              // Notification App
              Route::resource('notificationApp','NotificationAppController');
 
+             // order Filter Wax
+             Route::resource('filterWax','FilterWaxController');
+
+             // order Spare Part
+             Route::resource('sparePart','SparePartController');
+
+
+
          });
 
      });

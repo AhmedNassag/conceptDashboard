@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
 
     protected $guarded = ['id'];
 
@@ -103,6 +105,18 @@ class Product extends Model
 
     public function orderRetuen(){
         return $this->hasMany(OrderRetuen::class);
+    }
+
+    public function sparePart(){
+        return $this->belongsToMany(SparePart::class,'spare_part_products');
+    }
+
+    public function filterWax(){
+        return $this->belongsToMany(FilterWax::class,'filter_wax_products');
+    }
+
+    public function maintenance(){
+        return $this->hasOne(Maintenance::class);
     }
 
 }
