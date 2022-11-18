@@ -168,6 +168,24 @@
                             </li>
 
                             <li
+                                :class="[{'active': ['indexFilterWax','createFilterWax','editFilterWax'].includes($route.name)}]"
+                                v-if="permission.includes('sellingMethod read')"
+                            >
+                                <router-link :to="{name:'indexFilterWax'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t('global.wax') }}
+                                </router-link>
+                            </li>
+
+                            <li
+                                :class="[{'active': ['indexSparePart','createSparePart','editSparePart'].includes($route.name)}]"
+                                v-if="permission.includes('sellingMethod read')"
+                            >
+                                <router-link :to="{name:'indexSparePart'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t('global.SparePart') }}
+                                </router-link>
+                            </li>
+
+                            <li
                                 :class="[{'active': ['indexProduct','createProduct','editProduct'].includes($route.name)}]"
                                 v-if="permission.includes('product read')"
                             >

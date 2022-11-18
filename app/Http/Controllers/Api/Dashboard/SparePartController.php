@@ -26,7 +26,7 @@ class SparePartController extends Controller
         })
             ->latest()->paginate(10);
 
-        return $this->sendResponse(['sparePart' => $sparePart], 'Data exited successfully');
+        return $this->sendResponse(['spareParts' => $sparePart], 'Data exited successfully');
     }
 
 

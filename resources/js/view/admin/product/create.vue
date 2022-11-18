@@ -200,6 +200,75 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
+                                                <label >البيع</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    multiple
+                                                    v-model="v$.selling_method.$model"
+                                                    :class="{'is-invalid':v$.selling_method.$error,'is-valid':!v$.selling_method.$invalid}"
+                                                >
+                                                    <option v-for="sparePart in spareParts" :value="sparePart.id" :key="sparePart.id">
+                                                        {{ sparePart.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.selling_method.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label >البيع</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    multiple
+                                                    v-model="v$.selling_method.$model"
+                                                    :class="{'is-invalid':v$.selling_method.$error,'is-valid':!v$.selling_method.$invalid}"
+                                                >
+                                                    <option v-for="filterWax in filterWaxes" :value="filterWax.id" :key="filterWax.id">
+                                                        {{ filterWax.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.selling_method.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom055">حد اعادة الطلب</label>
+                                                <input
+                                                    type="number" class="form-control"
+                                                    v-model.trim="v$.Re_order_limit.$model"
+                                                    id="validationCustom055"
+                                                    placeholder="حد اعادة الطلب"
+                                                    :class="{'is-invalid':v$.Re_order_limit.$error,'is-valid':!v$.Re_order_limit.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.Re_order_limit.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.Re_order_limit.integer.$invalid"> يجب ان يكون رقم  <br /></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>اقصي كمية فى المخزن</label>
+                                                <input
+                                                    type="number" class="form-control"
+                                                    v-model.trim="v$.maximum_product.$model"
+                                                    placeholder="اقصي كمية فى المخزن"
+                                                    :class="{'is-invalid':v$.maximum_product.$error,'is-valid':!v$.maximum_product.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.maximum_product.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.maximum_product.integer.$invalid"> يجب ان يكون رقم  <br /></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
                                                 <label>اماكن ظهور المنتج</label>
                                                 <select
                                                     name="type"
@@ -400,6 +469,8 @@ export default {
         let companies = ref([]);
         let categories = ref([]);
         let subCategories = ref([]);
+        let spareParts = ref([]);
+        let filterWaxes = ref([]);
         let measures = ref([]);
         let sellingMethods = ref([]);
         let stores = ref([]);
@@ -413,17 +484,21 @@ export default {
                 description : '',
                 image : {},
                 files : [],
+                maximum_product: null,
+                Re_order_limit: null,
                 category_id: null,
                 sub_category_id: null,
                 company_id: null,
                 main_measurement_unit_id: null,
                 sub_measurement_unit_id: null,
                 selling_method: [],
+                filterWaxes: [],
                 sell_app:1,
                 quantity:0,
                 sub_quantity:0,
                 price:0,
                 sub_price:0,
+                sparePart: [],
                 mainUnitMeasurement:'',
                 subUnitMeasurement:'',
                 store_id:1,
@@ -441,6 +516,8 @@ export default {
                     measures.value = l.measures;
                     sellingMethods.value = l.sellingMethods;
                     stores.value = l.stores;
+                    filterWaxes.value = l.filterWaxes;
+                    spareParts.value = l.spareParts;
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -480,11 +557,25 @@ export default {
                     required,
                     integer
                 },
+                Re_order_limit: {
+                    required,
+                    integer
+                },
+                maximum_product: {
+                    required,
+                    integer
+                },
                 description: {required},
                 image: {
                     required
                 },
                 files: {
+                    required
+                },
+                sparePart:{
+                    required
+                },
+                filterWaxes: {
                     required
                 },
                 category_id: {
@@ -531,7 +622,7 @@ export default {
                 },
                 store_id:{
                     required
-                },
+                }
             }
         });
 
@@ -639,7 +730,9 @@ export default {
             measures,
             subCategories,
             getSubCategory,
-            sellingMethods
+            sellingMethods,
+            spareParts,
+            filterWaxes
         };
     },
     methods: {
@@ -660,6 +753,10 @@ export default {
                 formData.append('barcode',this.data.barcode);
                 formData.append('count_unit',this.data.count_unit);
                 formData.append('description',this.data.description);
+                formData.append('maximum_product',this.data.maximum_product);
+                formData.append('Re_order_limit',this.data.Re_order_limit);
+                formData.append('sparePart',this.data.spareParts);
+                formData.append('filterWaxes',this.data.filterWaxes);
                 formData.append('category_id',this.data.category_id);
                 formData.append('sub_category_id',this.data.sub_category_id);
                 formData.append('company_id',this.data.company_id);
@@ -707,6 +804,8 @@ export default {
             this.data.name = '';
             this.data.barcode = '';
             this.data.count_unit = null;
+            this.data.maximum_product = null;
+            this.data.Re_order_limit = null;
             this.data.description = '';
             this.data.image= {};
             this.data.files = [];
@@ -716,11 +815,13 @@ export default {
             this.data.main_measurement_unit_id = null;
             this.data.sub_measurement_unit_id = null;
             this.data.selling_method = [];
+            this.data.sparePart = [];
             this.data.sell_app = 1;
             this.data.quantity = 0;
             this.data.sub_quantity = 0;
             this.data.price = 0;
             this.data.sub_price = 0;
+            this.data.filterWaxes = [];
             this.data.store_id = 1;
             this.data.mainUnitMeasurement = '';
             this.data.subUnitMeasurement = '';

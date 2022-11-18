@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->string('model')->nullable();
             $table->string('made_of')->nullable();
             $table->string('quality')->nullable();
+            $table->integer('Re_order_limit');
+            $table->integer('maximum_product');
             $table->unsignedBigInteger('barcode')->unique()->nullable();
             $table->text('image')->nullable();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();

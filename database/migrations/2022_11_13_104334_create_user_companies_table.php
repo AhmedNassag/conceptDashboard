@@ -16,6 +16,7 @@ class CreateUserCompaniesTable extends Migration
         Schema::create('user_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('job')->nullable();
             $table->text('address')->nullable();
             $table->string('phone_second')->nullable();
             $table->text('facebook')->nullable();

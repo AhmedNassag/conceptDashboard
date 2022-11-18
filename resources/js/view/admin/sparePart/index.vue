@@ -6,14 +6,14 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">طرق البيع</h3>
+                        <h3 class="page-title">{{ $t('global.SparePart') }}</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <router-link :to="{name: 'dashboard'}">
                                     الرئيسية
                                 </router-link>
                             </li>
-                            <li class="breadcrumb-item active">طرق البيع</li>
+                            <li class="breadcrumb-item active">{{ $t('global.SparePart') }}</li>
                         </ul>
                     </div>
 
@@ -33,12 +33,12 @@
                                         <input type="search" v-model="search" class="custom"/>
                                     </div>
                                     <div class="col-5 row justify-content-end">
-<!--                                        <router-link-->
-<!--                                            v-if="permission.includes('sellingMethod create')"-->
-<!--                                           :to="{name: 'createSellingMethod'}"-->
-<!--                                            class="btn btn-custom btn-warning">-->
-<!--                                            اضافه-->
-<!--                                        </router-link>-->
+                                        <router-link
+                                            v-if="permission.includes('sellingMethod create')"
+                                           :to="{name: 'createSparePart'}"
+                                            class="btn btn-custom btn-warning">
+                                            اضافه
+                                        </router-link>
                                     </div>
                                 </div>
                             </div>
@@ -47,40 +47,31 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>اسم نوع البيع</th>
-                                        <th>{{ $t('global.LowestPurchaseValue') }}</th>
+                                        <th>اسم قطعه الغيار</th>
+                                        <th>{{ $t('global.price') }}</th>
                                         <th>تاريخ الانشاء</th>
-                                        <th>{{ $t('global.Status') }}</th>
-                                        <th>الاجراءات</th>
                                     </tr>
                                     </thead>
-                                    <tbody v-if="sellingMethods.length">
-                                    <tr v-for="(item,index) in sellingMethods"  :key="item.id">
+                                    <tbody v-if="spareParts.length">
+                                    <tr v-for="(item,index) in spareParts"  :key="item.id">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.name }}</td>
-                                        <td>{{item.order_amount}}</td>
+                                        <td>{{item.price}}</td>
                                         <td>{{ dateFormat(item.created_at) }}</td>
 
                                         <td>
-                                            <a href="#" @click="activationJob(item.id,item.name,item.status,index)">
-                                                <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">{{
-                                                        parseInt(item.status) ? $t('global.Active') : $t('global.Inactive')
-                                                    }}</span>
-                                            </a>
-                                        </td>
-                                        <td>
 
                                             <router-link
-                                                :to="{name: 'editSellingMethod',params:{id:item.id}}"
+                                                :to="{name: 'editSparePart',params:{id:item.id}}"
                                                v-if="permission.includes('sellingMethod edit')"
                                                class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
-<!--                                            <a href="#" @click="deleteSellingMethods(item.id,index)"-->
-<!--                                                v-if="permission.includes('sellingMethod delete')"-->
-<!--                                               data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">-->
-<!--                                                <i class="far fa-trash-alt"></i>-->
-<!--                                            </a>-->
+                                            <a href="#" @click="deleteSpareParts(item.id,index)"
+                                                v-if="permission.includes('sellingMethod delete')"
+                                               data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
                                         </td>
 
                                     </tr>
@@ -98,7 +89,7 @@
             </div>
             <!-- /Table -->
             <!-- start Pagination -->
-            <Pagination :limit="2" :data="sellingMethodsPaginate" @pagination-change-page="getSellingMethod">
+            <Pagination :limit="2" :data="sparePartsPaginate" @pagination-change-page="getSparePart">
                 <template #prev-nav>
                     <span>&lt; السابق</span>
                 </template>
@@ -124,22 +115,22 @@ export default {
 
         const {t} = useI18n({});
         // get packages
-        let sellingMethods = ref([]);
-        let sellingMethodsPaginate = ref({});
+        let spareParts = ref([]);
+        let sparePartsPaginate = ref({});
         let loading = ref(false);
         const search = ref('');
         let store = useStore();
 
         let permission = computed(() => store.getters['authAdmin/permission']);
 
-        let getSellingMethod = (page = 1) => {
+        let getSparePart = (page = 1) => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/sellingMethod?page=${page}&search=${search.value}`)
+            adminApi.get(`/v1/dashboard/sparePart?page=${page}&search=${search.value}`)
                 .then((res) => {
                     let l = res.data.data;
-                    sellingMethodsPaginate.value = l.sellingMethods;
-                    sellingMethods.value = l.sellingMethods.data;
+                    sparePartsPaginate.value = l.spareParts;
+                    spareParts.value = l.spareParts.data;
                 })
                 .catch((err) => {
                     console.log(err.response.data);
@@ -150,12 +141,12 @@ export default {
         }
 
         onMounted(() => {
-            getSellingMethod();
+            getSparePart();
         });
 
         watch(search, (search, prevSearch) => {
             if (search.length >= 0) {
-                getSellingMethod();
+                getSparePart();
             }
         });
 
@@ -170,8 +161,7 @@ export default {
             return st;
         };
 
-
-        function deleteSellingMethods(id, index) {
+        function deleteSpareParts(id, index) {
             Swal.fire({
                 title: `هل تريد هذف هذا العنصر ؟ `,
                 text: `لن تتمكن من التراجع عن هذا`,
@@ -183,9 +173,9 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    adminApi.delete(`/v1/dashboard/sellingMethod/${id}`)
+                    adminApi.delete(`/v1/dashboard/sparePart/${id}`)
                         .then((res) => {
-                            sellingMethods.value.splice(index, 1);
+                            spareParts.value.splice(index, 1);
 
                             Swal.fire({
                                 icon: 'success',
@@ -205,40 +195,7 @@ export default {
             });
         }
 
-        function activationJob(id, jobName, status,index) {
-            Swal.fire({
-                title: `${status ? t('global.AreYouSureInactive') :t('global.AreYouSureActive')}  (${jobName})`,
-                text: `${t("global.YouWontBeAbleToRevertThis")}`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    adminApi.get(`/v1/dashboard/activationSellingMethod/${id}`)
-                        .then((res) => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: `${status ? t('global.InactiveSuccessfully') :t('global.ActiveSuccessfully')}`,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            sellingMethods.value[index]['status'] =  status ? 0:1
-                        })
-                        .catch((err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: `${t('global.ThereIsAnErrorInTheSystem')}`,
-                                text: `${t('global.YouCanNotModifyThisSafe')}`,
-                            });
-                        });
-                }
-            });
-        }
-
-        return {dateFormat,sellingMethods, loading,permission, activationJob,getSellingMethod, search, deleteSellingMethods, sellingMethodsPaginate};
+        return {dateFormat,spareParts, loading,permission,getSparePart, search, deleteSpareParts, sparePartsPaginate};
 
     },
     data() {

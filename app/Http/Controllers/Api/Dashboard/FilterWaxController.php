@@ -20,14 +20,14 @@ class FilterWaxController extends Controller
      */
     public function index(Request $request)
     {
-        $measures = FilterWax::
+        $filterWaxes = FilterWax::
         when($request->search, function ($q) use ($request) {
             return $q->where('name', 'like', '%' . $request->search . '%');
 
         })
         ->latest()->paginate(10);
 
-        return $this->sendResponse(['measures' => $measures], 'Data exited successfully');
+        return $this->sendResponse(['filterWaxes' => $filterWaxes], 'Data exited successfully');
     }
 
 

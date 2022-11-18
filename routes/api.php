@@ -342,8 +342,6 @@ use Illuminate\Support\Facades\Route;
              // order Spare Part
              Route::resource('sparePart','SparePartController');
 
-
-
          });
 
      });

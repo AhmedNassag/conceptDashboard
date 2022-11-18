@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\FilterWax;
 use App\Models\MeasurementUnit;
 use App\Models\Media;
 use App\Models\Product;
 use App\Models\ProductPricing;
 use App\Models\PurchaseProduct;
 use App\Models\SellingMethod;
+use App\Models\SparePart;
 use App\Models\Store;
 use App\Models\StoreProduct;
 use App\Models\Tax;
@@ -111,13 +113,17 @@ class ProductController extends Controller
             $measures = MeasurementUnit::select('id', 'name')->get();
             $sellingMethods = SellingMethod::select('id', 'name')->get();
             $stores = Store::where('status',1 )->get();
+            $filterWaxes = FilterWax::get();
+            $spareParts = SparePart::get();
 
             return $this->sendResponse([
                 'companies' => $companies,
                 'categories' => $categories,
                 'measures' => $measures,
                 'sellingMethods' => $sellingMethods,
-                'stores' => $stores
+                'stores' => $stores,
+                "filterWaxes" => $filterWaxes,
+                "spareParts" => $spareParts
             ], 'Data exited successfully');
 
         } catch (\Exception $e) {
@@ -275,6 +281,8 @@ class ProductController extends Controller
             $categories = Category::where('parent_id', 0)->select('id', 'name')->get();
             $measures = MeasurementUnit::select('id', 'name')->get();
             $sellingMethods = SellingMethod::select('id', 'name')->get();
+            $filterWaxes = FilterWax::get();
+            $spareParts = SparePart::get();
             $sellingMethodChange = $product->selling_method;
             $stores = Store::where('status',1 )->get();
             $storeProduct = $product->storeProducts()->first();
@@ -290,6 +298,8 @@ class ProductController extends Controller
                 'stores' => $stores,
                 'storeProduct' => $storeProduct,
                 'purchaseProducts' => $purchaseProducts,
+                "filterWaxes" => $filterWaxes,
+                "spareParts" => $spareParts
             ], 'Data exited successfully');
 
         } catch (\Exception $e) {

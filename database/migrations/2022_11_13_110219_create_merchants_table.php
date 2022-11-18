@@ -17,6 +17,10 @@ class CreateMerchantsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->text('address')->nullable();
+            $table->string('delegateCard')->nullable();
+            $table->string('commercialRegister')->nullable();
+            $table->string('taxCard')->nullable();
+            $table->string('valueAdded')->nullable();
             $table->timestamps();
         });
     }

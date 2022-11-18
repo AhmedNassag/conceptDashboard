@@ -5,6 +5,7 @@ import supplier from './adminRoute/supplier';
 import category from './adminRoute/category';
 import company from './adminRoute/company';
 import job from './adminRoute/job';
+import filterWax from './adminRoute/filterWax';
 import role from './adminRoute/role';
 import employee from './adminRoute/employee';
 import measure from './adminRoute/measure';
@@ -72,6 +73,7 @@ import purchaseReturnIncomes from "./adminRoute/purchaseReturnIncomes";
 import orderOnline from "./adminRoute/orderOnline";
 import orderReturned from "./adminRoute/orderReturned";
 import orderDelivered from "./adminRoute/orderDelivered";
+import sparePart from "./adminRoute/sparePart";
 import orderIncomes from "./adminRoute/orderIncomes";
 import SupplierAccountStatement from "./adminRoute/SupplierAccountStatement";
 import ClientAccountStatement from "./adminRoute/ClientAccountStatement";
@@ -197,7 +199,9 @@ const routes = [
             ...orderIncomes,
             ...SupplierAccountStatement,
             ...ClientAccountStatement,
-            ...addNotificationApp
+            ...addNotificationApp,
+            ...filterWax,
+            ...sparePart
         ]
     },
     {

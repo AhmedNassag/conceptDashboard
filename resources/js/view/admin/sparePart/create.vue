@@ -9,10 +9,10 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">طرق البيع</h3>
+                        <h3 class="page-title">{{ $t('global.SparePart') }}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexSellingMethod'}">وحده القياس</router-link></li>
-                            <li class="breadcrumb-item active">اضافه طريقه البيع</li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexSparePart'}">{{ $t('global.SparePart') }}</router-link></li>
+                            <li class="breadcrumb-item active">اضافه</li>
                         </ul>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="card-header pt-0 mb-4">
                                 <router-link
-                                    :to="{name: 'indexSellingMethod'}"
+                                    :to="{name: 'indexSparePart'}"
                                     class="btn btn-custom btn-dark"
                                 >
                                     العوده للخلف
@@ -34,14 +34,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm">
-                                    <div class="alert alert-danger text-center" v-if="errors['order_amount']">{{ errors['order_amount'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['price']">{{ errors['order_amount'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
 
                                     <form @submit.prevent="storeSellingMethod" class="needs-validation">
                                         <div class="form-row row">
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">اسم طريقه البيع </label>
+                                                <label for="validationCustom01">اسم قطعه الغيار </label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.name.$model"
                                                        id="validationCustom01"
@@ -57,17 +57,30 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label >{{ $t('global.LowestPurchaseValue') }}</label>
-                                                <input type="number"
-                                                       class="form-control"
-                                                       v-model.trim="v$.order_amount.$model"
-                                                       :class="{'is-invalid':v$.order_amount.$error,'is-valid':!v$.order_amount.$invalid}"
-                                                       :placeholder="$t('global.LowestPurchaseValue')"
+                                                <label for="validationCustom02">{{ $t('global.price') }}</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.price.$model"
+                                                       id="validationCustom02"
+                                                       :placeholder="$t('global.price')"
+                                                       :class="{'is-invalid':v$.price.$error,'is-valid':!v$.price.$invalid}"
                                                 >
-                                                <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
+                                                <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.order_amount.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
-                                                    <span v-if="v$.order_amount.numeric.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
+                                                    <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom03">{{ $t('global.price') }}</label>
+                                                <textarea class="form-control"
+                                                       v-model.trim="v$.description.$model"
+                                                       id="validationCustom03"
+                                                       :placeholder="$t('global.Description')"
+                                                       :class="{'is-invalid':v$.description.$error,'is-valid':!v$.description.$invalid}"
+                                                ></textarea>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.description.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
                                             </div>
 
@@ -108,19 +121,23 @@ export default {
         let addSellingMethod =  reactive({
             data:{
                 name : '',
-                order_amount : 0
+                price : 0,
+                description: ''
             }
         });
 
         const rules = computed(() => {
             return {
-                order_amount:{
+                price:{
                     required,
                     numeric
                 },
                 name: {
                     minLength: minLength(3),
                     maxLength:maxLength(70),
+                    required
+                },
+                description: {
                     required
                 }
             }
@@ -141,7 +158,7 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.post(`/v1/dashboard/sellingMethod`,this.data)
+                adminApi.post(`/v1/dashboard/sparePart`,this.data)
                     .then((res) => {
 
                         notify({
@@ -165,7 +182,8 @@ export default {
         },
         resetForm(){
             this.data.name = '';
-            this.data.order_amount = 0;
+            this.data.price = 0;
+            this.data.description = 0;
         }
     }
 }

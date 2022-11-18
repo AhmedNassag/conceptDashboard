@@ -9,10 +9,10 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">طرق البيع</h3>
+                        <h3 class="page-title">{{ $t('global.wax') }}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexSellingMethod'}">طرق البيع</router-link></li>
-                            <li class="breadcrumb-item active">تعديل طريقه البيع</li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexFilterWax'}">{{ $t('global.wax') }}</router-link></li>
+                            <li class="breadcrumb-item active">تعديل</li>
                         </ul>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="card-header pt-0 mb-4">
                                 <router-link
-                                    :to="{name: 'indexSellingMethod'}"
+                                    :to="{name: 'indexFilterWax'}"
                                     class="btn btn-custom btn-dark"
                                 >
                                     العوده للخلف
@@ -34,18 +34,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm">
-                                    <div class="alert alert-danger text-center" v-if="errors['order_amount']">{{ errors['order_amount'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['price']">{{ errors['price'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
 
-                                    <form @submit.prevent="editSellingMethod" class="needs-validation">
+                                    <form @submit.prevent="editFilterWax" class="needs-validation">
                                         <div class="form-row row">
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">اسم طريقه البيع </label>
+                                                <label for="validationCustom01">اسم الشمعه </label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.name.$model"
                                                        id="validationCustom01"
-                                                       placeholder="اسم طريقه البيع"
+                                                       placeholder="اسم الشمعه"
                                                        :class="{'is-invalid':v$.name.$error,'is-valid':!v$.name.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
@@ -57,17 +57,32 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label >{{ $t('global.LowestPurchaseValue') }}</label>
-                                                <input type="number"
-                                                       class="form-control"
-                                                       v-model.trim="v$.order_amount.$model"
-                                                       :class="{'is-invalid':v$.order_amount.$error,'is-valid':!v$.order_amount.$invalid}"
-                                                       :placeholder="$t('global.LowestPurchaseValue')"
+                                                <label for="validationCustom02">{{ $t('global.price') }}</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.price.$model"
+                                                       id="validationCustom02"
+                                                       :placeholder="$t('global.price')"
+                                                       :class="{'is-invalid':v$.price.$error,'is-valid':!v$.price.$invalid}"
                                                 >
-                                                <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
+                                                <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.order_amount.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
-                                                    <span v-if="v$.order_amount.numeric.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
+                                                    <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom03">{{ $t('global.model') }}</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.model.$model"
+                                                       id="validationCustom03"
+                                                       :placeholder="$t('global.price')"
+                                                       :class="{'is-invalid':v$.model.$error,'is-valid':!v$.model.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.model.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.model.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.model.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.model.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.model.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
 
@@ -112,11 +127,12 @@ export default {
         let getMeasure = () => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/sellingMethod/${id.value}/edit`)
+            adminApi.get(`/v1/dashboard/filterWax/${id.value}/edit`)
                 .then((res) => {
                     let l = res.data.data;
-                    addMeasure.data.name = l.SellingMethod.name;
-                    addMeasure.data.order_amount = l.SellingMethod.order_amount;
+                    addMeasure.data.name = l.filterWax.name;
+                    addMeasure.data.price = l.filterWax.price;
+                    addMeasure.data.model = l.filterWax.model;
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -135,17 +151,23 @@ export default {
         let addMeasure =  reactive({
             data:{
                 name : '',
-                order_amount:0,
+                price: 0,
+                model: ''
             }
         });
 
         const rules = computed(() => {
             return {
-                order_amount:{
+                price: {
                     required,
                     numeric
                 },
                 name: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                model: {
                     minLength: minLength(3),
                     maxLength:maxLength(70),
                     required
@@ -160,7 +182,7 @@ export default {
         return {loading,...toRefs(addMeasure),v$};
     },
     methods: {
-        editSellingMethod(){
+        editFilterWax(){
             this.v$.$validate();
 
             if(!this.v$.$error){
@@ -168,7 +190,7 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.put(`/v1/dashboard/sellingMethod/${this.id}`,this.data)
+                adminApi.put(`/v1/dashboard/filterWax/${this.id}`,this.data)
                     .then((res) => {
 
                         notify({

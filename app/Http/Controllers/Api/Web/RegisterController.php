@@ -93,8 +93,10 @@ class RegisterController extends Controller
                 'phone' => 'required|string|unique:users',
                 'address' => 'required|string|min:8|max:300',
                 'nameCompany' => 'required|string|unique:complements',
-                'files' => 'required|array',
-                'files.*' => 'required|file|mimes:png,jpg,jpeg',
+                'delegateCard' => 'required|file|mimes:png,jpg,jpeg',
+                'commercialRegister' => 'required|file|mimes:png,jpg,jpeg',
+                'taxCard' => 'required|file|mimes:png,jpg,jpeg',
+                'valueAdded' => 'required|file|mimes:png,jpg,jpeg',
             ]);
 
             if($v->fails()) {
@@ -126,26 +128,76 @@ class RegisterController extends Controller
                 'user_id' => $user->id
             ]);
 
-            $i = 0;
-            if ($request->hasFile('files')) {
-                foreach ($request->file('files') as $index => $file) {
+            if ($request->hasFile('delegateCard')) {
 
-                    $file_size = $file->getSize();
-                    $file_type = $file->getMimeType();
-                    $image = time() . $i . '.' . $file->getClientOriginalName();
+                $file_size = $request->delegateCard->getSize();
+                $file_type = $request->delegateCard->getMimeType();
+                $image = time() . 1 . '.' . $request->delegateCard->getClientOriginalName();
 
-                    // picture move
-                    $file->storeAs('merchant', $image, 'general');
+                // picture move
+                $request->delegateCard->storeAs('merchant', $image, 'general');
 
-                    $merchant->media()->create([
-                        'file_name' => asset('upload/merchant/' . $image),
-                        'file_size' => $file_size,
-                        'file_type' => $file_type,
-                        'file_sort' => $i
-                    ]);
+                $merchant->media()->create([
+                    'file_name' => asset('upload/merchant/' . $image),
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 1
+                ]);
 
-                    $i++;
-                }
+            }
+
+            if ($request->hasFile('commercialRegister')) {
+
+                $file_size = $request->commercialRegister->getSize();
+                $file_type = $request->commercialRegister->getMimeType();
+                $image = time() . 2 . '.' . $request->commercialRegister->getClientOriginalName();
+
+                // picture move
+                $request->commercialRegister->storeAs('merchant', $image, 'general');
+
+                $merchant->media()->create([
+                    'file_name' => asset('upload/merchant/' . $image),
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 2
+                ]);
+
+            }
+
+            if ($request->hasFile('taxCard')) {
+
+                $file_size = $request->taxCard->getSize();
+                $file_type = $request->taxCard->getMimeType();
+                $image = time() . 3 . '.' . $request->taxCard->getClientOriginalName();
+
+                // picture move
+                $request->taxCard->storeAs('merchant', $image, 'general');
+
+                $merchant->media()->create([
+                    'file_name' => asset('upload/merchant/' . $image),
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 3
+                ]);
+
+            }
+
+            if ($request->hasFile('valueAdded')) {
+
+                $file_size = $request->valueAdded->getSize();
+                $file_type = $request->valueAdded->getMimeType();
+                $image = time() . 4 . '.' . $request->valueAdded->getClientOriginalName();
+
+                // picture move
+                $request->valueAdded->storeAs('merchant', $image, 'general');
+
+                $merchant->media()->create([
+                    'file_name' => asset('upload/merchant/' . $image),
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 4
+                ]);
+
             }
 
             DB::commit();
@@ -178,6 +230,7 @@ class RegisterController extends Controller
                 'phone' => 'required|string|unique:users',
                 'phone_second' => 'present|different:phone',
                 'address' => 'required|string|min:8|max:300',
+                'job' => 'required|string',
                 'nameCompany' => 'required|string|unique:complements',
                 "facebook" => 'nullable|url',
                 "linkedin" => 'nullable|url',
@@ -211,6 +264,7 @@ class RegisterController extends Controller
 
             UserCompany::create([
                 'user_id' => $user->id,
+                'job' => $request->job,
                 'address' => $request->address,
                 'phone_second' => $request->phone_second,
                 'facebook' => $request->facebook,

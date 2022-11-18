@@ -621,7 +621,10 @@
         "prushaseInvoice": " فاتوره شراء",
         "saleInvoice": "فاتوره مبيعات",
         "prushasereturn": "مردودات مشتريات",
-        "incomeReturn": "مردودات مبيعات"
+        "incomeReturn": "مردودات مبيعات",
+        "wax": "شمع",
+        "model": "الموديل",
+        "SparePart": "قطع الغيار"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",
