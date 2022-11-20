@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="developers" content="Innovative | Eng.Ahmed Mohamed | Eng.Ali Khalifa">
 
-    <title>Shahbander</title>
+    <title>Concept</title>
 
     <!-- Favicon -->
     <link rel="icon" href="{{asset('web/img/icon/favicon.ico')}}" type="image/x-icon">

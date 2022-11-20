@@ -200,13 +200,13 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label >البيع</label>
+                                                <label >قطع الغيار</label>
                                                 <select
                                                     name="type"
                                                     class="form-control"
                                                     multiple
-                                                    v-model="v$.selling_method.$model"
-                                                    :class="{'is-invalid':v$.selling_method.$error,'is-valid':!v$.selling_method.$invalid}"
+                                                    v-model="v$.sparePart.$model"
+                                                    :class="{'is-invalid':v$.sparePart.$error,'is-valid':!v$.sparePart.$invalid}"
                                                 >
                                                     <option v-for="sparePart in spareParts" :value="sparePart.id" :key="sparePart.id">
                                                         {{ sparePart.name }}
@@ -214,18 +214,18 @@
                                                 </select>
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.selling_method.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.sparePart.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label >البيع</label>
+                                                <label >الشمع</label>
                                                 <select
                                                     name="type"
                                                     class="form-control"
                                                     multiple
-                                                    v-model="v$.selling_method.$model"
-                                                    :class="{'is-invalid':v$.selling_method.$error,'is-valid':!v$.selling_method.$invalid}"
+                                                    v-model="v$.filterWaxes.$model"
+                                                    :class="{'is-invalid':v$.filterWaxes.$error,'is-valid':!v$.filterWaxes.$invalid}"
                                                 >
                                                     <option v-for="filterWax in filterWaxes" :value="filterWax.id" :key="filterWax.id">
                                                         {{ filterWax.name }}
@@ -233,7 +233,7 @@
                                                 </select>
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.selling_method.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.filterWaxes.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
                                             </div>
 

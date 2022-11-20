@@ -37,13 +37,6 @@ class ClientController extends Controller
             $user->update([
                 "status" => 1
             ]);
-
-            $tokens = [];
-            $tokens[] = $user->client->firebase_token;
-            $body = "تم تفعيل حسابك بنجاح";
-            $type = "active client";
-            $productData = $user;
-            $this->notification($tokens,$body,$type,$productData);
         }
         return $this->sendResponse([], 'Data exited successfully');
     }
@@ -52,14 +45,11 @@ class ClientController extends Controller
     {
         // get user
         $users = User::whereAuthId(2)->whereJsonContains('role_name','client')
-            ->with(['client'=>function ($q){
-            $q->with(['sellingMethod']);
-        }])->where(function ($q) use($request) {
+            ->with(['client','complement.sellingMethod'])->where(function ($q) use($request) {
                 $q->when($request->search, function ($q) use ($request) {
                     return $q->OrWhere('name', 'like', '%' . $request->search . '%')
                         ->orWhere('phone', 'like', '%' . $request->search . '%')
-                        ->orWhere('email', 'like', '%' . $request->search . '%')
-                        ->orWhereRelation('client','trade_name', 'like', '%' . $request->search . '%');
+                        ->orWhere('email', 'like', '%' . $request->search . '%');
                 });
             })->latest('id','ASC')->paginate(15);
 
@@ -79,15 +69,12 @@ class ClientController extends Controller
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|string',
-                'trade_name' => 'required|string',
-                'email' => 'nullable|string|email|unique:users,email',
-                'phone' => 'required|string|unique:users,phone',
-                'address' => 'required|string',
-                'location' => 'nullable|string',
-                'province_id' => 'required|integer|exists:provinces,id',
-                'area_id' => 'required|integer|exists:areas,id',
-                'amount' => 'nullable|numeric',
-                'selling_method_id' => 'required|integer|exists:selling_methods,id',
+                'email' => 'required|string|email|unique:users,email',
+                'province_id'  => 'required|integer|exists:provinces,id',
+                'area_id'  => 'required|integer|exists:areas,id',
+                'phone' => 'required|string|unique:users',
+                'address' => 'required|string|min:8|max:255',
+                'amount' => 'nullable|numeric'
             ]);
 
             if($v->fails()) {
@@ -98,20 +85,21 @@ class ClientController extends Controller
             $user =  User::create([
                 "name" => $request->name,
                 "email" => $request->email,
-                "phone" => $request->phone,
-                "code" => '+02',
                 "auth_id" => 2,
                 'role_name'=> ['client'],
+                "status" => 0,
+                'phone' => $request->phone,
+                "code" => '+2'
             ]);
 
-            $user->client()->create([
-                "address" => $request->address,
-                "trade_name" => $request->trade_name,
-                "province_id" => $request->province_id,
-                "area_id" => $request->area_id,
-                "location" => $request->location,
-                "selling_method_id" => $request->selling_method_id,
+            $user->complement()->create([
+                'province_id' => $request->province_id,
+                'area_id' => $request->area_id,
+                'selling_method_id' => 1,
+                'device' => 2
             ]);
+
+            $user->client()->create(['address' => $request->address]);
 
             $user->clientAccounts()->create([
                 'amount' => $request->amount ? $request->amount : 0
@@ -129,9 +117,9 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $user = User::with(['client'=>function ($q){
-                $q->with(['province','area','sellingMethod']);
-            }])->findOrFail($id);
+        $user = User::with(['client','complement' => function ($q){
+            $q->with(['area','province','sellingMethod']);
+        }])->findOrFail($id);
 
         return $this->sendResponse(['user' => $user],'Data exited successfully');
     }
@@ -144,7 +132,7 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        $user =  User::with(['client','clientAccounts'])->find($id);
+        $user =  User::with(['client','complement','clientAccounts'])->find($id);
         $provinces = Province::select('id','name')->get();
 
         return $this->sendResponse(['user' => $user,'provinces' => $provinces],'Data exited successfully');
@@ -163,17 +151,13 @@ class ClientController extends Controller
         if($user){
             // Validator request
             $v = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'trade_name' => 'required|string',
-                'email' => 'nullable|string|email|unique:users,email,'.$user->id,
-                'phone' => 'required|string|unique:users,phone,'.$user->id,
-                'address' => 'required|string',
-                'location' => 'nullable|string',
-                'province_id' => 'required|integer|exists:provinces,id',
-                'area_id' => 'required|integer|exists:areas,id',
-                'amount' => 'nullable|numeric',
-                'selling_method_id' => 'required|integer|exists:selling_methods,id',
-            ]);
+                    'name' => 'required|string',
+                    'province_id'  => 'required|integer|exists:provinces,id',
+                    'area_id'  => 'required|integer|exists:areas,id',
+                    'email' => 'nullable|string|email|unique:users,email,'.$user->id,
+                    'phone' => 'required|string|unique:users,phone,'.$user->id,                    'address' => 'required|string|min:8|max:300',
+                    'amount' => 'nullable|numeric'
+                ]);
 
             if($v->fails()) {
                 return $this->sendError('There is an error in the data',$v->errors());
@@ -183,17 +167,17 @@ class ClientController extends Controller
             $user->update([
                 "name" => $request->name,
                 "email" => $request->email,
-                "phone" => $request->phone,
+                "password" => $request->password,
+                'phone' => $request->phone,
             ]);
 
-            $user->client()->update([
-                "address" => $request->address,
-                "trade_name" => $request->trade_name,
-                "province_id" => $request->province_id,
-                "area_id" => $request->area_id,
-                "location" => $request->location,
-                "selling_method_id" => $request->selling_method_id,
+            $user->complement()->update([
+                'province_id' => $request->province_id,
+                'area_id' => $request->area_id,
+                'selling_method_id' => 1,
             ]);
+
+            $user->client()->update(['address' => $request->address]);
 
             $user->clientAccounts()->first()->update([
                 'amount' => $request->amount ? $request->amount : 0

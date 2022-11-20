@@ -46,10 +46,9 @@
                                         <div class="form-row row">
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">اسم </label>
+                                                <label>اسم </label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.name.$model"
-                                                       id="validationCustom01"
                                                        placeholder="اسم "
                                                        :class="{'is-invalid':v$.name.$error,'is-valid':!v$.name.$invalid}"
                                                 >
@@ -62,31 +61,16 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label>اسم التجارى</label>
-                                                <input type="text" class="form-control"
-                                                       v-model.trim="v$.trade_name.$model"
-                                                       placeholder="اسم التجارى"
-                                                       :class="{'is-invalid':v$.trade_name.$error,'is-valid':!v$.trade_name.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.trade_name.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                    <span v-if="v$.trade_name.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.trade_name.minLength.$params.min }} حرف  <br /></span>
-                                                    <span v-if="v$.trade_name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.trade_name.maxLength.$params.max }} حرف</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="validationCustom02">البريد الالكتؤونى </label>
-                                                <input type="text" class="form-control"
+                                                <label for="validationCustom02">الاميل </label>
+                                                <input type="email" class="form-control"
                                                        v-model.trim="v$.email.$model"
                                                        id="validationCustom02"
-                                                       placeholder="البريد الالكترونى"
+                                                       placeholder="الاميل"
                                                        :class="{'is-invalid':v$.email.$error,'is-valid':!v$.email.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.email.email.$invalid"> يجب ان يكون الاميل  <br /></span>
+                                                    <span v-if="v$.email.email.$invalid"> يجب ان يكون بريد الكترونى  <br /></span>
                                                 </div>
                                             </div>
 
@@ -159,39 +143,6 @@
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
                                                     <span v-if="v$.address.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="validationCustom05">الموقع</label>
-                                                <input type="text" class="form-control"
-                                                       v-model.trim="v$.location.$model"
-                                                       id="validationCustom05"
-                                                       placeholder="الموقع"
-                                                       :class="{'is-invalid':v$.location.$error,'is-valid':!v$.location.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label >{{ $t('global.sellingMethod') }}</label>
-                                                <select
-                                                    name="type"
-                                                    class="form-control"
-                                                    v-model="v$.selling_method_id.$model"
-                                                    :class="{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}"
-                                                >
-                                                    <option value="">---</option>
-                                                    <option
-                                                        v-for="selling_method in selling_methods"
-                                                        :value=" selling_method.id"
-                                                        :key=" selling_method.id"
-                                                    >{{ selling_method.name }}</option>
-                                                </select>
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.selling_method_id.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                    <span v-if="v$.selling_method_id.integer.$invalid"> يجب ان يكون رقم  <br /></span>
                                                 </div>
                                             </div>
 
@@ -270,16 +221,13 @@ export default {
                     let l = res.data.data;
                     provinces.value = l.provinces;
                     addClient.data.name = l.user.name;
-                    addClient.data.trade_name = l.user.client.trade_name;
-                    addClient.data.province_id = l.user.client.province_id;
-                    addClient.data.area_id = l.user.client.area_id;
+                    addClient.data.province_id = l.user.complement.province_id;
+                    addClient.data.area_id = l.user.complement.area_id;
                     addClient.data.phone = l.user.phone;
                     addClient.data.email = l.user.email;
                     addClient.data.address = l.user.client.address;
-                    addClient.data.location = l.user.client.location;
-                    addClient.data.selling_method_id = l.user.client.selling_method_id;
                     addClient.data.amount = l.user.client_accounts[0].amount;
-                    getAreas(l.user.client.province_id);
+                    getAreas(l.user.complement.province_id);
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -314,14 +262,11 @@ export default {
         let addClient =  reactive({
             data:{
                 name : '',
-                trade_name : '',
-                province_id : null,
-                area_id : null,
                 email : '',
                 phone : '',
                 address : '',
-                location : '',
-                selling_method_id : null,
+                province_id : null,
+                area_id : null,
                 amount: 0
             }
         });
@@ -333,13 +278,9 @@ export default {
                     maxLength:maxLength(70),
                     required
                 },
-                trade_name: {
-                    minLength: minLength(3),
-                    maxLength:maxLength(70),
-                    required
-                },
                 email: {
-                    email
+                    email,
+                    required
                 },
                 phone: {
                     required,
@@ -349,10 +290,8 @@ export default {
                     required
                 },
                 amount:{decimal},
-                location: {},
                 province_id:{required,integer},
                 area_id:{required,integer},
-                selling_method_id:{required,integer},
             }
         });
         let getAreas= (id) => {

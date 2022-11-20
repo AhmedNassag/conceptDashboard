@@ -68,6 +68,31 @@
                     </li>
                     <!--end client-->
 
+                    <!--start userCompany-->
+                    <li
+                        :class="[{'active': ['indexUserCompany','createUserCompany','editUserCompany','showUserCompany'].includes($route.name)}]"
+                        v-if="permission.includes('CreditCapacity read')"
+                    >
+                        <router-link :to="{name:'indexUserCompany'}" >
+                            <i class="fas fa-users"></i>
+                            <span>{{ $t('sidebar.userCompany') }}</span>
+                        </router-link>
+                    </li>
+                    <!--end userCompany-->
+
+                    <!--start knowledge-->
+                    <li
+                        :class="[{'active': ['indexKnowledge','createKnowledge','editKnowledge'].includes($route.name)}]"
+                        v-if="permission.includes('CreditCapacity read')"
+                    >
+                        <router-link :to="{name:'indexKnowledge'}" >
+                            <i class="fas fa-users"></i>
+                            <span>{{ $t('sidebar.Knowledge') }}</span>
+                        </router-link>
+                    </li>
+                    <!--end knowledge-->
+
+                    <!--start supplier-->
                     <li
                         :class="[{'active': ['indexSupplier','createSupplier','editSupplier'].includes($route.name)}]"
                         v-if="permission.includes('supplier read')"
@@ -77,9 +102,9 @@
                             <span>{{ $t('sidebar.supplier') }}</span>
                         </router-link>
                     </li>
+                    <!--start supplier-->
 
                     <!--start buy-->
-
                     <li class="submenu" v-if="permission.includes('buy')">
                         <a href="#" ><i class="fas fa-box-open"></i> <span> {{ $t('global.purchaseManagement') }}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -113,7 +138,6 @@
 
                         </ul>
                     </li>
-
                     <!--end buy-->
 
                     <!--start store-->

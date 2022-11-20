@@ -60,7 +60,7 @@
                                         <td>{{ item.id }}</td>
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.phone }}</td>
-                                        <td>{{ item.client.selling_method.name }}</td>
+                                        <td>{{ item.complement.selling_method.name }}</td>
                                         <td>{{ item.client.address }}</td>
                                         <td>
                                             <a href="#" @click="activationClient(item.id,item.status,index)">

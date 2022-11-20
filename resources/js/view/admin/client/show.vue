@@ -63,7 +63,7 @@
                                 </ul>
                             </div>
                             <div class="row">
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="card">
                                         <div class="card-body pt-0">
                                             <div class="card-header mb-4">
@@ -79,7 +79,7 @@
 
                                 </div>
 
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="card">
                                         <div class="card-body pt-0">
                                             <div class="card-header mb-4">
@@ -95,7 +95,7 @@
 
                                 </div>
 
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <div class="card">
                                         <div class="card-body pt-0">
                                             <div class="card-header mb-4">
@@ -111,21 +111,6 @@
 
                                 </div>
 
-                                <div class="col-lg-3">
-                                    <div class="card">
-                                        <div class="card-body pt-0">
-                                            <div class="card-header mb-4">
-                                                <h5 class="card-title">{{$t('global.tradeName')}}</h5>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <p>
-                                                    {{client.trade_name}}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -165,9 +150,9 @@ export default {
                     let l = res.data.data;
                     user.value = l.user;
                     client.value = l.user.client;
-                    client.value['area_name'] = l.user.client.area.name;
-                    client.value['province_name'] = l.user.client.province.name;
-                    client.value['selling_method_name'] = l.user.client.selling_method.name;
+                    client.value['area_name'] = l.user.complement.area.name;
+                    client.value['province_name'] = l.user.complement.province.name;
+                    client.value['selling_method_name'] = l.user.complement.selling_method.name;
                 })
                 .catch((err) => {
                     console.log(err.response.data);

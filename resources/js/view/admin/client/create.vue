@@ -35,12 +35,9 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['trade_name']">{{ errors['trade_name'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['email']">{{ errors['email'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['phone']">{{ errors['phone'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['address']">{{ errors['address'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['location']">{{ errors['location'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['selling_method_id']">{{ errors['selling_method_id'][0] }}<br /> </div>
 
                                     <form @submit.prevent="storeClient" class="needs-validation">
                                         <div class="form-row row">
@@ -57,22 +54,6 @@
                                                     <span v-if="v$.name.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                     <span v-if="v$.name.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.name.minLength.$params.min }} حرف  <br /></span>
                                                     <span v-if="v$.name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.name.maxLength.$params.max }} حرف</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">اسم التجارى</label>
-                                                <input type="text" class="form-control"
-                                                       v-model.trim="v$.trade_name.$model"
-                                                       id="validationCustom01"
-                                                       placeholder="اسم التجارى"
-                                                       :class="{'is-invalid':v$.trade_name.$error,'is-valid':!v$.trade_name.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.trade_name.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                    <span v-if="v$.trade_name.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.trade_name.minLength.$params.min }} حرف  <br /></span>
-                                                    <span v-if="v$.trade_name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.trade_name.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
 
@@ -162,39 +143,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
-                                                <label for="validationCustom05">الموقع</label>
-                                                <input type="text" class="form-control"
-                                                       v-model.trim="v$.location.$model"
-                                                       id="validationCustom05"
-                                                       placeholder="الموقع"
-                                                       :class="{'is-invalid':v$.location.$error,'is-valid':!v$.location.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label >{{ $t('global.sellingMethod') }}</label>
-                                                <select
-                                                    name="type"
-                                                    class="form-control"
-                                                    v-model="v$.selling_method_id.$model"
-                                                    :class="{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}"
-                                                >
-                                                    <option value="">---</option>
-                                                    <option
-                                                        v-for="selling_method in selling_methods"
-                                                        :value=" selling_method.id"
-                                                        :key=" selling_method.id"
-                                                    >{{ selling_method.name }}</option>
-                                                </select>
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.selling_method_id.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                    <span v-if="v$.selling_method_id.integer.$invalid"> يجب ان يكون رقم  <br /></span>
-                                                </div>
-                                            </div>
-
                                             <div class="col-md-6 mb-3 mt-5">
                                                 <div class="sec-body">
                                                     <div class="col-md-12 mb-12 sec-head">
@@ -262,14 +210,11 @@ export default {
         let addClient =  reactive({
             data:{
                 name : '',
-                trade_name : '',
                 email : '',
                 phone : '',
                 address : '',
-                location : '',
                 province_id : null,
                 area_id : null,
-                selling_method_id : null,
                 amount: 0
             }
         });
@@ -281,13 +226,9 @@ export default {
                     maxLength:maxLength(70),
                     required
                 },
-                trade_name: {
-                    minLength: minLength(3),
-                    maxLength:maxLength(70),
-                    required
-                },
                 email: {
-                    email
+                    email,
+                    required
                 },
                 phone: {
                     required,
@@ -297,10 +238,8 @@ export default {
                     required
                 },
                 amount:{decimal},
-                location: {},
                 province_id:{required,integer},
                 area_id:{required,integer},
-                selling_method_id:{required,integer},
             }
         });
 
@@ -384,7 +323,8 @@ export default {
                         this.$nextTick(() => { this.v$.$reset() });
                     })
                     .catch((err) => {
-                        this.errors = err.response;
+                        console.log(err.response);
+                        // this.errors = err.response;
                     })
                     .finally(() => {
                         this.loading = false;
@@ -394,12 +334,11 @@ export default {
         },
         resetForm(){
             this.data.name = '';
-            this.data.trade_name = '';
             this.data.email = '';
-            this.data.location = '';
             this.data.phone = '';
             this.data.address = '';
-            this.data.selling_method_id = null;
+            this.data.province_id = null;
+            this.data.area_id = null;
             this.data.amount = 0;
         }
     }

@@ -342,6 +342,14 @@ use Illuminate\Support\Facades\Route;
              // order Spare Part
              Route::resource('sparePart','SparePartController');
 
+             // userCompany && merchant
+             Route::resource('userCompany','UserCompanyController');
+             Route::get('activationCompany/{id}','UserCompanyController@activationCompany');
+             Route::resource('merchant','MerchantController');
+             Route::get('activationMerchant/{id}','MerchantController@activationMerchant');
+             Route::resource('knowledgeWay','KnowledgeWayController');
+
+
          });
 
      });

@@ -78,6 +78,11 @@ import orderIncomes from "./adminRoute/orderIncomes";
 import SupplierAccountStatement from "./adminRoute/SupplierAccountStatement";
 import ClientAccountStatement from "./adminRoute/ClientAccountStatement";
 import addNotificationApp from "./adminRoute/addNotificationApp";
+import knowledgeWay from "./adminRoute/knowledgeWay";
+import userCompany from "./adminRoute/userCompany";
+import merchant from "./adminRoute/merchant";
+
+
 
 
 
@@ -201,7 +206,10 @@ const routes = [
             ...ClientAccountStatement,
             ...addNotificationApp,
             ...filterWax,
-            ...sparePart
+            ...sparePart,
+            ...knowledgeWay,
+            ...userCompany,
+            ...merchant
         ]
     },
     {

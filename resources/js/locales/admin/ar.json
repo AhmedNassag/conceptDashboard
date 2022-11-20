@@ -42,7 +42,9 @@
         "offerDiscount": "العروض والخصومات ",
         "client": "العملاء",
         "OrderDirect": "الطلبات المباشره",
-        "upcomingPayment": "مديونات العملاء"
+        "upcomingPayment": "مديونات العملاء",
+        "Knowledge": "طرق التعرف علينا ",
+        "userCompany": "عملاء الشركات"
     },
     "global": {
         "Search":"بحث",
