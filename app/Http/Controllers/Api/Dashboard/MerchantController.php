@@ -52,12 +52,11 @@ class MerchantController extends Controller
 
     public function store(Request $request)
     {
+
         // Validator request
         $v = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'repeat_password' => 'required|same:password',
             'province_id'  => 'required|integer|exists:provinces,id',
             'area_id'  => 'required|integer|exists:areas,id',
             'phone' => 'required|string|unique:users',
@@ -87,8 +86,8 @@ class MerchantController extends Controller
 
         $user->complement()->create([
             'nameCompany' => $request->nameCompany,
-            'province_id' => $request->province,
-            'area_id' => $request->area,
+            'province_id' => $request->province_id,
+            'area_id' => $request->area_id,
             'selling_method_id' => 2,
             'device' => ($request->device  == 1 ? 1:0)
         ]);
@@ -96,6 +95,10 @@ class MerchantController extends Controller
         $merchant = Merchant::create([
             'address' => $request->address,
             'user_id' => $user->id
+        ]);
+
+        $user->clientAccounts()->create()->update([
+            'amount' => $request->amount ? $request->amount : 0
         ]);
 
         if ($request->hasFile('delegateCard')) {
@@ -194,7 +197,7 @@ class MerchantController extends Controller
      */
     public function edit($id)
     {
-        $user =  User::with(['merchant','complement'])->find($id);
+        $user =  User::with(['merchant','complement','clientAccounts'])->find($id);
         $provinces = Province::select('id','name')->get();
 
         return $this->sendResponse(['user' => $user,'provinces' => $provinces],'Data exited successfully');
@@ -219,7 +222,7 @@ class MerchantController extends Controller
                 'area_id'  => 'required|integer|exists:areas,id',
                 'phone' => 'required|string|unique:users,phone,'.$user->id,
                 'address' => 'required|string|min:8|max:300',
-                'nameCompany' => 'required|string|unique:complements',
+                'nameCompany' => 'required|string|unique:complements,nameCompany,'.$user->complement->id,
             ]);
 
             if($v->fails()) {
@@ -231,12 +234,15 @@ class MerchantController extends Controller
                 "name" => $request->name,
                 "email" => $request->email,
                 'phone' => $request->phone,
-                "code" => '+2'
             ]);
 
             $merchant = Merchant::whereUserId($user->id)->update([
                 'address' => $request->address,
                 'user_id' => $user->id
+            ]);
+
+            $user->clientAccounts()->first()->update([
+                'amount' => $request->amount ? $request->amount : 0
             ]);
 
             return $this->sendResponse([],'Data exited successfully');

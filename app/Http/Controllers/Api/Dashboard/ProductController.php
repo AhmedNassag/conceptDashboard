@@ -206,11 +206,15 @@ class ProductController extends Controller
                     'selling_method_id' => $item,
                     'measurement_unit_id' => $request->main_measurement_unit_id
                 ]);
-                ProductPricing::create([
-                    'product_id' => $product->id,
-                    'selling_method_id' => $item,
-                    'measurement_unit_id' => $request->sub_measurement_unit_id
-                ]);
+
+                if ($request['count_unit'] > 1) {
+                    ProductPricing::create([
+                        'product_id' => $product->id,
+                        'selling_method_id' => $item,
+                        'measurement_unit_id' => $request->sub_measurement_unit_id
+                    ]);
+                }
+
             }
 
             $i = 0;
@@ -394,11 +398,14 @@ class ProductController extends Controller
                         'selling_method_id' => $item,
                         'measurement_unit_id' => $request->main_measurement_unit_id
                     ]);
-                    ProductPricing::create([
-                        'product_id' => $id,
-                        'selling_method_id' => $item,
-                        'measurement_unit_id' => $request->sub_measurement_unit_id
-                    ]);
+
+                    if ($request['count_unit'] > 1) {
+                        ProductPricing::create([
+                            'product_id' => $id,
+                            'selling_method_id' => $item,
+                            'measurement_unit_id' => $request->sub_measurement_unit_id
+                        ]);
+                    }
                 } else {
                     foreach ($ProductPricing as $index=>$value){
                         if ($index == 0){
@@ -406,9 +413,17 @@ class ProductController extends Controller
                                 'measurement_unit_id' => $request->main_measurement_unit_id
                             ]);
                         }else{
-                            $value->update([
-                                'measurement_unit_id' => $request->sub_measurement_unit_id
-                            ]);
+                            if ($request['count_unit'] > 1) {
+                                $value->update([
+                                    'measurement_unit_id' => $request->sub_measurement_unit_id,
+                                ]);
+                            }else{
+                                $value->update([
+                                    'measurement_unit_id' => $request->sub_measurement_unit_id,
+                                    'active' => 0,
+                                ]);
+                            };
+
                         }
 
                     }

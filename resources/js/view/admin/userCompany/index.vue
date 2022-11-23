@@ -61,7 +61,7 @@
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.phone }}</td>
                                         <td>{{ item.complement.selling_method.name }}</td>
-                                        <td>{{ item.userCompany.address }}</td>
+                                        <td>{{ item.user_company.address }}</td>
                                         <td>
                                             <a href="#" @click="activationClient(item.id,item.status,index)">
                                                 <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">{{
@@ -70,13 +70,13 @@
                                         </td>
                                         <td>
                                             <router-link
-                                                :to="{name: 'editClient',params:{id:item.id}}"
+                                                :to="{name: 'editUserCompany',params:{id:item.id}}"
                                                 v-if="permission.includes('category edit')"
                                                 :title="$t('global.Edit')"
                                                 class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
-                                            <router-link :to="{name: 'showClient',params:{id:item.id}}"
+                                            <router-link :to="{name: 'showUserCompany',params:{id:item.id}}"
                                                class="btn btn-sm btn-info me-2" >
                                                 <i class="fas fa-book-open"></i> {{$t('global.Show')}}
                                             </router-link>
@@ -209,13 +209,11 @@ export default {
             getClient();
         });
 
-
         watch(search, (search, prevSearch) => {
             if (search.length >= 0) {
                 getClient();
             }
         });
-
 
         function activationClient(id, status,index) {
             Swal.fire({
@@ -268,11 +266,11 @@ export default {
 
         let close=(id)=>{
             document.getElementById('close-'+id).click();
-        }
+        };
 
         let userNotification=(id)=>{
             addJob.data.user_id = id;
-        }
+        };
 
         const v$ = useVuelidate(rules,addJob.data);
 

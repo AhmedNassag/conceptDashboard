@@ -193,8 +193,8 @@
                                                                                         <td>{{ it.product.name }}</td>
                                                                                         <td>{{ it.quantity }}</td>
                                                                                         <td>{{ it.price }} ج.م</td>
-                                                                                        <td>{{ it.sub_quantity }}</td>
-                                                                                        <td>{{ parseFloat(it.price / it.count_unit).toFixed(2) }} ج.م</td>
+                                                                                        <td>{{ it.sub_quantity > 0 ? it.sub_quantity : '-' }}</td>
+                                                                                        <td>{{ it.sub_quantity > 0 ? parseFloat(it.price / it.count_unit).toFixed(2) +' ج.م ' : '-'}}</td>
                                                                                         <td>{{ parseFloat(it.quantity * it.price) + parseFloat(it.sub_quantity * (it.price / it.count_unit)) }} ج.م</td>
                                                                                     </tr>
                                                                                     <tr v-else>

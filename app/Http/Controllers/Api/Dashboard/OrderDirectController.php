@@ -550,8 +550,7 @@ class OrderDirectController extends Controller
                 ]);
                 $order_details_id = $order_details->id;
                 $main_measurement_unit_id = $order_details->main_measurement_unit_id;
-                $sub_measurement_unit_id = $order_details->sub_measurement_unit_id;
-
+                $sub_measurement_unit_id = $product['count_unit'] >1 ? $order_details->sub_measurement_unit_id : null;
                 $this->storeProductData(
                     $request->store_id,
                     $product['product_id'],

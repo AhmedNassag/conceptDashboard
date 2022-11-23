@@ -9,10 +9,10 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">العملاء</h3>
+                        <h3 class="page-title">{{ $t('sidebar.merchant') }}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexClient'}">العملاء</router-link></li>
-                            <li class="breadcrumb-item active">اضافه عميل</li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexMerchant'}">{{ $t('sidebar.merchant') }}</router-link></li>
+                            <li class="breadcrumb-item active">اضافه </li>
                         </ul>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="card-header pt-0 mb-4">
                                 <router-link
-                                    :to="{name: 'indexClient'}"
+                                    :to="{name: 'indexMerchant'}"
                                     class="btn btn-custom btn-dark"
                                 >
                                     العوده للخلف
@@ -35,9 +35,14 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['nameCompany']">{{ errors['nameCompany'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['email']">{{ errors['email'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['phone']">{{ errors['phone'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['address']">{{ errors['address'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['delegateCard']">{{ errors['delegateCard'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['commercialRegister']">{{ errors['commercialRegister'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['taxCard']">{{ errors['taxCard'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['valueAdded']">{{ errors['valueAdded'][0] }}<br /> </div>
 
                                     <form @submit.prevent="storeClient" class="needs-validation">
                                         <div class="form-row row">
@@ -54,6 +59,21 @@
                                                     <span v-if="v$.name.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                     <span v-if="v$.name.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.name.minLength.$params.min }} حرف  <br /></span>
                                                     <span v-if="v$.name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.name.maxLength.$params.max }} حرف</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>اسم الشركه </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.nameCompany.$model"
+                                                       placeholder="اسم الوظيفه"
+                                                       :class="{'is-invalid':v$.nameCompany.$error,'is-valid':!v$.nameCompany.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.nameCompany.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.nameCompany.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.nameCompany.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.nameCompany.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.nameCompany.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
 
@@ -170,6 +190,110 @@
 
                                             </div>
 
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview"
+                                                        id="mediaPackage"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صوره بطاقه المفوض</span>
+                                                <p class="num-of-files">{{numberOfImage ? numberOfImage + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images" v-show="data.delegateCard && numberOfImage"></div>
+                                                <div class="container-images" v-show="!numberOfImage">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview1"
+                                                        id="mediaPackage1"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صوره السجل التجاري</span>
+                                                <p class="num-of-files">{{numberOfImage1 ? numberOfImage1 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images1" v-show="data.commercialRegister && numberOfImage1"></div>
+                                                <div class="container-images" v-show="!numberOfImage1">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview2"
+                                                        id="mediaPackage2"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صوره البطاقه الضربيه</span>
+                                                <p class="num-of-files">{{numberOfImage2 ? numberOfImage2 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images2" v-show="data.taxCard && numberOfImage2"></div>
+                                                <div class="container-images" v-show="!numberOfImage2">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview3"
+                                                        id="mediaPackage3"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صوره شهاده القيمه المضافه</span>
+                                                <p class="num-of-files">{{numberOfImage3 ? numberOfImage3 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images3" v-show="data.valueAdded && numberOfImage3"></div>
+                                                <div class="container-images" v-show="!numberOfImage3">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">اضافه</button>
@@ -205,23 +329,37 @@ export default {
         let areas = ref([]);
         let selling_methods = ref([]);
         let provinces = ref([]);
+        let numberOfImage = ref(0);
+        let numberOfImage1 = ref(0);
+        let numberOfImage2 = ref(0);
+        let numberOfImage3 = ref(0);
 
         //start design
         let addClient =  reactive({
             data:{
                 name : '',
+                nameCompany:'',
                 email : '',
                 phone : '',
                 address : '',
                 province_id : null,
                 area_id : null,
-                amount: 0
+                delegateCard:{},
+                commercialRegister: {},
+                taxCard: {},
+                valueAdded: {},
+                amount: 0,
             }
         });
 
         const rules = computed(() => {
             return {
                 name: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                nameCompany: {
                     minLength: minLength(3),
                     maxLength:maxLength(70),
                     required
@@ -298,7 +436,143 @@ export default {
 
         const v$ = useVuelidate(rules,addClient.data);
 
-        return {loading,...toRefs(addClient),areas,selling_methods,provinces,getAreas,v$};
+        let preview = (e) => {
+
+            let containerImages = document.querySelector('#container-images');
+            if(numberOfImage.value){
+                containerImages.innerHTML = '';
+            }
+            addClient.data.file = {};
+
+            numberOfImage.value = e.target.files.length;
+
+            addClient.data.delegateCard = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addClient.data.delegateCard.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addClient.data.delegateCard);
+
+        };
+
+        let preview1 = (e) => {
+
+            let containerImages = document.querySelector('#container-images1');
+            if(numberOfImage1.value){
+                containerImages.innerHTML = '';
+            }
+            addClient.data.commercialRegister = {};
+
+            numberOfImage1.value = e.target.files.length;
+
+            addClient.data.commercialRegister = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addClient.data.commercialRegister.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addClient.data.commercialRegister);
+
+        };
+
+        let preview2 = (e) => {
+
+            let containerImages = document.querySelector('#container-images2');
+            if(numberOfImage2.value){
+                containerImages.innerHTML = '';
+            }
+            addClient.data.taxCard = {};
+
+            numberOfImage2.value = e.target.files.length;
+
+            addClient.data.taxCard = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addClient.data.taxCard.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addClient.data.taxCard);
+
+        };
+
+        let preview3 = (e) => {
+
+            let containerImages = document.querySelector('#container-images3');
+            if(numberOfImage3.value){
+                containerImages.innerHTML = '';
+            }
+            addClient.data.valueAdded = {};
+
+            numberOfImage3.value = e.target.files.length;
+
+            addClient.data.valueAdded = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addClient.data.valueAdded.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addClient.data.valueAdded);
+
+        };
+
+        return {
+            loading,
+            ...toRefs(addClient),
+            areas,
+            selling_methods,
+            provinces,
+            getAreas,
+            v$,
+            preview,
+            preview1,
+            preview2,
+            preview3,
+            numberOfImage,
+            numberOfImage1,
+            numberOfImage2,
+            numberOfImage3
+        };
     },
     methods: {
         storeClient(){
@@ -308,8 +582,21 @@ export default {
 
                 this.loading = true;
                 this.errors = {};
+                let formData = new FormData();
+                formData.append('taxCard',this.data.taxCard);
+                formData.append('nameCompany',this.data.nameCompany);
+                formData.append('valueAdded',this.data.valueAdded);
+                formData.append('delegateCard',this.data.delegateCard);
+                formData.append('name',this.data.name);
+                formData.append('address',this.data.address);
+                formData.append('area_id',this.data.area_id);
+                formData.append('province_id',this.data.province_id);
+                formData.append('amount',this.data.amount);
+                formData.append('phone',this.data.phone);
+                formData.append('email',this.data.email)
+                formData.append('commercialRegister',this.data.commercialRegister);
 
-                adminApi.post(`/v1/dashboard/client`,this.data)
+                adminApi.post(`/v1/dashboard/merchant`,formData)
                     .then((res) => {
 
                         notify({
@@ -324,6 +611,7 @@ export default {
                     })
                     .catch((err) => {
                         console.log(err.response);
+                        document.querySelector('#mediaPackage');
                         // this.errors = err.response;
                     })
                     .finally(() => {
@@ -340,6 +628,14 @@ export default {
             this.data.province_id = null;
             this.data.area_id = null;
             this.data.amount = 0;
+            document.querySelector('#mediaPackage').value = '';
+            document.querySelector('#mediaPackage1').value = '';
+            document.querySelector('#mediaPackage2').value = '';
+            document.querySelector('#mediaPackage3').value = '';
+            document.querySelector('#container-images').innerHTML = '';
+            document.querySelector('#container-images1').innerHTML = '';
+            document.querySelector('#container-images2').innerHTML = '';
+            document.querySelector('#container-images3').innerHTML = '';
         }
     }
 }

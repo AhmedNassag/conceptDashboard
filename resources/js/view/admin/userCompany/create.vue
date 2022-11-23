@@ -37,7 +37,8 @@
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['email']">{{ errors['email'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['phone']">{{ errors['phone'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['address']">{{ errors['address'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['job']">{{ errors['phone'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['nameCompany']">{{ errors['nameCompany'][0] }}<br /> </div>
 
                                     <form @submit.prevent="storeClient" class="needs-validation">
                                         <div class="form-row row">
@@ -117,12 +118,64 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom04">رقم التليفون </label>
+                                                <label for="validationCustom04">رقم تليفون اخر </label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.phone_second.$model"
                                                        id="validationCustom05"
-                                                       placeholder="رقم التليفون"
+                                                       placeholder="رقم تليفون اخر"
                                                        :class="{'is-invalid':v$.phone_second.$error,'is-valid':!v$.phone_second.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom011">لنك الفيس بوك </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.facebook.$model"
+                                                       id="validationCustom011"
+                                                       placeholder="لنك الفيس بوك "
+                                                       :class="{'is-invalid':v$.facebook.$error,'is-valid':!v$.facebook.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom012">لنك linkedin </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.linkedin.$model"
+                                                       id="validationCustom012"
+                                                       placeholder="لنك linkedin "
+                                                       :class="{'is-invalid':v$.linkedin.$error,'is-valid':!v$.linkedin.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom013">لنك website</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.website.$model"
+                                                       id="validationCustom013"
+                                                       placeholder="لنك website"
+                                                       :class="{'is-invalid':v$.website.$error,'is-valid':!v$.website.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom016">لنك الواتس </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.whatsapp.$model"
+                                                       id="validationCustom016"
+                                                       placeholder="لنك الواتس "
+                                                       :class="{'is-invalid':v$.whatsapp.$error,'is-valid':!v$.whatsapp.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
@@ -194,21 +247,6 @@
                                                         </h3>
                                                     </div>
 
-                                                    <div class="col-md-12 mb-12" >
-                                                        <label for="validationCustom02">{{ $t('global.Amount') }}</label>
-                                                        <input type="number" step="0.1"
-                                                               class="form-control"
-                                                               v-model.trim="v$.amount.$model"
-                                                               id="validationCustom11"
-                                                               :class="{'is-invalid':v$.amount.$error,'is-valid':!v$.amount.$invalid}"
-                                                               :placeholder="$t('global.Amount')"
-                                                        >
-                                                        <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
-                                                        <div class="invalid-feedback">
-                                                            <span v-if="v$.amount.decimal.$invalid"> هذا الحقل يجب ان يكون رقم<br /> </span>
-                                                        </div>
-                                                    </div>
-
                                                 </div>
 
                                             </div>
@@ -231,7 +269,7 @@
 <script>
 import {computed, onMounted, reactive,toRefs,ref} from "vue";
 import useVuelidate from '@vuelidate/core';
-import {required,minLength,decimal,maxLength,integer,email} from '@vuelidate/validators';
+import {required,minLength,decimal,maxLength,integer,email,url} from '@vuelidate/validators';
 import adminApi from "../../../api/adminAxios";
 import { notify } from "@kyvg/vue3-notification";
 
@@ -257,11 +295,14 @@ export default {
                 phone : '',
                 nameCompany:'',
                 job: '',
+                facebook:'',
+                linkedin:'',
+                website:'',
+                whatsapp:'',
                 phone_second:'',
                 address : '',
                 province_id : null,
                 area_id : null,
-                amount: 0
             }
         });
 
@@ -290,11 +331,14 @@ export default {
                     required,
                     integer
                 },
+                facebook:{url},
+                linkedin:{url},
+                website:{url},
+                whatsapp:{url},
                 phone_second:{},
                 address: {
                     required
                 },
-                amount:{decimal},
                 province_id:{required,integer},
                 area_id:{required,integer},
             }
@@ -366,7 +410,7 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.post(`/v1/dashboard/client`,this.data)
+                adminApi.post(`/v1/dashboard/userCompany`,this.data)
                     .then((res) => {
 
                         notify({

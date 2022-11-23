@@ -6,14 +6,14 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">العملاء</h3>
+                        <h3 class="page-title">{{ $t('sidebar.merchant') }}</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <router-link :to="{name: 'dashboard'}">
                                     الرئيسية
                                 </router-link>
                             </li>
-                            <li class="breadcrumb-item active">العملاء</li>
+                            <li class="breadcrumb-item active">{{ $t('sidebar.merchant') }}</li>
                         </ul>
                     </div>
 
@@ -35,7 +35,7 @@
                                     <div class="col-5 row justify-content-end">
                                         <router-link
                                             v-if="permission.includes('category create')"
-                                            :to="{name: 'createClient'}"
+                                            :to="{name: 'createMerchant'}"
                                             class="btn btn-custom btn-warning">
                                             اضافه
                                         </router-link>
@@ -61,7 +61,7 @@
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.phone }}</td>
                                         <td>{{ item.complement.selling_method.name }}</td>
-                                        <td>{{ item.client.address }}</td>
+                                        <td>{{ item.merchant.address }}</td>
                                         <td>
                                             <a href="#" @click="activationClient(item.id,item.status,index)">
                                                 <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">{{
@@ -70,13 +70,13 @@
                                         </td>
                                         <td>
                                             <router-link
-                                                :to="{name: 'editClient',params:{id:item.id}}"
+                                                :to="{name: 'editMerchant',params:{id:item.id}}"
                                                 v-if="permission.includes('category edit')"
                                                 :title="$t('global.Edit')"
                                                 class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
-                                            <router-link :to="{name: 'showClient',params:{id:item.id}}"
+                                            <router-link :to="{name: 'showMerchant',params:{id:item.id}}"
                                                class="btn btn-sm btn-info me-2" >
                                                 <i class="fas fa-book-open"></i> {{$t('global.Show')}}
                                             </router-link>
@@ -191,7 +191,7 @@ export default {
         let getClient = (page = 1) => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/client?page=${page}&search=${search.value}`)
+            adminApi.get(`/v1/dashboard/merchant?page=${page}&search=${search.value}`)
                 .then((res) => {
                     let l = res.data.data;
                     clientsPaginate.value = l.users;
@@ -229,7 +229,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    adminApi.get(`/v1/dashboard/activationClient/${id}`)
+                    adminApi.get(`/v1/dashboard/activationMerchant/${id}`)
                         .then((res) => {
                             Swal.fire({
                                 icon: 'success',

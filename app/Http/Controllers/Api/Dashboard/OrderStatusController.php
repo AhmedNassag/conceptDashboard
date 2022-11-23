@@ -92,6 +92,8 @@ class OrderStatusController extends Controller
                     break;
 
                 case 5:
+
+                    $this->deleteOldAccount($order);
                     $this->orderAccount($request->all());
 
                     $tokens = [];
@@ -104,6 +106,7 @@ class OrderStatusController extends Controller
                     break;
 
                 case 6:
+                    $this->deleteOldAccount($order);
                     $this->orderReturnAllProduct($order);
 
                     $tokens = [];
@@ -116,6 +119,7 @@ class OrderStatusController extends Controller
                     break;
 
                 case 7:
+                    $this->deleteOldAccount($order);
                     $this->orderReturnSomeProduct($order,$request['products']);
                     $this->orderAccount($request->all());
 
@@ -370,6 +374,18 @@ class OrderStatusController extends Controller
             'amount' => -$request['sender_amount'],
             'client_income_id' => $clientIncome['id']
         ]);
+    }
+
+    // delete old Account
+
+    public function deleteOldAccount($order){
+
+        foreach ($order->clientAccounts as $clientAccount){
+            $clientAccount->delete();
+        }
+        foreach ($order->clientIncomes as $clientIncome){
+            $clientIncome->delete();
+        }
     }
 
 }

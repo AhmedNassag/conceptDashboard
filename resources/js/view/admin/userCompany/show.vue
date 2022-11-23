@@ -14,8 +14,8 @@
                                 </router-link>
                             </li>
                             <li class="breadcrumb-item">
-                                <router-link :to="{name: 'indexClient'}">
-                                    {{ $t('global.clients') }}
+                                <router-link :to="{name: 'indexUserCompany'}">
+                                    {{$t('sidebar.userCompany')}}
                                 </router-link>
                             </li>
                             <li class="breadcrumb-item active">{{ $t('global.Show') }}</li>
@@ -32,7 +32,7 @@
                         <div class="card-body">
 
                             <router-link
-                                :to="{name: 'editClient',params:{id}}"
+                                :to="{name: 'indexUserCompany',params:{id}}"
                                 v-if="permission.includes('category edit')"
                                 class="btn btn-sm btn-success me-2 mr-3">
                                 <i class="far fa-edit"></i> {{$t('global.updateUserData')}}
@@ -45,7 +45,12 @@
 
                             <div class="text-center mb-5">
                                 <label class="avatar avatar-xxl profile-cover-avatar" >
-                                    <img class="avatar-img" :src="user.image_path" alt="Profile Image">
+                                    <img
+                                        class="avatar-img"
+                                        :src="user.image_path"
+                                        onerror="src='/admin/img/admin.jpeg'"
+                                        alt="Profile Image"
+                                    >
                                 </label>
                                 <h2>{{user.name}} <i class="fas fa-certificate text-primary small" data-bs-toggle="tooltip"
                                                   data-placement="top" title="" data-original-title="Verified"></i></h2>
@@ -145,11 +150,11 @@ export default {
         let getProducts = () => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/client/${id.value}`)
+            adminApi.get(`/v1/dashboard/userCompany/${id.value}`)
                 .then((res) => {
                     let l = res.data.data;
                     user.value = l.user;
-                    client.value = l.user.client;
+                    client.value = l.user.user_company;
                     client.value['area_name'] = l.user.complement.area.name;
                     client.value['province_name'] = l.user.complement.province.name;
                     client.value['selling_method_name'] = l.user.complement.selling_method.name;
@@ -184,7 +189,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    adminApi.get(`/v1/dashboard/activationClient/${id}`)
+                    adminApi.get(`/v1/dashboard/activationCompany/${id}`)
                         .then((res) => {
                             Swal.fire({
                                 icon: 'success',

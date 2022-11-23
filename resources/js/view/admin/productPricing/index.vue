@@ -136,8 +136,7 @@
                                                                                             <td>{{ it.product_status.name }}</td>
                                                                                             <td>{{ it.main_quantity }}</td>
                                                                                             <td>{{ it.count_unit }}</td>
-                                                                                            <td>{{ it.sub_quantity_order }}</td>
-                                                                                            <td>{{ it.production_date ?? '---' }}</td>
+                                                                                            <td>{{ it.count_unit > 1 ? it.sub_quantity_order : '---' }}</td>                                                                                            <td>{{ it.production_date ?? '---' }}</td>
                                                                                             <td>{{ it.expiry_date ?? '---' }}</td>
                                                                                         </tr>
                                                                                     </tbody>

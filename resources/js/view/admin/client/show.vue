@@ -45,7 +45,12 @@
 
                             <div class="text-center mb-5">
                                 <label class="avatar avatar-xxl profile-cover-avatar" >
-                                    <img class="avatar-img" :src="user.image_path" alt="Profile Image">
+                                    <img
+                                        class="avatar-img"
+                                        :src="user.image_path"
+                                        onerror="src='/admin/img/admin.jpeg'"
+                                        alt="Profile Image"
+                                    >
                                 </label>
                                 <h2>{{user.name}} <i class="fas fa-certificate text-primary small" data-bs-toggle="tooltip"
                                                   data-placement="top" title="" data-original-title="Verified"></i></h2>

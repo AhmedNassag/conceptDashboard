@@ -81,7 +81,9 @@ import addNotificationApp from "./adminRoute/addNotificationApp";
 import knowledgeWay from "./adminRoute/knowledgeWay";
 import userCompany from "./adminRoute/userCompany";
 import merchant from "./adminRoute/merchant";
-
+import leadFollowUps from "./adminRoute/leadFollowUps";
+import leadSourse from "./adminRoute/leadSourse";
+import lead from "./adminRoute/lead";
 
 
 
@@ -209,7 +211,10 @@ const routes = [
             ...sparePart,
             ...knowledgeWay,
             ...userCompany,
-            ...merchant
+            ...merchant,
+            ...leadFollowUps,
+            ...leadSourse,
+            ...lead
         ]
     },
     {

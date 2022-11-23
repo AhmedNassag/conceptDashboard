@@ -56,8 +56,7 @@
                                     </thead>
                                     <tbody v-if="products.length">
                                     <tr v-for="(item,index) in products"  :key="item.id">
-                                        <td> <span v-if="item.error || item.quantity < item.Re_order_limit" class="fas fa-exclamation-circle red-text" aria-hidden="true"></span> {{ index +1}}</td>
-                                        <td>{{ item.barcode }}</td>
+                                        <td> <span v-if="item.error || item.quantity < item.Re_order_limit" class="fas fa-exclamation-circle red-text" aria-hidden="true"></span> {{ item.id}}</td>                                        <td>{{ item.barcode }}</td>
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.company.name }}</td>
                                         <td>{{ item.category.name }}</td>
@@ -119,8 +118,7 @@
                                                                                     <td>{{ it.main_quantity }}</td>
                                                                                     <td>{{ it.count_unit }}</td>
                                                                                     <td>{{ it.sub_quantity_order }}</td>
-                                                                                    <td>{{ it.production_date ?? '---' }}</td>
-                                                                                    <td>{{ it.expiry_date ?? '---' }}</td>
+                                                                                    <td>{{ it.count_unit > 1 ? it.sub_quantity_order : '---' }}</td>                                                                                    <td>{{ it.expiry_date ?? '---' }}</td>
                                                                                     <td v-if="it.expiry_date < date_now" class="danger"> {{$t('global.Expired')}} </td>
                                                                                     <td v-else > {{$t('global.ThereIsNo')}} </td>
                                                                                 </tr>
@@ -159,7 +157,7 @@
             </div>
             <!-- /Table -->
             <!-- start Pagination -->
-            <Pagination :data="productsPaginate" @pagination-change-page="getProducts">
+            <Pagination :limit="2" :data="productsPaginate" @pagination-change-page="getProducts">
                 <template #prev-nav>
                     <span>&lt; {{$t('global.Previous')}}</span>
                 </template>

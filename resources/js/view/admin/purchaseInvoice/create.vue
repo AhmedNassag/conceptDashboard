@@ -188,7 +188,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.countUnitsIN')}} {{data.product[index].mainUnitMeasurement}}</label>
                                                             <input type="number" class="form-control"
                                                                    v-model.number="v$.product[index].count_unit.$model"
@@ -203,7 +203,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.RequiredQuantity')}} ( {{data.product[index].subUnitMeasurement}} )</label>
                                                             <input type="number" class="form-control"
                                                                    v-model.number="v$.product[index].sub_quantity.$model"
@@ -218,7 +218,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.price')}} ( {{data.product[index].subUnitMeasurement}} )</label>
                                                             <input type="number" step="0.1" class="form-control" disabled
                                                                    v-model.number="v$.product[index].sub_price.$model"

@@ -112,14 +112,14 @@
                                                             >
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.RequiredQuantity')}} ( {{data.product[index].subUnitMeasurement}} ) ( {{$t('global.Partial')}} )</label>
                                                             <input type="text" disabled class="form-control"
                                                                    v-model="data.product[index].RequiredSubQuantity"
                                                             >
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.countUnits')}}</label>
                                                             <input type="text" disabled class="form-control"
                                                                    v-model="data.product[index].count_unit"
@@ -184,7 +184,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.quantityReceived')}} ( {{$t('global.Partial')}} )</label>
                                                             <input type="number" class="form-control"
                                                                    @input="subQuantityReceived(index)"
@@ -199,7 +199,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 mb-3">
+                                                        <div class="col-md-3 mb-3" v-if="data.product[index].count_unit > 1">
                                                             <label>{{$t('global.returnQuantity')}} ( {{$t('global.Partial')}} )</label>
                                                             <input type="number" class="form-control"
                                                                    @input="returnSubQuantity(index)"

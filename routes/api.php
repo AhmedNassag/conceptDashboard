@@ -143,7 +143,7 @@ use Illuminate\Support\Facades\Route;
              //start logout
              Route::post('logout','AuthDashboardController@logout');
 
-             // shift
+             // province
              Route::resource('province','ProvinceController');
 
              // area
@@ -348,6 +348,16 @@ use Illuminate\Support\Facades\Route;
              Route::resource('merchant','MerchantController');
              Route::get('activationMerchant/{id}','MerchantController@activationMerchant');
              Route::resource('knowledgeWay','KnowledgeWayController');
+
+             // start leadSourse
+             Route::resource('leadSourse','LeadSourceController');
+
+             // start leadFollowUps
+             Route::resource('leadFollowUps','LeadFollowUpController');
+
+             // start lead
+             Route::resource('lead','LeadController');
+
 
 
          });

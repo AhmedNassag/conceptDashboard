@@ -9,10 +9,10 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">العملاء</h3>
+                        <h3 class="page-title">{{ $t('sidebar.merchant') }}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexClient'}">العملاء</router-link></li>
-                            <li class="breadcrumb-item active">تعديل العميل</li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexMerchant'}">{{ $t('sidebar.merchant') }}</router-link></li>
+                            <li class="breadcrumb-item active">تعديل </li>
                         </ul>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="card-header pt-0 mb-4">
                                 <router-link
-                                    :to="{name: 'indexClient'}"
+                                    :to="{name: 'indexMerchant'}"
                                     class="btn btn-custom btn-dark"
                                 >
                                     العوده للخلف
@@ -35,12 +35,11 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['trade_name']">{{ errors['trade_name'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['nameCompany']">{{ errors['nameCompany'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['email']">{{ errors['email'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['phone']">{{ errors['phone'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['address']">{{ errors['address'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['location']">{{ errors['location'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['selling_method_id']">{{ errors['selling_method_id'][0] }}<br /> </div>
+
 
                                     <form @submit.prevent="editClient" class="needs-validation">
                                         <div class="form-row row">
@@ -57,6 +56,21 @@
                                                     <span v-if="v$.name.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                     <span v-if="v$.name.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.name.minLength.$params.min }} حرف  <br /></span>
                                                     <span v-if="v$.name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.name.maxLength.$params.max }} حرف</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>اسم الشركه </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.nameCompany.$model"
+                                                       placeholder="اسم الوظيفه"
+                                                       :class="{'is-invalid':v$.nameCompany.$error,'is-valid':!v$.nameCompany.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.nameCompany.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.nameCompany.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.nameCompany.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.nameCompany.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.nameCompany.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
 
@@ -216,7 +230,7 @@ export default {
         let getClient = () => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/client/${id.value}/edit`)
+            adminApi.get(`/v1/dashboard/merchant/${id.value}/edit`)
                 .then((res) => {
                     let l = res.data.data;
                     provinces.value = l.provinces;
@@ -225,7 +239,8 @@ export default {
                     addClient.data.area_id = l.user.complement.area_id;
                     addClient.data.phone = l.user.phone;
                     addClient.data.email = l.user.email;
-                    addClient.data.address = l.user.client.address;
+                    addClient.data.nameCompany = l.user.complement.nameCompany;
+                    addClient.data.address = l.user.merchant.address;
                     addClient.data.amount = l.user.client_accounts[0].amount;
                     getAreas(l.user.complement.province_id);
                 })
@@ -262,18 +277,25 @@ export default {
         let addClient =  reactive({
             data:{
                 name : '',
+                nameCompany:'',
                 email : '',
                 phone : '',
                 address : '',
                 province_id : null,
                 area_id : null,
                 amount: 0
+
             }
         });
 
         const rules = computed(() => {
             return {
                 name: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                nameCompany: {
                     minLength: minLength(3),
                     maxLength:maxLength(70),
                     required
@@ -294,20 +316,20 @@ export default {
                 area_id:{required,integer},
             }
         });
-        let getAreas= (id) => {
+        let getAreas= (province_id) => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/province/${id}`)
+            adminApi.get(`/v1/dashboard/province/${province_id}`)
                 .then((res) => {
                     let l = res.data.data;
                     areas.value = l.areas;
                 })
                 .catch((err) => {
-                    console.log(err.response);
+                    console.log(err);
                 })
                 .finally(() => {
                     loading.value = false;
-                })
+                });
         };
 
         const v$ = useVuelidate(rules,addClient.data);
@@ -323,7 +345,7 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.put(`/v1/dashboard/client/${this.id}`,this.data)
+                adminApi.put(`/v1/dashboard/merchant/${this.id}`,this.data)
                     .then((res) => {
 
                         notify({

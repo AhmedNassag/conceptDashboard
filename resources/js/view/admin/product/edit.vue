@@ -356,7 +356,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3 mb-3">
+                                                    <div class="col-md-3 mb-3" v-if="data.count_unit > 1">
                                                         <label>{{$t('global.RequiredQuantity')}} ( {{data.subUnitMeasurement}} ) ( {{$t('global.Partial')}} )</label>
                                                         <input type="number" class="form-control"
                                                                v-model.number="v$.sub_quantity.$model"
@@ -370,7 +370,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-3 mb-3">
+                                                    <div class="col-md-3 mb-3" v-if="data.count_unit > 1">
                                                         <label>{{$t('global.price')}} ( {{data.subUnitMeasurement}} ) ( {{$t('global.Partial')}} )</label>
                                                         <input type="number" step="0.1" class="form-control" disabled
                                                                v-model.number="v$.sub_price.$model"

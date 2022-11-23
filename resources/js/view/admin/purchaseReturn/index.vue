@@ -318,10 +318,10 @@
                                                                                     <tr v-for="(it,index) in item.return_products" v-if="item.return_products" :key="it.id">
                                                                                         <td>{{ index +1}}</td>
                                                                                         <td>{{ it.product.name }}</td>
-                                                                                        <td>{{ it.quantity }}</td>
-                                                                                        <td>{{ it.price }} ج.م</td>
-                                                                                        <td>{{ it.sub_quantity }}</td>
-                                                                                        <td>{{ parseFloat(it.sub_price).toFixed(2) }} ج.م</td>
+                                                                                        <td>{{ it.quantity > 0 ? it.quantity : '-' }}</td>
+                                                                                        <td>{{ it.quantity > 0 ? it.price+' ج.م ' : '-' }}</td>
+                                                                                        <td>{{ it.sub_quantity > 0 ? it.sub_quantity : '-' }}</td>
+                                                                                        <td>{{ it.sub_quantity > 0 ? parseFloat(it.sub_price).toFixed(2)+' ج.م ' : '-' }}</td>
                                                                                         <td>{{ parseFloat(it.quantity * it.price) + parseFloat(it.sub_quantity * it.sub_price) }} ج.م</td>
                                                                                         <td>{{ it.note ?? '---' }}</td>
                                                                                     </tr>
@@ -374,10 +374,10 @@
                                                                                     <tr v-for="(it,index) in item.purchase.purchase_products" v-if="item.purchase.purchase_products" :key="it.id">
                                                                                         <td>{{ index +1}}</td>
                                                                                         <td>{{ it.product.name }}</td>
-                                                                                        <td>{{ it.quantity }}</td>
-                                                                                        <td>{{ it.price }} ج.م</td>
-                                                                                        <td>{{ it.sub_quantity }}</td>
-                                                                                        <td>{{ parseFloat(it.price / it.count_unit).toFixed(2) }} ج.م</td>
+                                                                                        <td>{{ it.quantity > 0 ? it.quantity : '-' }}</td>
+                                                                                        <td>{{ it.quantity > 0 ? it.price + ' ج.م ' : '-'}}</td>
+                                                                                        <td>{{ it.sub_quantity > 0 ? it.sub_quantity : '-'}}</td>
+                                                                                        <td>{{ it.sub_quantity > 0 ? parseFloat(it.price / it.count_unit).toFixed(2) + ' ج.م ' : '-' }}</td>
                                                                                         <td>{{ parseFloat(it.quantity * it.price) + parseFloat(it.sub_quantity * (it.price / it.count_unit)) }} ج.م</td>
                                                                                     </tr>
                                                                                     <tr v-else>

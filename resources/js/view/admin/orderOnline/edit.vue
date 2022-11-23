@@ -188,7 +188,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0">
+                                                        <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0 && products[index].count_unit > 1">
                                                             <label>
                                                                 {{ products[index].productPrice[1].measurement_unit.name }}
                                                                 ({{ products[index].productPrice[1].available_quantity }})
@@ -526,7 +526,7 @@ export default {
                             branchQuantity: {required,numeric, minValue: minValue(0)},
                             product_id:{required}
                         });
-                        this.products.push({products:[],total:0,product:{},avgPrice:0,productPrice:[],count_unit:0,totalCount:0,isValidProd:true,search:'',name:''});
+                        addJob.products.push({products:[],total:0,product:{},avgPrice:0,productPrice:[],count_unit:0,totalCount:0,isValidProd:true,search:'',name:''});
 
                         addJob.data.product[index].mainPrice = q.price;
                         addJob.data.product[index].branchPrice = q.sub_price;

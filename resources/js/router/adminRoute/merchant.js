@@ -1,20 +1,20 @@
-import indexClient from "../../view/admin/client/index";
-import createClient  from "../../view/admin/client/create";
-import editClient  from "../../view/admin/client/edit";
-import showClient  from "../../view/admin/client/show";
+import indexMerchant from "../../view/admin/merchant/index";
+import createMerchant  from "../../view/admin/merchant/create";
+import editMerchant  from "../../view/admin/merchant/edit";
+import showMerchant from "../../view/admin/merchant/show";
 import store from "../../store/admin";
 
 export default [
     {
-        path: 'client',
+        path: 'merchant',
         component:  {
             template:'<router-view />',
         },
         children:[
             {
                 path: '',
-                name: 'indexClient',
-                component: indexClient,
+                name: 'indexMerchant',
+                component: indexMerchant,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
 
@@ -27,8 +27,8 @@ export default [
             },
             {
                 path: 'create',
-                name: 'createClient',
-                component: createClient,
+                name: 'createMerchant',
+                component: createMerchant,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
 
@@ -41,8 +41,8 @@ export default [
             },
             {
                 path: 'edit/:id(\\d+)',
-                name: 'editClient',
-                component: editClient,
+                name: 'editMerchant',
+                component: editMerchant,
                 props: true,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
@@ -56,8 +56,8 @@ export default [
             },
             {
                 path: 'show/:id(\\d+)',
-                name: 'showClient',
-                component: showClient,
+                name: 'showMerchant',
+                component: showMerchant,
                 props: true,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;

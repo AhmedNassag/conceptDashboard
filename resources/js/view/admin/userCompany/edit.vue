@@ -9,10 +9,10 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">العملاء</h3>
+                        <h3 class="page-title">{{$t('sidebar.userCompany')}}</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexClient'}">العملاء</router-link></li>
-                            <li class="breadcrumb-item active">تعديل العميل</li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexUserCompany'}">{{$t('sidebar.userCompany')}}</router-link></li>
+                            <li class="breadcrumb-item active">تعديل </li>
                         </ul>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="card-header pt-0 mb-4">
                                 <router-link
-                                    :to="{name: 'indexClient'}"
+                                    :to="{name: 'indexUserCompany'}"
                                     class="btn btn-custom btn-dark"
                                 >
                                     العوده للخلف
@@ -35,12 +35,10 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="alert alert-danger text-center" v-if="errors['name']">{{ errors['name'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['trade_name']">{{ errors['trade_name'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['email']">{{ errors['email'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['phone']">{{ errors['phone'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['address']">{{ errors['address'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['location']">{{ errors['location'][0] }}<br /> </div>
-                                    <div class="alert alert-danger text-center" v-if="errors['selling_method_id']">{{ errors['selling_method_id'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['job']">{{ errors['phone'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['nameCompany']">{{ errors['nameCompany'][0] }}<br /> </div>
 
                                     <form @submit.prevent="editClient" class="needs-validation">
                                         <div class="form-row row">
@@ -57,6 +55,36 @@
                                                     <span v-if="v$.name.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                     <span v-if="v$.name.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.name.minLength.$params.min }} حرف  <br /></span>
                                                     <span v-if="v$.name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.name.maxLength.$params.max }} حرف</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>اسم الوظيفه </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.job.$model"
+                                                       placeholder="اسم الوظيفه"
+                                                       :class="{'is-invalid':v$.job.$error,'is-valid':!v$.job.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.job.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.job.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.job.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.job.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.job.maxLength.$params.max }} حرف</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>اسم الشركه </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.nameCompany.$model"
+                                                       placeholder="اسم الوظيفه"
+                                                       :class="{'is-invalid':v$.nameCompany.$error,'is-valid':!v$.nameCompany.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.nameCompany.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.nameCompany.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.nameCompany.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.nameCompany.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.nameCompany.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
 
@@ -86,6 +114,71 @@
                                                 <div class="invalid-feedback">
                                                     <span v-if="v$.phone.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                     <span v-if="v$.phone.integer.$invalid"> يجب ان يكون رقم.  <br /></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom04">رقم تليفون اخر </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.phone_second.$model"
+                                                       id="validationCustom05"
+                                                       placeholder="رقم تليفون اخر"
+                                                       :class="{'is-invalid':v$.phone_second.$error,'is-valid':!v$.phone_second.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom011">لنك الفيس بوك </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.facebook.$model"
+                                                       id="validationCustom011"
+                                                       placeholder="لنك الفيس بوك "
+                                                       :class="{'is-invalid':v$.facebook.$error,'is-valid':!v$.facebook.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom012">لنك linkedin </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.linkedin.$model"
+                                                       id="validationCustom012"
+                                                       placeholder="لنك linkedin "
+                                                       :class="{'is-invalid':v$.linkedin.$error,'is-valid':!v$.linkedin.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom013">لنك website</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.website.$model"
+                                                       id="validationCustom013"
+                                                       placeholder="لنك website"
+                                                       :class="{'is-invalid':v$.website.$error,'is-valid':!v$.website.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom016">لنك الواتس </label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.whatsapp.$model"
+                                                       id="validationCustom016"
+                                                       placeholder="لنك الواتس "
+                                                       :class="{'is-invalid':v$.whatsapp.$error,'is-valid':!v$.whatsapp.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
                                                 </div>
                                             </div>
 
@@ -146,33 +239,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3 mt-5">
-                                                <div class="sec-body">
-                                                    <div class="col-md-12 mb-12 sec-head">
-                                                        <h3>
-                                                            {{ $t('global.TheBalanceOfTheFirstDuration') }}
-                                                        </h3>
-                                                    </div>
-
-                                                    <div class="col-md-12 mb-12" >
-                                                        <label for="validationCustom02">{{ $t('global.Amount') }}</label>
-                                                        <input type="number" step="0.1"
-                                                               class="form-control"
-                                                               v-model.trim="v$.amount.$model"
-                                                               id="validationCustom11"
-                                                               :class="{'is-invalid':v$.amount.$error,'is-valid':!v$.amount.$invalid}"
-                                                               :placeholder="$t('global.Amount')"
-                                                        >
-                                                        <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
-                                                        <div class="invalid-feedback">
-                                                            <span v-if="v$.amount.decimal.$invalid"> هذا الحقل يجب ان يكون رقم<br /> </span>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">تعديل</button>
@@ -216,17 +282,23 @@ export default {
         let getClient = () => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/client/${id.value}/edit`)
+            adminApi.get(`/v1/dashboard/userCompany/${id.value}/edit`)
                 .then((res) => {
                     let l = res.data.data;
                     provinces.value = l.provinces;
                     addClient.data.name = l.user.name;
                     addClient.data.province_id = l.user.complement.province_id;
+                    addClient.data.nameCompany = l.user.complement.nameCompany;
+                    addClient.data.job = l.user.user_company.job;
                     addClient.data.area_id = l.user.complement.area_id;
                     addClient.data.phone = l.user.phone;
                     addClient.data.email = l.user.email;
-                    addClient.data.address = l.user.client.address;
-                    addClient.data.amount = l.user.client_accounts[0].amount;
+                    addClient.data.address = l.user.user_company.address;
+                    addClient.data.facebook = l.user.user_company.facebook;
+                    addClient.data.whatsapp = l.user.user_company.whatsapp;
+                    addClient.data.website = l.user.user_company.website;
+                    addClient.data.phone_second = l.user.user_company.phone_second;
+                    addClient.data.linkedin = l.user.user_company.linkedin;
                     getAreas(l.user.complement.province_id);
                 })
                 .catch((err) => {
@@ -264,16 +336,32 @@ export default {
                 name : '',
                 email : '',
                 phone : '',
+                nameCompany:'',
+                job: '',
+                facebook:'',
+                linkedin:'',
+                website:'',
+                whatsapp:'',
+                phone_second:'',
                 address : '',
                 province_id : null,
                 area_id : null,
-                amount: 0
             }
         });
 
         const rules = computed(() => {
             return {
                 name: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                nameCompany: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                job:{
                     minLength: minLength(3),
                     maxLength:maxLength(70),
                     required
@@ -286,6 +374,11 @@ export default {
                     required,
                     integer
                 },
+                facebook:{},
+                linkedin:{},
+                website:{},
+                whatsapp:{},
+                phone_second:{},
                 address: {
                     required
                 },
@@ -323,7 +416,7 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.put(`/v1/dashboard/client/${this.id}`,this.data)
+                adminApi.put(`/v1/dashboard/userCompany/${this.id}`,this.data)
                     .then((res) => {
 
                         notify({
@@ -335,7 +428,8 @@ export default {
 
                     })
                     .catch((err) => {
-                        this.errors = err.response.data.errors;
+                        console.log(err.response)
+                        // this.errors = err.response.data.errors;
                     })
                     .finally(() => {
                         this.loading = false;

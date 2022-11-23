@@ -17,13 +17,9 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('description');
-            $table->text('details')->nullable();
-            $table->string('model')->nullable();
-            $table->string('made_of')->nullable();
-            $table->string('quality')->nullable();
+            $table->unsignedBigInteger('barcode')->unique()->nullable();
             $table->integer('Re_order_limit');
             $table->integer('maximum_product');
-            $table->unsignedBigInteger('barcode')->unique()->nullable();
             $table->text('image')->nullable();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('sub_category_id')->constrained('categories')->cascadeOnDelete();
@@ -33,7 +29,6 @@ class CreateProductsTable extends Migration
             $table->integer('count_unit')->default(0);
             $table->boolean('status')->default(true);
             $table->boolean('sell_app')->default(true);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

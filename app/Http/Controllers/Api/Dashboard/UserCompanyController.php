@@ -55,8 +55,8 @@ class UserCompanyController extends Controller
         $v = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
-            'province'  => 'required|integer|exists:provinces,id',
-            'area'  => 'required|integer|exists:areas,id',
+            'province_id'  => 'required|integer|exists:provinces,id',
+            'area_id'  => 'required|integer|exists:areas,id',
             'phone' => 'required|string|unique:users',
             'phone_second' => 'present|different:phone',
             'address' => 'required|string|min:8|max:300',
@@ -114,7 +114,11 @@ class UserCompanyController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::with(['userCompany','complement' => function ($q){
+            $q->with(['area','province','sellingMethod']);
+        }])->findOrFail($id);
+
+        return $this->sendResponse(['user' => $user],'Data exited successfully');
     }
 
     /**
@@ -145,14 +149,14 @@ class UserCompanyController extends Controller
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|string',
-                'email' => 'required|string|email|unique:users,email',
-                'province'  => 'required|integer|exists:provinces,id',
-                'area'  => 'required|integer|exists:areas,id',
-                'phone' => 'required|string|unique:users',
+                'email' => 'required|string|email|unique:users,email,'.$user->id,
+                'province_id'  => 'required|integer|exists:provinces,id',
+                'area_id'  => 'required|integer|exists:areas,id',
+                'phone' => 'required|string|unique:users,phone,'.$user->id,
                 'phone_second' => 'present|different:phone',
                 'address' => 'required|string|min:8|max:300',
                 'job' => 'required|string',
-                'nameCompany' => 'required|string|unique:complements',
+                'nameCompany' => 'required|string|unique:complements,nameCompany,'.$user->complement->id,
                 "facebook" => 'nullable|url',
                 "linkedin" => 'nullable|url',
                 "website" => 'nullable|url',
@@ -164,20 +168,20 @@ class UserCompanyController extends Controller
             }
 
             // start create user
-            $user->create([
+            $user->update([
                 "name" => $request->name,
                 "email" => $request->email,
                 'phone' => $request->phone,
                 "code" => '+2'
             ]);
 
-            $user->complement()->update([
+            $user->complement()->first()->update([
                 'nameCompany' => $request->nameCompany,
                 'province_id' => $request->province_id,
                 'area_id' => $request->area_id,
             ]);
 
-            UserCompany::whereUserId($user->id)->update([
+            UserCompany::whereUserId($user->id)->first()->update([
                 'job' => $request->job,
                 'address' => $request->address,
                 'phone_second' => $request->phone_second,

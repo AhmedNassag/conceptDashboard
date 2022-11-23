@@ -189,7 +189,8 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0">
+                                                        <div
+                                                            class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0 && products[index].count_unit > 1">
                                                             <label>
                                                                 {{ products[index].productPrice[1].measurement_unit.name }}
                                                                 ({{ products[index].productPrice[1].available_quantity }})
@@ -579,7 +580,7 @@ export default {
                                 addJob.products[index].productPrice[0].price;
                         }
 
-                        productPricePartialTotal();
+                        productPricePartialTotal(index);
 
                     });
 

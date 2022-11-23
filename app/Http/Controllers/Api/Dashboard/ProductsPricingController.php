@@ -59,6 +59,8 @@ class ProductsPricingController extends Controller
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
+            $product_count_unit = Product::find($request->product_id);
+
             foreach ($request->product as $item){
                 $product = ProductPricing::find($item['id']);
                 $product->update([
@@ -68,6 +70,21 @@ class ProductsPricingController extends Controller
                     'active'=>$item['active'],
                     'measurement_unit_id'=>$item['measurement_unit_id']
                 ]);
+
+                if ($product_count_unit->count_unit == 1){
+
+                    $product_pricing = ProductPricing::where([
+                        ['id',$item['id']],
+                        ['product_id',$request['product_id']],
+                        ['measurement_unit_id',$product_count_unit['sub_measurement_unit_id']],
+                    ])->first();
+
+                    if ($product_pricing){
+                        $product_pricing->update([
+                            'active'=> 0,
+                        ]);
+                    }
+                }
 
                 PricingHistory::create([
                    'product_id' =>$request->product_id,

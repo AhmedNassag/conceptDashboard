@@ -446,10 +446,10 @@
                                                                                 <tr v-for="(it,index) in item.order_details" :key="it.id">
                                                                                     <td>{{ index +1}}</td>
                                                                                     <td>{{ it.product.name }}</td>
-                                                                                    <td>{{ it.quantity }} ( {{it.main_measurement_unit.name}} )</td>
-                                                                                    <td>{{ it.sub_quantity }} ( {{it.sub_measurement_unit.name}} )</td>
-                                                                                    <td>{{ it.sub_quantity ? it.price : '-'}}</td>
-                                                                                    <td>{{  it.sub_quantity ? it.sub_price : '-'}}</td>
+                                                                                    <td>{{ it.quantity ? it.quantity + ' ( '+it.main_measurement_unit.name+' ) ' : '-'}}</td>
+                                                                                    <td>{{ it.sub_quantity ? it.sub_quantity + ' ( '+it.sub_measurement_unit.name+' ) ' : '-' }} </td>
+                                                                                    <td>{{ it.quantity ? it.price : '-'}}</td>
+                                                                                    <td>{{ it.sub_quantity ? it.sub_price : '-'}}</td>
                                                                                     <td>
                                                                                         {{
                                                                                             parseFloat((it.quantity * it.price) + (it.sub_quantity * it.sub_price))

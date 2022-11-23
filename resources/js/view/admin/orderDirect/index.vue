@@ -1,7 +1,7 @@
 <template>
     <div :class="['page-wrapper','page-wrapper-ar']">
         <div class="content container-fluid">
-
+            <notifications :position="'top left'"  />
             <!-- Page Header -->
             <div class="page-header">
                 <div class="row align-items-center">
@@ -219,10 +219,10 @@
                                                                                         <tr v-for="(it,index) in item.order_details" :key="it.id">
                                                                                             <td>{{ index +1}}</td>
                                                                                             <td>{{ it.product.name }}</td>
-                                                                                            <td>{{ it.quantity }} ( {{it.main_measurement_unit.name}} )</td>
-                                                                                            <td>{{ it.sub_quantity }} ( {{it.sub_measurement_unit.name}} )</td>
-                                                                                            <td>{{ it.sub_quantity ? it.price : '-'}}</td>
-                                                                                            <td>{{  it.sub_quantity ? it.sub_price : '-'}}</td>
+                                                                                            <td>{{ it.quantity ? it.quantity + ' ( '+it.main_measurement_unit.name+' ) ' : '-'}}</td>
+                                                                                            <td>{{ it.sub_quantity ? it.sub_quantity + ' ( '+it.sub_measurement_unit.name+' ) ' : '-' }} </td>
+                                                                                            <td>{{ it.quantity ? it.price : '-'}}</td>
+                                                                                            <td>{{ it.sub_quantity ? it.sub_price : '-'}}</td>
                                                                                             <td>
                                                                                                 {{
                                                                                                     parseFloat((it.quantity * it.price) + (it.sub_quantity * it.sub_price))
@@ -259,7 +259,7 @@
                                                         <div class="modal-header">
                                                             <h4 class="modal-title">
                                                                 {{ $t('global.changeOrderStatus') }}</h4>
-                                                            <button :id="'close-'+item.id"  type="button" class="close print-button" data-bs-dismiss="modal">
+                                                            <button :id="'close-status-'+item.id"  type="button" class="close print-button" data-bs-dismiss="modal">
                                                                 <span>&times;</span></button>
                                                         </div>
 
@@ -527,7 +527,7 @@ export default {
                     ordersPaginate.value = l.orders;
                     orders.value = l.orders.data;
                     orderStatus.value = l.orderStatus;
-
+                    treasury_amount.value = l.treasuries[0].amount;
                     treasuries.value = l.treasuries;
                 })
                 .catch((err) => {
@@ -545,6 +545,7 @@ export default {
 
         let close=(id)=>{
             document.getElementById('close-'+id).click();
+            document.getElementById('close-status-'+id).click();
         };
 
         let dateFormat = (item) => {
@@ -854,7 +855,7 @@ export default {
                             speed: 2000
                         });
 
-                        document.getElementById('close-'+this.data.order_id).click();
+                        document.getElementById('close-status-'+this.data.order_id).click();
                         this.resetForm();
                         this.getOrder();
                         this.$nextTick(() => { this.v$.$reset() });
@@ -869,6 +870,18 @@ export default {
 
             }
         },
+        resetForm(){
+            this.data.order_status_id = '';
+            this.data.representative_id = '';
+            this.data.order_id = '';
+            this.data.treasury_id = 1;
+            this.data.type_invoice = 1;
+            this.data.name_supplier = '';
+            this.data.sender_id = 0;
+            this.data.treasury_amount = 0;
+            this.data.sender_amount = 0;
+            this.data.products = [];
+        }
     },
     data() {
         return {

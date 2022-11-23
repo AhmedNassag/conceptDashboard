@@ -44,7 +44,11 @@
         "OrderDirect": "الطلبات المباشره",
         "upcomingPayment": "مديونات العملاء",
         "Knowledge": "طرق التعرف علينا ",
-        "userCompany": "عملاء الشركات"
+        "userCompany": "عملاء الشركات",
+        "merchant": "عملاء التجار",
+        "LeadFollowUps": "متابعه العملاء",
+        "leadSourse": "مصادر العملاء ",
+        "lead": "عملاء غير محتملين"
     },
     "global": {
         "Search":"بحث",
