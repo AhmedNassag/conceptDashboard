@@ -150,6 +150,26 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-6 mb-3">
+                                                <label >موظف</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.employee_id.$model"
+                                                    :class="{'is-invalid':v$.employee_id.$error,'is-valid':!v$.employee_id.$invalid}"
+                                                >
+                                                    <option value="">---</option>
+                                                    <option
+                                                        v-for="employee in employees"
+                                                        :value=" employee.id"
+                                                        :key=" employee.id"
+                                                    >{{ employee.user.name }}</option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                  </div>
+                                            </div>
+
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">اضافه</button>
@@ -184,6 +204,23 @@ export default {
         let loading = ref(false);
         let areas = ref([]);
         let provinces = ref([]);
+        let employees = ref([]);
+
+        let getLead = () => {
+            loading.value = true;
+
+            adminApi.get(`/v1/dashboard/lead/create`)
+                .then((res) => {
+                    let l = res.data.data;
+                    employees.value = l.employees;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                })
+                .finally(() => {
+                    loading.value = false;
+                })
+        }
 
         //start design
         let addClient =  reactive({
@@ -194,6 +231,7 @@ export default {
                 address : '',
                 province_id : null,
                 area_id : null,
+                employee_id: null
             }
         });
 
@@ -214,6 +252,7 @@ export default {
                 address: {
                     required
                 },
+                employee_id:{},
                 amount:{decimal},
                 province_id:{required,integer},
                 area_id:{required,integer},
@@ -238,6 +277,7 @@ export default {
 
         onMounted(() => {
             getStore();
+            getLead();
         });
 
         let getAreas= (id) => {
@@ -249,7 +289,7 @@ export default {
                     areas.value = l.areas;
                 })
                 .catch((err) => {
-                    console.log(err.response);
+                    this.errors = err.response.data.errors;
                 })
                 .finally(() => {
                     loading.value = false;
@@ -258,7 +298,7 @@ export default {
 
         const v$ = useVuelidate(rules,addClient.data);
 
-        return {loading,...toRefs(addClient),areas,provinces,getAreas,v$};
+        return {loading,...toRefs(addClient),areas,provinces,getAreas,v$,employees};
     },
     methods: {
         storeClient(){
@@ -283,7 +323,7 @@ export default {
                         this.$nextTick(() => { this.v$.$reset() });
                     })
                     .catch((err) => {
-                        console.log(err.response);
+                        this.errors = err.response.data.errors;
                     })
                     .finally(() => {
                         this.loading = false;

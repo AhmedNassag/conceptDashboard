@@ -53,10 +53,10 @@
                                                 </div>
                                             </div>
 
-<!--                                            <div class="col-md-6 mb-3">-->
-<!--                                                <label for="validationCustom0">{{$t('global.AllowAddingToSalesTeam')}}</label>-->
-<!--                                                <input type="checkbox" id="validationCustom0" v-model="data.Allow_adding_to_sales_team" class="m-5" >-->
-<!--                                            </div>-->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom0">{{$t('global.AllowAddingToSalesTeam')}}</label>
+                                                <input type="checkbox" id="validationCustom0" v-model="data.Allow_adding_to_sales_team" class="m-5" >
+                                            </div>
 
                                         </div>
 

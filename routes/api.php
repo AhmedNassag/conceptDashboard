@@ -359,7 +359,6 @@ use Illuminate\Support\Facades\Route;
              Route::resource('lead','LeadController');
 
 
-
          });
 
      });
@@ -376,12 +375,23 @@ use Illuminate\Support\Facades\Route;
          // setting
          Route::get('setting','SettingController@setting');
 
-         //check phone exist
-         Route::get('checkPhone/{phone}','AuthMobileController@checkPhone');
+         // check token
+         Route::get('checkToken',  'AuthController@authorizeUser');
 
-         Route::post('signUp','AuthMobileController@signUp');
-         Route::post('signIn','AuthMobileController@signIn');
-         Route::post('forgotPassword','ForgotPasswordController@forgotPassword');
+         // start Register[company,merchant,client]
+         Route::post('company','RegisterController@companyRegister');
+         Route::post('merchant','RegisterController@merchantRegister');
+         Route::post('client','RegisterController@clientRegister');
+         Route::get('province','RegisterController@province');
+         Route::get('area/{area}','RegisterController@area');
+
+         // start reset[company,merchant,client]
+         Route::post('forgot-password', 'AuthController@forgotPassword');
+         Route::post('confirmOtp', 'AuthController@confirmOtp');
+         Route::post('reset-password', 'AuthController@reset');
+
+         // start Login[company,merchant,client]
+         Route::post('login','AuthController@login');
 
          Route::middleware(['auth:api'])->group(function () {
 
@@ -431,6 +441,9 @@ use Illuminate\Support\Facades\Route;
 
              // get client Debts
              Route::get('clientDebts',  'ClientDebtsController@clientDebts');
+
+             // start logout
+             Route::post('logout','AuthController@logout');
          });
 
      });

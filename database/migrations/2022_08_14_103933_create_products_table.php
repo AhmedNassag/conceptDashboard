@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->integer('Re_order_limit');
             $table->integer('maximum_product');
             $table->text('image')->nullable();
+            $table->string('shipping')->nullable();
+            $table->string('guarantee')->nullable();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('sub_category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();

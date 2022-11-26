@@ -149,6 +149,26 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-6 mb-3">
+                                                <label >موظف</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.employee_id.$model"
+                                                    :class="{'is-invalid':v$.employee_id.$error,'is-valid':!v$.employee_id.$invalid}"
+                                                >
+                                                    <option value="">---</option>
+                                                    <option
+                                                        v-for="employee in employees"
+                                                        :value=" employee.id"
+                                                        :key=" employee.id"
+                                                    >{{ employee.user.name }}</option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">تعديل</button>
@@ -188,6 +208,7 @@ export default {
         let areas = ref([]);
         let provinces = ref([]);
         let selling_methods = ref([]);
+        let employees = ref([]);
 
         let getClient = () => {
             loading.value = true;
@@ -196,16 +217,18 @@ export default {
                 .then((res) => {
                     let l = res.data.data;
                     provinces.value = l.provinces;
+                    employees.value = l.employees;
                     addClient.data.name = l.lead.name;
                     addClient.data.province_id = l.lead.province_id;
                     addClient.data.area_id = l.lead.area_id;
                     addClient.data.phone = l.lead.phone;
                     addClient.data.type = l.lead.type;
                     addClient.data.address = l.lead.address;
+                    addClient.data.employee_id = l.lead.employee_id;
                     getAreas(l.lead.province_id);
                 })
                 .catch((err) => {
-                    console.log(err.response);
+                    this.errors = err.response.data.errors;
                 })
                 .finally(() => {
                     loading.value = false;
@@ -225,7 +248,8 @@ export default {
                 phone : '',
                 address : '',
                 province_id : null,
-                area_id : null
+                area_id : null,
+                employee_id: null
             }
         });
 
@@ -246,6 +270,7 @@ export default {
                 address: {
                     required
                 },
+                employee_id:{},
                 amount:{decimal},
                 province_id:{required,integer},
                 area_id:{required,integer},
@@ -269,7 +294,7 @@ export default {
 
         const v$ = useVuelidate(rules,addClient.data);
 
-        return {id,loading,...toRefs(addClient),v$,areas,selling_methods,provinces,getAreas};
+        return {id,loading,...toRefs(addClient),v$,areas,selling_methods,provinces,getAreas,employees};
     },
     methods: {
         editClient(){
@@ -292,7 +317,8 @@ export default {
 
                     })
                     .catch((err) => {
-                        this.errors = err.response.data.errors;
+                        console.log(err.response)
+                        // this.errors = err.response.data.errors;
                     })
                     .finally(() => {
                         this.loading = false;

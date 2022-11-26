@@ -449,7 +449,7 @@ export default {
                     })
                     .catch((err) => {
                         console.log(err.response);
-                        // this.errors = err.response.data.errors;
+                        this.errors = err.response.data.errors;
                     })
                     .finally(() => {
                         this.loading = false;

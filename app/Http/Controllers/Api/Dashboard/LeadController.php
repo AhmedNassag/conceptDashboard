@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\Lead;
 use App\Models\Province;
 use App\Traits\Message;
@@ -27,6 +28,14 @@ class LeadController extends Controller
         return $this->sendResponse(['leads' => $leads],'Data exited successfully');
     }
 
+    public function create(){
+        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)->whereHas('job',function ($q){
+            $q->where('Allow_adding_to_sales_team',1);
+        })->get();
+
+        return $this->sendResponse(['employees' => $employees], 'Data exited successfully');
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -42,8 +51,9 @@ class LeadController extends Controller
             'type' => 'required|in:merchant,client,company',
             'province_id'  => 'required|integer|exists:provinces,id',
             'area_id'  => 'required|integer|exists:areas,id',
-            'phone' => 'required|string|unique:users',
+            'phone' => 'required|string|unique:leads,phone',
             'address' => 'required|string|min:8|max:255',
+            'employee_id' => 'nullable'
         ]);
 
         if($v->fails()) {
@@ -57,7 +67,8 @@ class LeadController extends Controller
             "area_id" => $request->area_id,
             'phone' => $request->phone,
             'address' => $request->address,
-            "type" => $request->type
+            "type" => $request->type,
+            "employee_id" => $request->employee_id
         ]);
 
         return $this->sendResponse([],'Data exited successfully');
@@ -76,7 +87,15 @@ class LeadController extends Controller
         $lead =  Lead::find($id);
         $provinces = Province::select('id','name')->get();
 
-        return $this->sendResponse(['lead' => $lead,'provinces' => $provinces],'Data exited successfully');
+        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)->whereHas('job',function ($q){
+            $q->where('Allow_adding_to_sales_team',1);
+        })->get();
+
+        return $this->sendResponse([
+            'lead' => $lead,
+            'provinces' => $provinces,
+            'employees' => $employees
+        ],'Data exited successfully');
     }
 
     /**
@@ -96,8 +115,9 @@ class LeadController extends Controller
                 'type' => 'required|in:merchant,client,company',
                 'province_id'  => 'required|integer|exists:provinces,id',
                 'area_id'  => 'required|integer|exists:areas,id',
-                'phone' => 'required|string|unique:users',
+                'phone' => 'required|string|unique:leads,phone,'.$user->id,
                 'address' => 'required|string|min:8|max:255',
+                'employee_id' => 'nullable'
             ]);
 
             if($v->fails()) {
@@ -111,7 +131,8 @@ class LeadController extends Controller
                 "area_id" => $request->area_id,
                 'phone' => $request->phone,
                 'address' => $request->address,
-                "type" => $request->type
+                "type" => $request->type,
+                "employee_id" => $request->employee_id
             ]);
 
             return $this->sendResponse([],'Data exited successfully');

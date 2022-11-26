@@ -162,6 +162,8 @@ class ProductController extends Controller
                 'sub_measurement_unit_id' => 'required|integer|exists:measurement_units,id',
                 'count_unit' => 'required|numeric',
                 'selling_method' => 'required',
+                'shipping' => 'required',
+                'guarantee' => 'required',
                 'sell_app' => 'required',
                 'selling_method.*' => 'required|exists:selling_methods,id',
                 'quantity' => 'required|numeric',
@@ -194,6 +196,8 @@ class ProductController extends Controller
                 'sub_measurement_unit_id' => $request->sub_measurement_unit_id,
                 'count_unit' => $request->count_unit,
                 'sell_app' => $request->sell_app,
+                'shipping' => $request->shipping,
+                'guarantee' => $request->guarantee,
             ]);
 
             $imageProduct = explode(',', $request->selling_method);
@@ -346,12 +350,13 @@ class ProductController extends Controller
                 'selling_method' => 'required',
                 'sell_app' => 'required',
                 'selling_method.*' => 'required|exists:selling_methods,id',
-
+                'shipping' => 'required',
+                'guarantee' => 'required',
                 'quantity' => 'required|numeric',
                 'sub_quantity' => 'required|numeric',
                 'price' => 'required|numeric',
                 'sub_price' => 'required|numeric',
-                'store_id' => 'required|integer|exists:stores,id',
+                'store_id' => 'required|integer|exists:stores,id'
             ]);
 
             if ($v->fails()) {
@@ -378,6 +383,8 @@ class ProductController extends Controller
             $data['sub_measurement_unit_id'] = $request->sub_measurement_unit_id;
             $data['count_unit'] = $request->count_unit;
             $data['sell_app'] = $request->sell_app;
+            $data['shipping'] = $request->shipping;
+            $data['guarantee'] = $request->guarantee;
 
 
             $product->update($data);
