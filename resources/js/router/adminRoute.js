@@ -82,6 +82,7 @@ import knowledgeWay from "./adminRoute/knowledgeWay";
 import userCompany from "./adminRoute/userCompany";
 import merchant from "./adminRoute/merchant";
 import leadFollowUps from "./adminRoute/leadFollowUps";
+import leadClient from "./adminRoute/leadClient";
 import leadSourse from "./adminRoute/leadSourse";
 import lead from "./adminRoute/lead";
 
@@ -214,7 +215,8 @@ const routes = [
             ...merchant,
             ...leadFollowUps,
             ...leadSourse,
-            ...lead
+            ...lead,
+            ...leadClient
         ]
     },
     {

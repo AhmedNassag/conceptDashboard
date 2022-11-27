@@ -357,6 +357,9 @@ use Illuminate\Support\Facades\Route;
 
              // start lead
              Route::resource('lead','LeadController');
+             Route::get('leadClient','LeadController@leadClient');
+             Route::post('storeClient','LeadController@storeClient');
+             Route::get('leadClientGet','LeadController@leadClientGet');
 
 
          });

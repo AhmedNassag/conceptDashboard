@@ -69,12 +69,86 @@
                                                 class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
+
+                                            <a href="javascript:void(0);"
+                                               v-if="item.lead_client"
+                                               class="btn btn-sm btn-info me-2"
+                                               data-bs-toggle="modal"
+                                               :data-bs-target="'#edit-category'+item.id"
+                                            >
+                                                <i class="fas fa-book-open"></i> {{$t('global.Show')}}
+                                            </a>
+
                                             <a href="#" @click="deleteMeasure(item.id,index)"
                                                v-if="permission.includes('measureUnit delete')"
                                                data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
                                                 <i class="far fa-trash-alt"></i>
                                             </a>
                                         </td>
+
+                                        <!-- invoice big Modal -->
+                                        <div class="modal fade custom-modal" :id="'edit-category'+item.id" v-if="item.lead_client">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content" id="print">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title"
+                                                        >
+                                                            التفاصيل
+                                                        </h4>
+                                                        <button :id="'close-'+item.id"  type="button" class="close print-button" data-bs-dismiss="modal">
+                                                            <span>&times;</span></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body row" >
+
+                                                        <div class="card bg-white projects-card">
+                                                            <div class="card-body pt-0">
+                                                                <div class="tab-content pt-0">
+                                                                    <div role="tabpanel" :id="'tab-4'" class="tab-pane fade active show">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-center table-hover mb-0 datatable">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>الاسم</th>
+                                                                                    <th>{{ item.name }}</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th>الموبيل</th>
+                                                                                    <th>{{ item.phone }}</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th>العنوان</th>
+                                                                                    <th>{{ item.address }}</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th>النوع</th>
+                                                                                    <th>{{ item.type }}</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th></th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th></th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                            </table>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /invoice big Modal-->
 
                                     </tr>
                                     </tbody>

@@ -20,4 +20,8 @@ class Lead extends Model
         return $this->belongsTo(Area::class);
     }
 
+    public function leadClient(){
+        return $this->hasOne(LeadActivty::class);
+    }
+
 }

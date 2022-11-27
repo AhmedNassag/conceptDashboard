@@ -22,6 +22,7 @@ class CreateLeadsTable extends Migration
             $table->text('address')->nullable();
             $table->enum('type',['merchant','client','company'])->nullable();
             $table->foreignId('employee_id')->nullable()->constrained('employees')->cascadeOnDelete();
+            $table->boolean('status')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

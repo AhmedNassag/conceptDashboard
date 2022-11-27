@@ -126,7 +126,19 @@
                             <span>{{ $t('sidebar.lead') }}</span>
                         </router-link>
                     </li>
-                    <!--end leadFollowUps-->
+                    <!--end Lead-->
+
+                    <!--start LeadClient-->
+                    <li
+                        :class="[{'active': ['indexLeadClient','createLeadClient','editLeadClient'].includes($route.name)}]"
+                        v-if="permission.includes('CreditCapacity read')"
+                    >
+                        <router-link :to="{name:'indexLeadClient'}" >
+                            <i class="fas fa-users"></i>
+                            <span>{{ $t('sidebar.leadClient') }}</span>
+                        </router-link>
+                    </li>
+                    <!--end LeadClient-->
 
                     <!--start knowledge-->
                     <li

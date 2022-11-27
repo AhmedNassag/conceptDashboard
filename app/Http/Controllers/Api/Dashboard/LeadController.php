@@ -15,10 +15,34 @@ class LeadController extends Controller
 
     use Message;
 
+    public function leadClientGet(){
+        // get user
+        $leads = Lead::whereStatus(false)
+            ->whereEmployeeId(auth()->user()->employee->id)
+            ->paginate(10);
+
+        return $this->sendResponse(['leadClient' => $leads],'Data exited successfully');
+    }
+
+    public function leadClient(){
+        // get user
+        $leads = Lead::with(['province:id,name','area:id,name'])
+        ->whereNull('employee_id')
+        ->limit(10)
+        ->get();
+
+        foreach ($leads as $lead){
+            $lead->update(['employee_id' => auth()->user()->employee->id]);
+        }
+
+        return $this->sendResponse([],'Data exited successfully');
+    }
+
     public function index(Request $request)
     {
         // get user
-        $leads = Lead::with(['province:id,name','area:id,name'])->
+        $leads = Lead::
+        with(['province:id,name','area:id,name','leadClient'])->
         when($request->search, function ($q) use ($request) {
             return $q->OrWhere('name', 'like', '%' . $request->search . '%')
                 ->orWhere('phone', 'like', '%' . $request->search . '%')
@@ -73,6 +97,37 @@ class LeadController extends Controller
 
         return $this->sendResponse([],'Data exited successfully');
 
+    }
+
+
+    public function storeClient(Request $request)
+    {
+        // Validator request
+        $v = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'type' => 'required|in:merchant,client,company',
+            'province_id'  => 'required|integer|exists:provinces,id',
+            'area_id'  => 'required|integer|exists:areas,id',
+            'phone' => 'required|string|unique:leads,phone',
+            'address' => 'required|string|min:8|max:255',
+        ]);
+
+        if($v->fails()) {
+            return $this->sendError('There is an error in the data',$v->errors());
+        }
+
+        // start create user
+        Lead::create([
+            "name" => $request->name,
+            "province_id" => $request->province_id,
+            "area_id" => $request->area_id,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            "type" => $request->type,
+            "employee_id" => auth()->user()->employee->id
+        ]);
+
+        return $this->sendResponse([],'Data exited successfully');
     }
 
 
