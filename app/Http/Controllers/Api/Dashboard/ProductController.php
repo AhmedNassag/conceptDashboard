@@ -171,6 +171,11 @@ class ProductController extends Controller
                 'price' => 'required|numeric',
                 'sub_price' => 'required|numeric',
                 'store_id' => 'required|integer|exists:stores,id',
+                'price_maintenance' => 'required',
+                'period_maintenance' => 'required',
+                'type_maintenance' => 'required',
+                'filterWaxes.*' => 'nullable',
+                'sparePart.*' => 'required'
             ]);
 
             if ($v->fails()) {
@@ -263,6 +268,22 @@ class ProductController extends Controller
                 'count_unit' => $request['count_unit'],
             ]);
 
+            $filterWaxes = explode(',',$request->filterWaxes);
+            if(count($filterWaxes) > 0){
+                $product->filterWax()->attach($filterWaxes);
+            }
+
+            $sparePart= explode(',',$request->sparePart);
+            if(count($filterWaxes) > 0){
+                $product->sparePart()->attach($sparePart);
+            }
+
+            $product->maintenance()->create([
+                "price" => $request->price_maintenance,
+                "period" => $request->period_maintenance,
+                "type" => $request->type_maintenance
+            ]);
+
             DB::commit();
 
             return $this->sendResponse([], 'Data exited successfully');
@@ -284,7 +305,8 @@ class ProductController extends Controller
     {
         try {
 
-            $product = Product::with('media:mediable_id,file_name,id')->find($id);
+            $product = Product::with(['media:mediable_id,file_name,id','sparePart','filterWax','maintenance'])
+                ->find($id);
             $companies = Company::select('id', 'name')->get();
             $categories = Category::where('parent_id', 0)->select('id', 'name')->get();
             $measures = MeasurementUnit::select('id', 'name')->get();
@@ -326,8 +348,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        DB::beginTransaction();
-        try {
+//        DB::beginTransaction();
+//        try {
 
             $product = Product::find($id);
 
@@ -356,7 +378,12 @@ class ProductController extends Controller
                 'sub_quantity' => 'required|numeric',
                 'price' => 'required|numeric',
                 'sub_price' => 'required|numeric',
-                'store_id' => 'required|integer|exists:stores,id'
+                'store_id' => 'required|integer|exists:stores,id',
+                'price_maintenance' => 'required',
+                'period_maintenance' => 'required',
+                'type_maintenance' => 'required',
+                'filterWaxes.*' => 'nullable',
+                'sparePart.*' => 'required'
             ]);
 
             if ($v->fails()) {
@@ -479,13 +506,29 @@ class ProductController extends Controller
                 'count_unit' => $request['count_unit'],
             ]);
 
+            $filterWaxes = explode(',',$request->filterWaxes);
+//            if(count($filterWaxes) > 0){
+//                $product->filterWax()->sync($filterWaxes);
+//            }
+
+            $sparePart= explode(',',$request->sparePart);
+            if(count($filterWaxes) > 0){
+                $product->sparePart()->sync($sparePart);
+            }
+
+            $product->maintenance()->update([
+                "price" => $request->price_maintenance,
+                "period" => $request->period_maintenance,
+                "type" => $request->type_maintenance
+            ]);
+
             DB::commit();
             return $this->sendResponse([], 'Data exited successfully');
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+//        } catch (\Exception $e) {
+//
+//            DB::rollBack();
+//            return $this->sendError('An error occurred in the system');
+//        }
     }
 
 

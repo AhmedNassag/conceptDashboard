@@ -18,6 +18,7 @@ class CreateLeadActivtiesTable extends Migration
             $table->text('note')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('lead_id')->nullable()->constrained('leads')->cascadeOnDelete();
+            $table->foreignId('product_id')->nullable()->constrained('products')->cascadeOnDelete();
             $table->foreignId('lead_follow_up_id')->nullable()->constrained('lead_follow_ups')->cascadeOnDelete();
             $table->foreignId('lead_Sources_id')->nullable()->constrained('lead_Sources')->cascadeOnDelete();
             $table->timestamps();

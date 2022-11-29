@@ -128,12 +128,12 @@
                                                                                     <th>{{ item.type }}</th>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th></th>
-                                                                                    <th></th>
+                                                                                    <th>المصدر</th>
+                                                                                    <th>{{ item.lead_client.lead_source.name }}</th>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th></th>
-                                                                                    <th></th>
+                                                                                    <th>المتابعه</th>
+                                                                                    <th>{{ item.lead_client.lead_follow.name }}</th>
                                                                                 </tr>
                                                                                 </thead>
                                                                             </table>

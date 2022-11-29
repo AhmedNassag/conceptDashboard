@@ -68,19 +68,111 @@
                                         <td>{{ item.address }}</td>
                                         <td>{{ item.type }}</td>
                                         <td>
-                                            <router-link
-                                                :to="{name: 'editLead',params:{id:item.id}}"
-                                                v-if="permission.includes('category edit')"
-                                                :title="$t('global.Edit')"
-                                                class="btn btn-sm btn-success me-2">
-                                                <i class="far fa-edit"></i>
-                                            </router-link>
-                                            <a href="#" @click="deleteMeasure(item.id,index)"
-                                               v-if="permission.includes('measureUnit delete')"
-                                               data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
-                                                <i class="far fa-trash-alt"></i>
+                                            <a href="javascript:void(0);"
+                                               v-if="!item.lead_client"
+                                               class="btn btn-sm btn-info me-2"
+                                               data-bs-toggle="modal"
+                                               :data-bs-target="'#edit-category'+item.id"
+                                            >
+                                                <i class="fas fa-book-open"></i> {{$t('global.Show')}}
                                             </a>
                                         </td>
+
+                                        <!-- invoice big Modal -->
+                                        <div class="modal fade custom-modal" :id="'edit-category'+item.id" v-if="!item.lead_client">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content" id="print">
+
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title"
+                                                        >
+                                                            التفاصيل
+                                                        </h4>
+                                                        <button :id="'close-'+item.id"  type="button" class="close print-button" data-bs-dismiss="modal">
+                                                            <span>&times;</span></button>
+                                                    </div>
+
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body row" >
+
+                                                        <div class="card bg-white projects-card">
+                                                            <div class="card-body pt-0">
+                                                                <div class="tab-content pt-0">
+                                                                    <div role="tabpanel" :id="'tab-4'" class="tab-pane fade active show">
+                                                                        <div class="row">
+                                                                            <form  class="needs-validation">
+                                                                                <div class="form-row row">
+
+                                                                                    <div class="col-md-4 mb-3">
+                                                                                        <label>متابعه العملاء</label>
+                                                                                        <select  v-model="data.lead_follow_up_id" class="form-select" :class="{'is-invalid':v$.lead_follow_up_id.$error,'is-valid':!v$.lead_follow_up_id.$invalid}">
+                                                                                            <option v-for="orderSt in leadFollows" :kay="orderSt.id" :value="orderSt.id">{{orderSt.name}}</option>
+                                                                                        </select>
+
+                                                                                        <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                                                        <div class="invalid-feedback">
+                                                                                            <span v-if="v$.lead_follow_up_id.required.$invalid">{{$t('global.TreasuryIsRequired')}}<br /> </span>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-4 mb-3">
+                                                                                        <label>مصدر العملاء</label>
+                                                                                        <select  v-model="data.lead_Sources_id" class="form-select" :class="{'is-invalid':v$.lead_Sources_id.$error,'is-valid':!v$.lead_Sources_id.$invalid}">
+                                                                                            <option v-for="orderSt in leadSources" :kay="orderSt.id" :value="orderSt.id">{{orderSt.name}}</option>
+                                                                                        </select>
+
+                                                                                        <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                                                        <div class="invalid-feedback">
+                                                                                            <span v-if="v$.lead_Sources_id.required.$invalid">{{$t('global.TreasuryIsRequired')}}<br /> </span>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="col-md-4 mb-3 position-relative">
+                                                                                        <label> اختار المنتح </label>
+                                                                                        <label class="balance"> {{$t('global.Balance')}}}</label>
+
+                                                                                        <input type="text"
+                                                                                               class="form-control mb-1 input-Sender"
+                                                                                               v-model="searchProduct"
+                                                                                               @input="searchSender"
+                                                                                               @blur="isButton = true"
+                                                                                               @focus="searchSender"
+                                                                                               autofocus
+                                                                                               :placeholder="$t('treasury.Search')"
+                                                                                        >
+                                                                                        <ul class="dropdown-search sender-search" v-if="dropDownSenders.length">
+                                                                                            <li
+                                                                                                class="Sender"
+                                                                                                v-for="(dropDownSender,index) in dropDownSenders"
+                                                                                                :key="index"
+                                                                                                @click="showSenderName(index)"
+                                                                                                @mouseenter="senderHover"
+                                                                                            >
+                                                                                                {{ dropDownSender.name }}
+                                                                                            </li>
+                                                                                        </ul>
+
+                                                                                        <input type="text"
+                                                                                               disabled
+                                                                                               v-model="nameSender"
+                                                                                        >
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </form>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /invoice big Modal-->
                                     </tr>
                                     </tbody>
                                     <tbody v-else>
@@ -128,7 +220,14 @@ export default {
         let leadClientsPaginate = ref({});
         let loading = ref(false);
         const search = ref('');
+        const searchProduct = ref('');
         let store = useStore();
+        let nameSender = ref('');
+        let dropDownSenders = ref([]);
+        let isButton = ref(true);
+        let leadFollows = ref([]);
+        let leadSources = ref([]);
+        let products = ref([]);
         const {t} = useI18n({});
 
         let permission = computed(() => store.getters['authAdmin/permission']);
@@ -158,6 +257,8 @@ export default {
                     let l = res.data.data;
                     leadClients.value = l.leadClient.data;
                     leadClientsPaginate.value = l.leadClient;
+                    leadFollows.value  = l.leadFollows;
+                    leadSources.value = l.leadSources;
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -205,9 +306,161 @@ export default {
             });
         };
 
-        return {getClient,deleteMeasure,getLeadClients, loading,permission, search,leadClients,t,leadClientsPaginate};
+        let changeStatus =  reactive({
+            data:{
+                lead_follow_up_id: null,
+                lead_Sources_id: null,
+                product_id: null,
+                note: ''
+            },
+        });
 
-    },methods: {
+        let searchSender = () => {
+            dropDownSenders.value = [];
+            if(searchProduct.value){
+                let thisString = new RegExp(searchProduct.value,'i');
+                let items = products.value.filter(e => e.name.match(thisString));
+                dropDownSenders.value = items.splice(0,10);
+            }else{
+                dropDownSenders.value = [];
+            }
+            isButton.value = false;
+        };
+
+        let showSenderName = (index) => {
+            let item = dropDownSenders.value[index];
+            nameSender.value = item.name;
+            changeStatus.data.product_id = item.id;
+        };
+
+        let senderHover = (e) => {
+            let items = document.querySelectorAll('.sender-search .Sender');
+            items.forEach(e => e.classList.remove('active'));
+            e.target.classList.add('active');
+        };
+
+        const rules = computed(() => {
+            return {
+                lead_follow_up_id:{
+                    required
+                },
+                lead_Sources_id:{
+                    required
+                },
+                note:{}
+            }
+        });
+
+        const v$ = useVuelidate(rules,changeStatus.data);
+
+        document.addEventListener('keyup',(e) => {
+
+            if(e.keyCode == 38){ //top arrow
+                if(dropDownSenders.value.length > 0){
+                    let items = document.querySelectorAll('.sender-search .Sender');
+                    let isTrue = false;
+                    let index = null;
+                    items.forEach((e,i) => {
+                        if(e.classList.contains('active')) {
+                            isTrue = true;
+                            index = i;
+                        }
+                    });
+                    if(isTrue && index != 0){
+                        items[index].classList.remove('active');
+                        items[index - 1].classList.add('active');
+                    }else if(isTrue && index == 0){
+                        items[index].classList.remove('active');
+                        items[items.length - 1].classList.add('active');
+                    }
+                    if(!isTrue) items[0].classList.add('active');
+                }else {
+                    dropDownSenders.value = [];
+                }
+            };
+
+            if(e.keyCode == 40){ //down arrow
+                if(dropDownSenders.value.length > 0){
+                    let items = document.querySelectorAll('.sender-search .Sender');
+                    let isTrue = false;
+                    let index = null;
+                    items.forEach((e,i) => {
+                        if(e.classList.contains('active')) {
+                            isTrue = true;
+                            index = i;
+                        }
+                    });
+                    if(isTrue && index != (items.length - 1)){
+                        items[index].classList.remove('active');
+                        items[index + 1].classList.add('active');
+                    }else if(isTrue && index == (items.length - 1)){
+                        items[index].classList.remove('active');
+                        items[0].classList.add('active');
+                    }
+                    if(!isTrue) items[items.length - 1].classList.add('active');
+                }else {
+                    dropDownSenders.value = [];
+                }
+            };
+
+            if(e.keyCode == 13){ //enter
+
+                if(dropDownSenders.value.length > 0){
+                    let items = document.querySelectorAll('.sender-search .Sender');
+                    items.forEach((e,i) => {
+                        if(e.classList.contains('active')) showSenderName(i);
+                    });
+                }else {
+                    dropDownSenders.value = [];
+                }
+
+                e.target.blur();
+
+            };
+
+        });
+
+        document.addEventListener('click',(e) => {
+            if(dropDownSenders.value.length > 0){
+                if(!e.target.classList.contains('Sender') && !e.target.classList.contains('input-Sender') && e.pointerType){
+                    dropDownSenders.value = [];
+                }
+            }
+
+            addJob.products.forEach((item,ind) => {
+                if(item.products.length > 0){
+                    if(
+                        !e.target.classList.contains(`Sender-${ind}`) &&
+                        !e.target.classList.contains(`input-Sender`) &&
+                        e.pointerType
+                    ) {
+                        item.products = [];
+                    }
+                }
+            });
+        });
+
+        return {
+            v$,
+            getClient,
+            deleteMeasure,
+            getLeadClients,
+            loading,
+            ...toRefs(changeStatus),
+            permission,
+            search,
+            leadClients,
+            leadFollows,
+            leadSources,
+            dropDownSenders,
+            t,
+            leadClientsPaginate,
+            searchProduct,
+            searchSender,
+            senderHover,
+            showSenderName
+        };
+
     },
     data() {
         return {
@@ -273,4 +526,34 @@ img {
     max-width: inherit;
     width: inherit;
 }
+
+
+.dropdown-search{
+    position: absolute;
+    width: 97%;
+    background-color: #fff;
+    border: 1px solid #d9d3d3;
+    top: 83px;
+    z-index: 10;
+    padding: 0;
+}
+
+.dropdown-search li{
+    padding: 5px;
+}
+
+.dropdown-search li:not(:last-child){
+    border-bottom: 1px solid #d9d3d3;
+}
+
+.dropdown-search li:hover{
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.dropdown-search li.active{
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
 </style>

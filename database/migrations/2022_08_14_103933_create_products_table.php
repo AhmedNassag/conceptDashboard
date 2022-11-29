@@ -31,6 +31,7 @@ class CreateProductsTable extends Migration
             $table->integer('count_unit')->default(0);
             $table->boolean('status')->default(true);
             $table->boolean('sell_app')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

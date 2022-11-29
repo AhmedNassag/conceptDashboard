@@ -11,7 +11,7 @@ class Maintenance extends Model
 
     protected $guarded = ['id'];
 
-    public function maintenance(){
+    public function product(){
         return $this->belongsTo(Product::class);
     }
 

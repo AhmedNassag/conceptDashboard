@@ -1,6 +1,5 @@
 import indexLeadClient from "../../view/admin/leadClient/index";
 import createLeadClient from "../../view/admin/leadClient/create";
-import editLeadClient from "../../view/admin/leadClient/edit";
 import store from "../../store/admin";
 
 export default [
@@ -37,22 +36,7 @@ export default [
                     //     return next({name:'Page404'});
                     // }
                 }
-            },
-            {
-                path: 'edit/:id(\\d+)',
-                name: 'editLeadClient',
-                component: editLeadClient,
-                props: true,
-                beforeEnter: (to, from,next) => {
-                    let permission = store.state.authAdmin.permission;
-
-                    // if(permission.includes('measureUnit edit')){
-                        return next();
-                    // }else{
-                    //     return next({name:'Page404'});
-                    // }
-                }
-            },
+            }
         ]
     },
 ];

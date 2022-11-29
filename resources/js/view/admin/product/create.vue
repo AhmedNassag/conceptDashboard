@@ -233,7 +233,7 @@
                                                 </select>
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.filterWaxes.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+<!--                                                    <span v-if="v$.filterWaxes.required.$invalid"> هذا الحقل مطلوب<br /> </span>-->
                                                 </div>
                                             </div>
 
@@ -462,6 +462,65 @@
 
                                             </div>
 
+                                            <div class="col-md-12 mb-3 mt-5">
+                                                <div class="sec-body row">
+                                                    <div class="col-md-12 mb-12 sec-head">
+                                                        <h3>
+                                                            مواعيد الصيانات
+                                                        </h3>
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label>سعر الصيانه</label>
+                                                        <input type="number" class="form-control"
+                                                               step="0.1"
+                                                               v-model.number="v$.price_maintenance.$model"
+                                                               placeholder="سعر الصيانه"
+                                                               :class="{'is-invalid':v$.price_maintenance.$error,'is-valid':!v$.price_maintenance.$invalid}"
+                                                        >
+                                                        <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                        <div class="invalid-feedback">
+                                                            <span v-if="v$.price_maintenance.required.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>
+                                                            <span v-if="v$.price_maintenance.numeric.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label>المده</label>
+                                                        <input type="number" class="form-control"
+                                                               v-model.number="v$.period_maintenance.$model"
+                                                               placeholder="المده"
+                                                               :class="{'is-invalid':v$.period_maintenance.$error,'is-valid':!v$.period_maintenance.$invalid}"
+                                                        >
+                                                        <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                        <div class="invalid-feedback">
+                                                            <span v-if="v$.period_maintenance.required.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>
+                                                            <span v-if="v$.period_maintenance.integer.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3 mb-3">
+                                                        <label>نوع الصيانة </label>
+                                                        <select
+                                                            name="type"
+                                                            class="form-control"
+                                                            :class="{'is-invalid':v$.type_maintenance.$error,'is-valid':!v$.type_maintenance.$invalid}"
+                                                            v-model="v$.type_maintenance.$model"
+                                                        >
+                                                            <option value="0">غير اجبارية خلال فترة الضمان</option>
+                                                            <option value="1">( اجبارية  خلال فترة الضمان </option>
+                                                        </select>
+                                                        <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                        <div class="invalid-feedback">
+                                                            <span v-if="v$.type_maintenance.required.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>
+                                                            <span v-if="v$.type_maintenance.integer.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">اضافه</button>
@@ -532,6 +591,9 @@ export default {
                 mainUnitMeasurement:'',
                 subUnitMeasurement:'',
                 store_id:1,
+                price_maintenance: 0,
+                period_maintenance: 0,
+                type_maintenance: 0
             }
         });
 
@@ -611,9 +673,7 @@ export default {
                 sparePart:{
                     required
                 },
-                filterWaxes: {
-                    required
-                },
+                filterWaxes: {},
                 category_id: {
                     required,
                     integer
@@ -658,6 +718,18 @@ export default {
                 },
                 store_id:{
                     required
+                },
+                price_maintenance: {
+                    required,
+                    numeric
+                },
+                period_maintenance: {
+                    required,
+                    integer
+                },
+                type_maintenance: {
+                    required,
+                    integer
                 }
             }
         });
@@ -791,7 +863,7 @@ export default {
                 formData.append('description',this.data.description);
                 formData.append('maximum_product',this.data.maximum_product);
                 formData.append('Re_order_limit',this.data.Re_order_limit);
-                formData.append('sparePart',this.data.spareParts);
+                formData.append('sparePart',this.data.sparePart);
                 formData.append('filterWaxes',this.data.filterWaxes);
                 formData.append('category_id',this.data.category_id);
                 formData.append('sub_category_id',this.data.sub_category_id);
@@ -802,6 +874,11 @@ export default {
                 formData.append('image',this.data.image);
                 formData.append('selling_method',this.data.selling_method);
                 formData.append('quantity',this.data.quantity);
+                formData.append('price_maintenance',this.data.price_maintenance);
+                formData.append('period_maintenance',this.data.period_maintenance);
+                formData.append('type_maintenance',this.data.type_maintenance);
+                formData.append('guarantee',this.data.guarantee);
+                formData.append('shipping',this.data.shipping);
                 for( var i = 0; i < this.numberOfImage1; i++ ){
                     let file = this.data.files[i];
                     formData.append('files[' + i + ']', file);
@@ -822,7 +899,6 @@ export default {
                     })
                     .catch((err) => {
                         this.errors = err.response.data.errors;
-                        console.log(err.response);
                     })
                     .finally(() => {
                         this.loading = false;
@@ -861,6 +937,13 @@ export default {
             this.data.store_id = 1;
             this.data.mainUnitMeasurement = '';
             this.data.subUnitMeasurement = '';
+            this.data.filterWaxes = [];
+            this.data.sparePart = [];
+            this.data.type_maintenance = 0;
+            this.data.period_maintenance = 0;
+            this.data.price_maintenance = 0;
+            this.data.guarantee = '';
+            this.data.shipping = '';
         }
     }
 }
