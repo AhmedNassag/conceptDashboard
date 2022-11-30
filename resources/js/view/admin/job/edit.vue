@@ -59,9 +59,21 @@
                                                 <input type="checkbox" id="validationCustom02" v-model="data.Allow_adding_to_sales_team" class="m-5" :checked="data.Allow_adding_to_sales_team">
                                             </div>
 
+                                            <div class="col-md-6 mb-12" v-if="data.Allow_adding_to_sales_team">
+                                                <label>طريقه البيع</label>
+
+                                                <select v-model="data.selling_method_id" :class="['form-select',{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}]">
+                                                    <option v-for="selling_method in selling_methods" :kay="selling_method.id" :value="selling_method.id">{{selling_method.name}}</option>
+                                                </select>
+                                                <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                <div class="invalid-feedback">
+                                                    <span class="text-danger" v-if="v$.selling_method_id.requiredIf.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>
+                                                </div>
+                                            </div>
+
                                         </div>
 
-                                        <button class="btn btn-primary" type="submit">{{$t('global.Submit')}}</button>
+                                        <button class="btn btn-primary my-2" type="submit">{{$t('global.Submit')}}</button>
                                     </form>
                                 </div>
                             </div>
@@ -77,7 +89,7 @@
 <script>
 import {computed, onMounted, reactive,toRefs,inject,ref} from "vue";
 import useVuelidate from '@vuelidate/core';
-import {required,minLength,maxLength} from '@vuelidate/validators';
+import {required, minLength, maxLength, requiredIf} from '@vuelidate/validators';
 import adminApi from "../../../api/adminAxios";
 import { notify } from "@kyvg/vue3-notification";
 import {useI18n} from "vue-i18n";
@@ -96,6 +108,7 @@ export default {
         const {t} = useI18n({});
         let job = ref({});
         let loading = ref(false);
+        let selling_methods = ref([]);
 
         let getMainJobViews = () => {
             loading.value = true;
@@ -104,6 +117,8 @@ export default {
                 .then((res) => {
                     let l = res.data.data;
                     addJob.data.name = l.job.name;
+                    selling_methods.value = l.selling_methods;
+                    addJob.data.selling_method_id = l.job.selling_method_id;
                     addJob.data.Allow_adding_to_sales_team = l.job.Allow_adding_to_sales_team;
                 })
                 .catch((err) => {
@@ -122,6 +137,7 @@ export default {
             data:{
                 name : '',
                 Allow_adding_to_sales_team:0,
+                selling_method_id: ''
             }
         });
 
@@ -131,6 +147,9 @@ export default {
                     minLength: minLength(3),
                     maxLength:maxLength(40),
                     required
+                },
+                selling_method_id:{
+                    requiredIf: requiredIf(addJob.data.Allow_adding_to_sales_team)
                 }
             }
         });
@@ -139,7 +158,7 @@ export default {
         const v$ = useVuelidate(rules,addJob.data);
 
 
-        return {t,loading,...toRefs(addJob),v$};
+        return {t,loading,...toRefs(addJob),v$,selling_methods};
     },
     methods: {
         editJob(){

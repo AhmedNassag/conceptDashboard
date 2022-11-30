@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Job;
+use App\Models\SellingMethod;
 use App\Traits\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,13 @@ class JobController extends Controller
         return $this->sendResponse(['jobs' => $jobs], 'Data exited successfully');
     }
 
+    public function create()
+    {
+        $selling_methods = SellingMethod::get();
+
+        return $this->sendResponse(['selling_methods' => $selling_methods], 'Data exited successfully');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -72,14 +80,18 @@ class JobController extends Controller
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|unique:jobs,name',
+                'selling_method_id' => 'nullable'
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $data = $request->only(['name','Allow_adding_to_sales_team']);
 
-            Job::create($data);
+            Job::create([
+                'name' => $request->name,
+                'Allow_adding_to_sales_team' => $request->Allow_adding_to_sales_team,
+                'selling_method_id' => $request->Allow_adding_to_sales_team ?  $request->selling_method_id : 0
+            ]);
 
             DB::commit();
 
@@ -97,8 +109,9 @@ class JobController extends Controller
         try {
 
             $job = Job::find($id);
+            $selling_methods = SellingMethod::get();
 
-            return $this->sendResponse(['job' => $job], 'Data exited successfully');
+            return $this->sendResponse(['job' => $job,'selling_methods' => $selling_methods], 'Data exited successfully');
 
         } catch (\Exception $e) {
 
@@ -135,15 +148,18 @@ class JobController extends Controller
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|unique:jobs,name,'.$job->id,
+                'selling_method_id' => 'nullable'
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
-            $data = $request->only(['name','Allow_adding_to_sales_team']);
-
-            $job->update($data);
+            $job->update([
+                'name' => $request->name,
+                'Allow_adding_to_sales_team' => $request->Allow_adding_to_sales_team,
+                'selling_method_id' => $request->Allow_adding_to_sales_team ?  $request->selling_method_id : 0
+            ]);
 
             DB::commit();
 
