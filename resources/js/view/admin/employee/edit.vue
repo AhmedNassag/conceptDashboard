@@ -217,7 +217,7 @@
 
                                             </div>
 
-                                            <div class="col-md-12 mb-12">
+                                            <div class="col-md-6 mb-12">
                                                 <label>{{ $t('job.ChooseJob') }}</label>
 
                                                 <select v-model="data.job_id" :class="['form-select',{'is-invalid':v$.job_id.$error,'is-valid':!v$.job_id.$invalid}]">
@@ -229,6 +229,16 @@
                                                     <span v-if="v$.job_id.required.$invalid">{{$t('global.JobIsRequired')}}<br /> </span>
                                                 </div>
 
+                                            </div>
+
+                                            <div class="col-md-6 mb-12">
+                                                <label>المخزن</label>
+
+                                                <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
+                                                    <option v-for="store in stores" :kay="store.id" :value="store.id">{{store.name}}</option>
+                                                </select>
+
+                                                <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                             </div>
 
 
@@ -443,6 +453,7 @@ export default {
         const numberOfImage = ref(0);
         const image = ref('');
         const imageUpload = ref({});
+        let stores = ref([]);
         let preview = (e) => {
 
             let containerImages = document.querySelector('#container-images');
@@ -482,6 +493,7 @@ export default {
                     departments.value = l.departments;
                     jobs.value = l.jobs;
                     roles.value = l.roles;
+                    stores.value = l .stores;
                     addEmployee.data.bank_name = l.employee.bank.name;
                     user_id.value = l.employee.user_id
                     addEmployee.data.bank_address = l.employee.bank.address;
@@ -498,6 +510,7 @@ export default {
                     addEmployee.data.birth_date = l.employee.birth_date;
                     addEmployee.data.hiring_date = l.employee.hiring_date;
                     addEmployee.data.salary = l.employee.salary;
+                    addEmployee.data.store_id = l.employee.store_id;
                     image.value = l.media;
                 })
                 .catch((err) => {
@@ -506,7 +519,7 @@ export default {
                 .finally(() => {
                     loading.value = false;
                 })
-        }
+        };
 
         onBeforeMount(() => {
             getMainEmployeeViews();
@@ -522,6 +535,7 @@ export default {
                 email: '',
                 department_id: '',
                 job_id: '',
+                store_id: '',
                 phone: '',
                 role_name: '',
                 address: '',
@@ -531,7 +545,7 @@ export default {
                 salary: '',
                 file: {}
             }
-        })
+        });
 
         const rules = computed(() => {
             return {
@@ -592,7 +606,8 @@ export default {
                 },
                 salary:{
                     required
-                }
+                },
+                store_id: {}
             }
         });
 
@@ -600,7 +615,7 @@ export default {
         const v$ = useVuelidate(rules,addEmployee.data);
 
 
-        return {t,user_id,preview,imageUpload,image,numberOfImage,departments,jobs,roles,loading,...toRefs(addEmployee),v$};
+        return {t,user_id,stores,preview,imageUpload,image,numberOfImage,departments,jobs,roles,loading,...toRefs(addEmployee),v$};
     },
     methods: {
         editEmployee(){
@@ -628,6 +643,7 @@ export default {
                 formData.append('salary',this.data.salary);
                 formData.append('file',this.data.file);
                 formData.append('_method','PUT');
+                formData.append('store_id',this.data.store_id);
 
                 adminApi.post(`/v1/dashboard/employee/${this.id}`,formData)
                     .then((res) => {

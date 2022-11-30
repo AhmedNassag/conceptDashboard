@@ -269,12 +269,12 @@ class ProductController extends Controller
             ]);
 
             $filterWaxes = explode(',',$request->filterWaxes);
-            if(count($filterWaxes) > 0){
+            if(count($filterWaxes) > 0 && $request->filterWaxes ){
                 $product->filterWax()->attach($filterWaxes);
             }
 
             $sparePart= explode(',',$request->sparePart);
-            if(count($filterWaxes) > 0){
+            if(count($sparePart) > 0){
                 $product->sparePart()->attach($sparePart);
             }
 
@@ -305,7 +305,8 @@ class ProductController extends Controller
     {
         try {
 
-            $product = Product::with(['media:mediable_id,file_name,id','sparePart','filterWax','maintenance'])
+            $product = Product::
+            with(['media:mediable_id,file_name,id','sparePart','filterWax','maintenance'])
                 ->find($id);
             $companies = Company::select('id', 'name')->get();
             $categories = Category::where('parent_id', 0)->select('id', 'name')->get();
@@ -389,6 +390,7 @@ class ProductController extends Controller
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
+//        return $this->sendError('There is an error in the data',$request->all());
 
             $data['name'] = $request->name;
             $data['Re_order_limit'] = $request->Re_order_limit;
@@ -507,9 +509,9 @@ class ProductController extends Controller
             ]);
 
             $filterWaxes = explode(',',$request->filterWaxes);
-//            if(count($filterWaxes) > 0){
-//                $product->filterWax()->sync($filterWaxes);
-//            }
+            if(count($filterWaxes) > 0 && $request->filterWaxes){
+                $product->filterWax()->sync($filterWaxes);
+            }
 
             $sparePart= explode(',',$request->sparePart);
             if(count($filterWaxes) > 0){

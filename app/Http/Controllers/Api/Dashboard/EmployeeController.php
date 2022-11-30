@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Income;
 use App\Models\Job;
+use App\Models\Store;
 use App\Models\User;
 use App\Traits\Message;
 use Illuminate\Http\Request;
@@ -84,7 +85,8 @@ class EmployeeController extends Controller
     public function role()
     {
         $roles = DB::table('roles')->where('name', '!=', 'SuperAdmin')->get();
-        return $this->sendResponse(['roles' => $roles], 'Data exited successfully');
+        $stores = Store::get();
+        return $this->sendResponse(['roles' => $roles,'stores' => $stores], 'Data exited successfully');
     }
 
     /**
@@ -142,6 +144,7 @@ class EmployeeController extends Controller
                 'hiring_date' => 'required|date',
                 'salary' => 'required',
                 'file' => 'image|mimes:jpeg,jpg,png,webp|max:5048',
+                'store_id' => 'nullable'
             ]);
 
             if ($v->fails()) {
@@ -163,6 +166,7 @@ class EmployeeController extends Controller
             $user->employee()->create([
                 'department_id' => $request->department_id,
                 'job_id' => $request->job_id,
+                'store_id' => $request->store_id,
                 'address' => $request->address,
                 'National_ID' => $request->National_ID,
                 'birth_date' => $request->birth_date,
@@ -209,9 +213,10 @@ class EmployeeController extends Controller
             $employee['bank'] = $employee->user->banks;
             $department = Department::where('active', 1)->get();
             $job = Job::where('active', 1)->get();
+            $stores = Store::get();
             $roles = DB::table('roles')->where('name', '!=', 'SuperAdmin')->get();
 
-            return $this->sendResponse(['employee' => $employee, 'departments' => $department, 'jobs' => $job, 'roles' => $roles, 'media' => $media], 'Data exited successfully');
+            return $this->sendResponse(['employee' => $employee,'stores' => $stores, 'departments' => $department, 'jobs' => $job, 'roles' => $roles, 'media' => $media], 'Data exited successfully');
 
         } catch (\Exception $e) {
 
@@ -251,6 +256,7 @@ class EmployeeController extends Controller
                 'birth_date' => 'required|date',
                 'hiring_date' => 'required|date',
                 'salary' => 'required',
+                'store_id' => 'nullable',
                 'file' => 'nullable' . ($request->hasFile('file') ? '|mimes:jpeg,jpg,png,webp|max:5048' : ''),
             ]);
 
@@ -275,6 +281,7 @@ class EmployeeController extends Controller
                 'birth_date' => $request->birth_date,
                 'hiring_date' => $request->hiring_date,
                 'salary' => $request->salary,
+                'store_id' => $request->store_id,
             ]);
 
             $employee->user->banks->first()->update([

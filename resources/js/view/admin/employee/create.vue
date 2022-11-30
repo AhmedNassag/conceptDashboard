@@ -228,7 +228,7 @@
 
                                             </div>
 
-                                            <div class="col-md-12 mb-12">
+                                            <div class="col-md-6 mb-12">
                                                 <label>{{ $t('job.ChooseJob') }}</label>
 
                                                 <select v-model="data.job_id" :class="['form-select',{'is-invalid':v$.job_id.$error,'is-valid':!v$.job_id.$invalid}]">
@@ -240,6 +240,16 @@
                                                     <span v-if="v$.job_id.required.$invalid">{{$t('global.JobIsRequired')}}<br /> </span>
                                                 </div>
 
+                                            </div>
+
+                                            <div class="col-md-6 mb-12">
+                                                <label>المخزن</label>
+
+                                                <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
+                                                    <option v-for="store in stores" :kay="store.id" :value="store.id">{{store.name}}</option>
+                                                </select>
+
+                                                <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                             </div>
 
 
@@ -476,6 +486,7 @@ export default {
         let mainDepartment = ref([]);
         let mainJob = ref([]);
         let mainRole = ref([]);
+        let stores = ref([]);
 
         let getMainDepartmentViews = () => {
             loading.value = true;
@@ -491,7 +502,7 @@ export default {
                 .finally(() => {
                     loading.value = false;
                 })
-        }
+        };
         let getMainJobViews = () => {
             loading.value = true;
 
@@ -506,7 +517,7 @@ export default {
                 .finally(() => {
                     loading.value = false;
                 })
-        }
+        };
         let getMainRoleViews = () => {
             loading.value = true;
 
@@ -514,6 +525,7 @@ export default {
                 .then((res) => {
                     let l = res.data.data;
                     mainRole.value= l.roles;
+                    stores.value = l.stores;
                 })
                 .catch((err) => {
                     console.log(err.response.data);
@@ -521,7 +533,7 @@ export default {
                 .finally(() => {
                     loading.value = false;
                 })
-        }
+        };
 
         onMounted(() => {
             getMainDepartmentViews();
@@ -536,6 +548,7 @@ export default {
                 bank_iban: '',
                 bank_swift: '',
                 name: '',
+                store_id:'',
                 email: '',
                 password: '',
                 confirmtion: '',
@@ -625,7 +638,8 @@ export default {
                 },
                 file:{
                     required
-                }
+                },
+                store_id:{}
             }
         });
         const numberOfImage = ref(0);
@@ -678,7 +692,7 @@ export default {
         const v$ = useVuelidate(rules, addEmployee.data);
 
 
-        return {mainRole,mainJob,mainDepartment,preview, t, loading, ...toRefs(addEmployee), v$,requiredn,numberOfImage,empty};
+        return {mainRole,stores,mainJob,mainDepartment,preview, t, loading, ...toRefs(addEmployee), v$,requiredn,numberOfImage,empty};
     },
     methods: {
         storeEmployee() {
@@ -707,6 +721,7 @@ export default {
                 formData.append('hiring_date',this.data.hiring_date);
                 formData.append('salary',this.data.salary);
                 formData.append('file',this.data.file);
+                formData.append('store_id',this.data.store_id);
 
 
                 adminApi.post(`/v1/dashboard/employee`, formData)
@@ -747,14 +762,15 @@ export default {
             this.data.password= '';
             this.data.confirmtion= '';
             this.data.department_id= '';
-            this.data.job_id= '';
-            this.data.phone= '';
-            this.data.role_name= '';
-            this.data.address= '';
-            this.data.National_ID= '';
-            this.data.birth_date= '';
-            this.data.hiring_date= '';
-            this.data.salary= '';
+            this.data.job_id = '';
+            this.data.phone = '';
+            this.data.role_name = '';
+            this.data.address = '';
+            this.data.National_ID = '';
+            this.data.birth_date = '';
+            this.data.hiring_date = '';
+            this.data.salary = '';
+            this.data.store_id = '';
             this.data.file= {}
         }
     }

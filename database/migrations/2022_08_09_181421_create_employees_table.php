@@ -24,6 +24,7 @@ class CreateEmployeesTable extends Migration
             $table->date('birth_date');
             $table->date('hiring_date');
 
+            $table->foreignId('store_id')->nullable()->constrained('stores')->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');

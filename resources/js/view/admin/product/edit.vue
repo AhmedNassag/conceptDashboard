@@ -923,7 +923,7 @@ export default {
                 formData.append('name',this.data.name);
                 formData.append('barcode',this.data.barcode);
                 formData.append('sparePart',this.data.sparePart);
-                formData.append('filterWaxes',this.data.filterWaxes);
+                formData.append('filterWaxes',this.data.filterWaxes ? this.data.filterWaxes:'');
                 formData.append('maximum_product',this.data.maximum_product);
                 formData.append('Re_order_limit',this.data.Re_order_limit);
                 formData.append('description',this.data.description);
