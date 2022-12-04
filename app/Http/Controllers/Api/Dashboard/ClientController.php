@@ -73,7 +73,7 @@ class ClientController extends Controller
                 'province_id'  => 'required|integer|exists:provinces,id',
                 'area_id'  => 'required|integer|exists:areas,id',
                 'phone' => 'required|string|unique:users',
-                'address' => 'required|string|min:8|max:255',
+                'address' => 'required|string|min:5|max:255',
                 'amount' => 'nullable|numeric'
             ]);
 

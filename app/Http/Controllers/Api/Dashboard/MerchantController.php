@@ -186,7 +186,12 @@ class MerchantController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::with(['merchant','complement' => function ($q){
+            $q->with(['area','province','sellingMethod']);
+        }])->findOrFail($id);
+        return $user;
+
+        return $this->sendResponse(['user' => $user],'Data exited successfully');
     }
 
     /**

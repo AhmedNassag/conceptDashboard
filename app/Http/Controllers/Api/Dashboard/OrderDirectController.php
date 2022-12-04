@@ -141,7 +141,8 @@ class OrderDirectController extends Controller
 
         $offerDiscount = OfferDiscount::select('id','name','type','value')->where('status',true)->get();
 
-        $stores = Store::get();
+        $stores = Store::where('status',1)->get();
+
 
         $clients = User::whereAuthId(2)->with(['client' => function ($q){
             $q->select('user_id','selling_method_id')->with('sellingMethod:id,name');

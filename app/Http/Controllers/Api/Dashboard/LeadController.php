@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Lead;
+use App\Models\LeadAction;
 use App\Models\LeadFollowUp;
 use App\Models\LeadSource;
 use App\Models\Product;
 use App\Models\Province;
+use App\Models\User;
 use App\Traits\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class LeadController extends Controller
@@ -30,16 +33,16 @@ class LeadController extends Controller
         $leadFollows = LeadFollowUp::get();
         $leadSources = LeadSource::get();
 
-        $products =  Product::select('id','name','barcode','count_unit')
-            ->whereRelation('storeProducts.store','store_id',$request->store_id)
-            ->whereRelation('productPrice','selling_method_id',$request->selling_method_id)
-            ->with(['productPrice' => function ($q) use($request){
-                $q->where('selling_method_id',$request->selling_method_id)->with('measurementUnit:id,name');
-            },'storeProducts' => function ($q) {
-                $q->with('purchaseProduct:id,price')
-                    ->where('sub_quantity_order','>',0)
-                    ->whereNotNull('purchase_product_id');
-            }])->get();
+//        $products =  Product::select('id','name','barcode','count_unit')
+//            ->whereRelation('storeProducts.store','store_id',$request->store_id)
+//            ->whereRelation('productPrice','selling_method_id',$request->selling_method_id)
+//            ->with(['productPrice' => function ($q) use($request){
+//                $q->where('selling_method_id',$request->selling_method_id)->with('measurementUnit:id,name');
+//            },'storeProducts' => function ($q) {
+//                $q->with('purchaseProduct:id,price')
+//                    ->where('sub_quantity_order','>',0)
+//                    ->whereNotNull('purchase_product_id');
+//            }])->get();
 
         return $this->sendResponse([
             'leadClient' => $leads,
@@ -112,11 +115,12 @@ class LeadController extends Controller
         return $this->sendResponse(['leads' => $leads],'Data exited successfully');
     }
 
-    public function create(){
+
+    public function create()
+    {
         $employees = Employee::with('user:id,name')->whereRelation('user','status',1)->whereHas('job',function ($q){
             $q->where('Allow_adding_to_sales_team',1);
         })->get();
-
         return $this->sendResponse(['employees' => $employees], 'Data exited successfully');
     }
 
@@ -159,6 +163,17 @@ class LeadController extends Controller
 
     }
 
+    public function show($id)
+    {
+        $lead =  Lead::find($id);
+        $actions = LeadAction::where('lead_id',$id)->with('employee.user','lead')->get();
+
+        return $this->sendResponse([
+            'lead' => $lead,
+            'actions' => $actions,
+        ],'Data exited successfully');
+    }
+
 
     public function storeClient(Request $request)
     {
@@ -188,6 +203,66 @@ class LeadController extends Controller
         ]);
 
         return $this->sendResponse([],'Data exited successfully');
+    }
+
+
+    public function addAction(Request $request)
+    {
+        // Validator request
+        $v = Validator::make($request->all(), [
+            'action' => 'required|string',
+            'lead_id'  => 'required|integer|exists:leads,id',
+        ]);
+
+        if($v->fails()) {
+            return $this->sendError('There is an error in the data',$v->errors());
+        }
+
+        // start create user
+        LeadAction::create([
+            "action" => $request->action,
+            "lead_id" => $request->lead_id,
+            "employee_id" => auth()->user()->employee->id
+        ]);
+
+        return $this->sendResponse([],'Data exited successfully');
+    }
+
+    public function changeLeadClient(Request $request, $id)
+    {
+        try {
+            $lead = Lead::find($id);
+            if ($lead) {
+                $user = User::create([
+                    "name" => $lead->name,
+                    "email" => $request->email,
+                    "auth_id" => 2,
+                    'role_name'=> ['client'],
+                    "status" => 0,
+                    'phone' => $lead->phone,
+                    "code" => '+2'
+                ]);
+                $user->complement()->create([
+                    'province_id' => $request->province_id,
+                    'area_id' => $request->area_id,
+                    'selling_method_id' => 1,
+                    'device' => 2
+                ]);
+                $user->client()->create(['address' => $lead->address]);
+                $user->clientAccounts()->create([
+                    'amount' => $request->amount ? $request->amount : 0
+                ]);
+
+                $lead->delete();
+
+                return $this->sendResponse([], 'Deleted successfully');
+            } else {
+                return $this->sendError('ID is not exist');
+            }
+
+        } catch (\Exception $e) {
+            return $this->sendError('An error occurred in the system');
+        }
     }
 
 

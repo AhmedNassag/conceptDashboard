@@ -153,7 +153,6 @@ class PermissionSeeder extends Seeder
             // end financial Accounts
 
             // start ads
-
             ['name' => 'popupAds read','role' => 'ads','category' => 'Ads'],
             ['name' => 'popupAds create','role' => 'ads','category' => 'Ads'],
             ['name' => 'popupAds edit','role' => 'ads','category' => 'Ads'],
@@ -168,7 +167,6 @@ class PermissionSeeder extends Seeder
             ['name' => 'secondSliderAds create','role' => 'ads','category' => 'Ads'],
             ['name' => 'secondSliderAds edit','role' => 'ads','category' => 'Ads'],
             ['name' => 'secondSliderAds delete','role' => 'ads','category' => 'Ads'],
-
             // end ads
 
             // start sitting
@@ -189,7 +187,6 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'orderReturned read','role' => 'order','category' => 'order'],
             ['name' => 'orderDelivered read','role' => 'order','category' => 'order'],
-
             // end order
 
             // start platform Accounts

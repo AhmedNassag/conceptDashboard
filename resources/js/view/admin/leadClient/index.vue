@@ -68,14 +68,27 @@
                                         <td>{{ item.address }}</td>
                                         <td>{{ item.type }}</td>
                                         <td>
-                                            <a href="javascript:void(0);"
-                                               v-if="!item.lead_client"
-                                               class="btn btn-sm btn-info me-2"
-                                               data-bs-toggle="modal"
-                                               :data-bs-target="'#edit-category'+item.id"
-                                            >
-                                                <i class="fas fa-book-open"></i> {{$t('global.Show')}}
-                                            </a>
+<!--                                            <a href="javascript:void(0);"-->
+<!--                                               v-if="!item.lead_client"-->
+<!--                                               class="btn btn-sm btn-info me-2"-->
+<!--                                               data-bs-toggle="modal"-->
+<!--                                               :data-bs-target="'#edit-category'+item.id"-->
+<!--                                            >-->
+<!--                                                <i class="fas fa-book-open"></i> {{$t('global.Show')}}-->
+<!--                                            </a>-->
+                                            <router-link
+                                                :to="{name: 'addActionLeadClient',params:{id:item.id}}"
+                                                :title="$t('global.AddAction')"
+                                                class="btn btn-sm btn-success me-2">
+                                                <i class="far fa-edit"></i> {{$t('global.AddAction')}}
+                                            </router-link>
+                                            <router-link
+                                                :to="{name: 'changeLeadClient',params:{id:item.id}}"
+                                                :title="$t('global.changeLead')"
+                                                class="btn btn-sm btn-info me-2">
+                                                <i class="far fa-edit"></i> {{$t('global.changeLead')}}
+                                            </router-link>
+<!--                                            <a class="btn btn-sm btn-info me-2" href="#" @click="changeLeadClient(item.id,index)">{{$t('global.changeLead')}}</a>-->
                                         </td>
 
                                         <!-- invoice big Modal -->
@@ -85,12 +98,12 @@
 
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title"
-                                                        >
+                                                        <h4 class="modal-title">
                                                             التفاصيل
                                                         </h4>
                                                         <button :id="'close-'+item.id"  type="button" class="close print-button" data-bs-dismiss="modal">
-                                                            <span>&times;</span></button>
+                                                            <span>&times;</span>
+                                                        </button>
                                                     </div>
 
                                                     <!-- Modal body -->
@@ -233,7 +246,7 @@ export default {
         let permission = computed(() => store.getters['authAdmin/permission']);
 
         let getClient = () => {
-            if(leadClients.value.length == 0){
+            if(leadClients.value.length <= 10){
                 loading.value = true;
 
                 adminApi.get(`/v1/dashboard/leadClient`)
@@ -339,6 +352,38 @@ export default {
             e.target.classList.add('active');
         };
 
+        function changeLeadClient(id,index) {
+            Swal.fire({
+                title: 'هل انت متأكد من تحويل العميل إلى عميل حقيقى',
+                text: `لم تتمكن من التراجع عن هذا`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    adminApi.post(`/v1/dashboard/changeLeadClient/${id}`)
+                    .then((res) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${parseInt(status) ? 'تم ايقاف التفعيل بنجاح' : 'تم التفعيل بنجاح'}`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        clients.value[index]['status'] =  parseInt(status) ? 0:1
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `يوجد خطا`,
+                            text: `يوجد خطا في النظام!`,
+                        });
+                    });
+                }
+            });
+        }
         const rules = computed(() => {
             return {
                 lead_follow_up_id:{
@@ -353,92 +398,92 @@ export default {
 
         const v$ = useVuelidate(rules,changeStatus.data);
 
-        document.addEventListener('keyup',(e) => {
-
-            if(e.keyCode == 38){ //top arrow
-                if(dropDownSenders.value.length > 0){
-                    let items = document.querySelectorAll('.sender-search .Sender');
-                    let isTrue = false;
-                    let index = null;
-                    items.forEach((e,i) => {
-                        if(e.classList.contains('active')) {
-                            isTrue = true;
-                            index = i;
-                        }
-                    });
-                    if(isTrue && index != 0){
-                        items[index].classList.remove('active');
-                        items[index - 1].classList.add('active');
-                    }else if(isTrue && index == 0){
-                        items[index].classList.remove('active');
-                        items[items.length - 1].classList.add('active');
-                    }
-                    if(!isTrue) items[0].classList.add('active');
-                }else {
-                    dropDownSenders.value = [];
-                }
-            };
-
-            if(e.keyCode == 40){ //down arrow
-                if(dropDownSenders.value.length > 0){
-                    let items = document.querySelectorAll('.sender-search .Sender');
-                    let isTrue = false;
-                    let index = null;
-                    items.forEach((e,i) => {
-                        if(e.classList.contains('active')) {
-                            isTrue = true;
-                            index = i;
-                        }
-                    });
-                    if(isTrue && index != (items.length - 1)){
-                        items[index].classList.remove('active');
-                        items[index + 1].classList.add('active');
-                    }else if(isTrue && index == (items.length - 1)){
-                        items[index].classList.remove('active');
-                        items[0].classList.add('active');
-                    }
-                    if(!isTrue) items[items.length - 1].classList.add('active');
-                }else {
-                    dropDownSenders.value = [];
-                }
-            };
-
-            if(e.keyCode == 13){ //enter
-
-                if(dropDownSenders.value.length > 0){
-                    let items = document.querySelectorAll('.sender-search .Sender');
-                    items.forEach((e,i) => {
-                        if(e.classList.contains('active')) showSenderName(i);
-                    });
-                }else {
-                    dropDownSenders.value = [];
-                }
-
-                e.target.blur();
-
-            };
-
-        });
-
-        document.addEventListener('click',(e) => {
-            if(dropDownSenders.value.length > 0){
-                if(!e.target.classList.contains('Sender') && !e.target.classList.contains('input-Sender') && e.pointerType){
-                    dropDownSenders.value = [];
-                }
-            }
-
-            addJob.products.forEach((item,ind) => {
-                if(item.products.length > 0){
-                    if(
-                        !e.target.classList.contains(`Sender-${ind}`) &&
-                        !e.target.classList.contains(`input-Sender`) &&
-                        e.pointerType
-                    ) {
-                        item.products = [];
-                    }
-                }
-            });
-        });
+        // document.addEventListener('keyup',(e) => {
+        //
+        //     if(e.keyCode == 38){ //top arrow
+        //         if(dropDownSenders.value.length > 0){
+        //             let items = document.querySelectorAll('.sender-search .Sender');
+        //             let isTrue = false;
+        //             let index = null;
+        //             items.forEach((e,i) => {
+        //                 if(e.classList.contains('active')) {
+        //                     isTrue = true;
+        //                     index = i;
+        //                 }
+        //             });
+        //             if(isTrue && index != 0){
+        //                 items[index].classList.remove('active');
+        //                 items[index - 1].classList.add('active');
+        //             }else if(isTrue && index == 0){
+        //                 items[index].classList.remove('active');
+        //                 items[items.length - 1].classList.add('active');
+        //             }
+        //             if(!isTrue) items[0].classList.add('active');
+        //         }else {
+        //             dropDownSenders.value = [];
+        //         }
+        //     };
+        //
+        //     if(e.keyCode == 40){ //down arrow
+        //         if(dropDownSenders.value.length > 0){
+        //             let items = document.querySelectorAll('.sender-search .Sender');
+        //             let isTrue = false;
+        //             let index = null;
+        //             items.forEach((e,i) => {
+        //                 if(e.classList.contains('active')) {
+        //                     isTrue = true;
+        //                     index = i;
+        //                 }
+        //             });
+        //             if(isTrue && index != (items.length - 1)){
+        //                 items[index].classList.remove('active');
+        //                 items[index + 1].classList.add('active');
+        //             }else if(isTrue && index == (items.length - 1)){
+        //                 items[index].classList.remove('active');
+        //                 items[0].classList.add('active');
+        //             }
+        //             if(!isTrue) items[items.length - 1].classList.add('active');
+        //         }else {
+        //             dropDownSenders.value = [];
+        //         }
+        //     };
+        //
+        //     if(e.keyCode == 13){ //enter
+        //
+        //         if(dropDownSenders.value.length > 0){
+        //             let items = document.querySelectorAll('.sender-search .Sender');
+        //             items.forEach((e,i) => {
+        //                 if(e.classList.contains('active')) showSenderName(i);
+        //             });
+        //         }else {
+        //             dropDownSenders.value = [];
+        //         }
+        //
+        //         e.target.blur();
+        //
+        //     };
+        //
+        // });
+        //
+        // document.addEventListener('click',(e) => {
+        //     if(dropDownSenders.value.length > 0){
+        //         if(!e.target.classList.contains('Sender') && !e.target.classList.contains('input-Sender') && e.pointerType){
+        //             dropDownSenders.value = [];
+        //         }
+        //     }
+        //
+        //     addJob.products.forEach((item,ind) => {
+        //         if(item.products.length > 0){
+        //             if(
+        //                 !e.target.classList.contains(`Sender-${ind}`) &&
+        //                 !e.target.classList.contains(`input-Sender`) &&
+        //                 e.pointerType
+        //             ) {
+        //                 item.products = [];
+        //             }
+        //         }
+        //     });
+        // });
 
         return {
             v$,
@@ -458,7 +503,8 @@ export default {
             searchProduct,
             searchSender,
             senderHover,
-            showSenderName
+            showSenderName,
+            changeLeadClient
         };
 
     },

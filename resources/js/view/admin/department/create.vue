@@ -108,7 +108,6 @@ export default {
 
         const v$ = useVuelidate(rules,addDepartment.data);
 
-
         return {t,loading,...toRefs(addDepartment),v$};
     },
     methods: {

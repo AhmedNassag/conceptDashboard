@@ -69,6 +69,9 @@
                                                 class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
+                                            <router-link :to="{name: 'showLead',params:{id:item.id}}" class="btn btn-sm btn-info me-2" >
+                                                <i class="fas fa-book-open"></i> {{$t('global.Show')}}
+                                            </router-link>
 
                                             <a href="javascript:void(0);"
                                                v-if="item.lead_client"

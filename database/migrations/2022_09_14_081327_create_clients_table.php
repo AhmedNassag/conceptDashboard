@@ -16,6 +16,7 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('selling_method_id')->constrained('selling_methods')->cascadeOnDelete()->default(1);
             $table->text('address')->nullable();
             $table->timestamps();
         });

@@ -39,17 +39,18 @@
                             </router-link>
 
                             <a href="#" @click="activationClient(user.id,user.status)">
-                                                <span :class="[parseInt(user.status) ? 'text-success hover': 'text-danger hover']">{{
-                                                        parseInt(user.status) ? 'تفعيل' : 'ايقاف تفعيل' }}</span>
+                                <span :class="[parseInt(user.status) ? 'text-success hover': 'text-danger hover']">
+                                    {{parseInt(user.status) ? 'تفعيل' : 'ايقاف تفعيل' }}
+                                </span>
                             </a>
 
                             <div class="text-center mb-5">
                                 <label class="avatar avatar-xxl profile-cover-avatar" >
                                     <img class="avatar-img" :src="user.image_path" alt="Profile Image">
                                 </label>
-                                <h2>{{user.name}} <i class="fas fa-certificate text-primary small" data-bs-toggle="tooltip"
-                                                  data-placement="top" title="" data-original-title="Verified"></i></h2>
-
+                                <h2>{{user.name}}
+                                    <i class="fas fa-certificate text-primary small" data-bs-toggle="tooltip" data-placement="top" title="" data-original-title="Verified"></i>
+                                </h2>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <i class="fas fa-phone"></i> <span>{{user.phone}}</span>

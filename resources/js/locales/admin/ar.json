@@ -61,6 +61,8 @@
         "Inactive":"غير مفعل",
         "NameEn":"الاسم",
         "Submit":"تأكيد",
+        "AddAction": "إضافة تفاعل",
+        "changeLead": "تغيير حالة العميل",
         "EditSuccessfully": "تم التعديل بنجاح",
         "AddedSuccessfully": "تمت الاضافة بنجاح",
         "Status":"الحالة",

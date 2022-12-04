@@ -129,6 +129,29 @@
                                                 </div>
                                             </div>
 
+                                            <!--Start selling_method_id-->
+<!--                                            <div class="col-md-6 mb-3">-->
+<!--                                                <label >{{ $t('global.SellingMethod') }}</label>-->
+<!--                                                <select-->
+<!--                                                    name="type"-->
+<!--                                                    class="form-control"-->
+<!--                                                    v-model="v$.selling_method_id.$model"-->
+<!--                                                    :class="{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}"-->
+<!--                                                >-->
+<!--                                                    <option-->
+<!--                                                        v-for="sellingMethod in sellingMethods"-->
+<!--                                                        :value=" sellingMethod.id"-->
+<!--                                                        :key=" sellingMethod.id"-->
+<!--                                                    >{{ sellingMethod.name }}</option>-->
+<!--                                                </select>-->
+<!--                                                <div class="valid-feedback">تبدو جيده</div>-->
+<!--                                                <div class="invalid-feedback">-->
+<!--                                                    <span v-if="v$.selling_method_id.$invalid"> هذا الحقل مطلوب<br /> </span>-->
+<!--                                                    <span v-if="v$.selling_method_id.integer.$invalid"> يجب ان يكون رقم  <br /></span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                            <!--End selling_method_id-->
+
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom04">العنوان </label>
                                                 <input type="text" class="form-control"
@@ -215,6 +238,7 @@ export default {
                 address : '',
                 province_id : null,
                 area_id : null,
+                // selling_method_id : null,
                 amount: 0
             }
         });
@@ -240,6 +264,7 @@ export default {
                 amount:{decimal},
                 province_id:{required,integer},
                 area_id:{required,integer},
+                // selling_method_id:{required,integer},
             }
         });
 
