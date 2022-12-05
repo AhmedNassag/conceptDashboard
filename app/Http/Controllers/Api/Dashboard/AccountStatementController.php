@@ -14,7 +14,7 @@ class AccountStatementController extends Controller
 
     public function index(Request $request)
     {
-        $restrictions =Restriction::where('sub_account_id',$request->sub_account_id)->with('dailyRestriction')
+        $restrictions = Restriction::where('sub_account_id',$request->sub_account_id)->with('dailyRestriction')
             ->whereRelation('dailyRestriction',function ($q) use($request){
                 $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
                     $q->whereDate('date', ">=", $request->from_date)
