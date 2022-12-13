@@ -16,9 +16,10 @@ class CreateJobsTable extends Migration
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('selling_method_id')->nullable()->constrained('selling_methods')->cascadeOnDelete();
+//            $table->foreignId('selling_method_id')->default(1)->nullable()->constrained('selling_methods')->cascadeOnDelete();
             $table->boolean('Allow_adding_to_sales_team')->default(0);
-            $table->boolean('active')->default(1);
+//            $table->boolean('targetType')->default(1)->nullable();
+            $table->boolean('active')->default(1)->nullable();
             $table->timestamps();
         });
     }

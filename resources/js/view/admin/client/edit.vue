@@ -406,13 +406,13 @@ input[type="file"] {
 }
 
 .sec-body{
-    border: 3px solid #fcb00c;
+    border: 3px solid #000;
     border-radius: 20px;
     padding: 10px;
 }
 .sec-head{
-    background-color: #fcb00c;
-    color: #000;
+    background-color: #103C67;
+    color: #FFF;
     border-radius: 11px;
     padding: 5px;
     text-align: center;
@@ -420,12 +420,16 @@ input[type="file"] {
     margin-top: 10px;
 }
 .sec-body:hover .sec-head{
-    border: 3px solid #fcb00c;
+    border: 3px solid #000;
     padding: 2px;
     border-radius: 11px;
     background-color: #ffff;
 }
+.sec-body:hover .sec-head h3{
+    color: #000;
+}
 .sec-head h3{
     font-weight: 700;
+    color: #FFF;
 }
 </style>

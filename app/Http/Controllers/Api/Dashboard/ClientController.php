@@ -82,7 +82,7 @@ class ClientController extends Controller
             }
 
             // start create user
-            $user =  User::create([
+            $user = User::create([
                 "name" => $request->name,
                 "email" => $request->email,
                 "auth_id" => 2,

@@ -985,7 +985,7 @@ export default {
     position: relative;
 }
 .account{
-    background-color: #fcb00c;
+    background-color: #103C67;
     color: #000000 !important;
     border-radius: 5px;
 }

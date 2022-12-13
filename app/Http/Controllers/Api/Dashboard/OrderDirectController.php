@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\followLead;
 use App\Models\OfferDiscount;
 use App\Models\Order;
 use App\Models\OrderDetails;
@@ -12,11 +13,13 @@ use App\Models\Product;
 use App\Models\ProductPricing;
 use App\Models\Store;
 use App\Models\StoreProduct;
+use App\Models\TargetAchieved;
 use App\Models\Tax;
 use App\Models\Treasury;
 use App\Models\User;
 use App\Traits\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,6 +34,20 @@ class OrderDirectController extends Controller
         $order->update([
             "order_status_id" => 5
         ]);
+
+        //
+//        $followLead = User::where('id',$order->user_id)->with('client')->first();
+//        if($followLead)
+//        {
+//            followLead::create([
+//                'name' => $followLead->name,
+//                'address' => $followLead->client->address,
+//                'email' => $followLead->email,
+//                'phone' => $followLead->phone,
+//                'seller_category_id' => 1,
+//            ]);
+//        }
+        //
 
         return $this->sendResponse([], 'Data exited successfully');
     }
@@ -182,7 +199,7 @@ class OrderDirectController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+//        try {
             DB::beginTransaction();
 
             // Validator request
@@ -264,6 +281,19 @@ class OrderDirectController extends Controller
                 'order_status' => 0
             ]);
 
+            //
+            $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
+            if(!$auth)
+            {
+                TargetAchieved::create([
+                    'count' => $totalAfterTax,
+                    'employee_id' => auth()->user()->id,
+                    'date' => now(),
+                ]);
+            }
+            //
+
+
             if($request->taxs){
                 foreach ($request->taxs as $ta){
                     $off = Tax::find($ta);
@@ -334,10 +364,10 @@ class OrderDirectController extends Controller
 
             return $this->sendResponse(['order' =>$order], 'Data exited successfully');
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            return $this->sendError('An error occurred in the system');
+//        }
     }
 
 
