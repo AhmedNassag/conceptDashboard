@@ -140,17 +140,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-2 mb-3" v-if="data.product[index].product_id">
-                                                            <label>
-                                                                {{ $t('global.middlePrice') }}
-                                                            </label>
-                                                            <input type="text"
-                                                                   :class="['form-control']"
-                                                                   disabled
-                                                                   v-model="products[index].avgPrice"
-                                                            >
-                                                        </div>
-
                                                         <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0">
                                                             <label>{{ products[index].productPrice[0].measurement_unit.name }}
                                                                 ( {{ products[index].productPrice[0].available_quantity }} )
@@ -189,11 +178,10 @@
                                                             </div>
                                                         </div>
 
-                                                        <div
-                                                            class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0 && products[index].count_unit > 1">
+                                                        <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0 && products[index].product.count_unit > 1">
                                                             <label>
-                                                                {{ products[index].productPrice[1].measurement_unit.name }}
-                                                                ({{ products[index].productPrice[1].available_quantity }})
+                                                                {{products[index].product.count_unit > 1 ? products[index].productPrice[1].measurement_unit.name: "---" }}
+                                                                ({{products[index].product.count_unit > 1 ? products[index].productPrice[1].available_quantity : "---"}})
                                                             </label>
                                                             <input
                                                                 type="number"
@@ -248,6 +236,12 @@
                                                                     data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger mt-1">
                                                                 <i class="far fa-trash-alt"></i> {{$t('global.Delete')}}
                                                             </button>
+                                                        </div>
+
+                                                        <div class="col-md-2 mb-3" v-if="data.product[index].product_id">
+                                                            <p class="middlePrice">
+                                                                {{ $t('global.middlePrice') }} : {{products[index].avgPrice}}
+                                                            </p>
                                                         </div>
 
                                                     </div>
@@ -435,7 +429,7 @@
                                                         <td>{{ index +1}}</td>
                                                         <td>{{ products[index].product.name }}</td>
                                                         <td>{{ data.product[index].mainQuantity }} ( {{products[index].productPrice[0].measurement_unit.name}} )</td>
-                                                        <td>{{ data.product[index].branchQuantity }} ( {{products[index].productPrice[1].measurement_unit.name}} )</td>
+                                                        <td>{{ products[index].product.count_unit > 1 ? data.product[index].branchQuantity : '-' }} ( {{products[index].product.count_unit > 1 ? products[index].productPrice[1].measurement_unit.name:'--'}} )</td>
                                                         <td>{{data.product[index].mainQuantity? data.product[index].mainPrice : '-'}}</td>
                                                         <td>{{data.product[index].branchQuantity? data.product[index].branchPrice : '-'}}</td>
                                                         <td>
@@ -536,7 +530,7 @@ export default {
                             branchQuantity: 0,
                             product_id:null,
                             mainId: null,
-                            branchId: null
+                            branchId: ''
                         });
                         productValidation.value.push({
                             mainPrice: {required, numeric},
@@ -558,8 +552,8 @@ export default {
                             products.value.find(e => e.id == q.product_id);
                         addJob.data.product[index].mainId =
                             products.value.find(e => e.id == q.product_id).product_price[0].id;
-                        addJob.data.product[index].branchId =
-                            products.value.find(e => e.id == q.product_id).product_price[1].id;
+                        addJob.data.product[index].branchId = products.value.find(e => e.id == q.product_id).count_unit > 1 ?
+                            products.value.find(e => e.id == q.product_id).product_price[1].id : "";
                         addJob.products[index].name =
                             products.value.find(e => e.id == q.product_id).name;
                         addJob.products[index].productPrice =
@@ -692,7 +686,7 @@ export default {
 
             addJob.products[index].isValidProd =
                 ((addJob.data.product[index].mainQuantity * addJob.products[index].count_unit) +
-                    addJob.data.product[index].branchQuantity) <=  addJob.products[index].productPrice[1].available_quantity + addJob.products[index].totalCount ;
+                    addJob.data.product[index].branchQuantity) <=  addJob.products[index].productPrice[0].available_quantity + addJob.products[index].totalCount ;
 
             totalProductFun();
         };
@@ -934,7 +928,7 @@ export default {
                             speed: 2000
                         });
 
-                       this.invoicePrint = true;
+                        this.invoicePrint = true;
 
                     })
                     .catch((err) => {
