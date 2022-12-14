@@ -87,6 +87,7 @@
                                             <router-link
                                                 :to="{name: 'editLead', params: {lang: locale || 'ar',idTarget:id,idLead:item.id}}"
                                                 v-if="permission.includes('Leads edit')"
+                                                :title="$t('global.Edit')"
                                                 class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
@@ -99,8 +100,16 @@
 
                                             <router-link
                                                 :to="{name: 'indexLeadComment', params: {lang: locale || 'ar',id:item.id}}"
+                                                :title="$t('global.Comment')"
                                                 class="btn btn-sm btn-info me-2">
                                                 <i class="fas fa-book-open"></i>
+                                            </router-link>
+
+                                            <router-link
+                                                :to="{name: 'changeLead', params: {lang: locale || 'ar',idTarget:id,idLead:item.id}}"
+                                                :title="$t('global.changeLead')"
+                                                class="btn btn-sm btn-info me-2">
+                                                <i class="fa fa-check"></i> {{$t('global.changeLead')}}
                                             </router-link>
 
                                         </td>

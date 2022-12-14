@@ -1,4 +1,3 @@
-
 <template>
     <div :class="['page-wrapper','page-wrapper-ar']">
 
@@ -97,7 +96,7 @@
                                                         @click="showSenderName(index)"
                                                         @mouseenter="senderHover"
                                                     >
-                                                        {{ dropDownSender.name }}
+                                                        {{ dropDownSender.id }} - {{ dropDownSender.name }}
                                                     </li>
                                                 </ul>
 
@@ -168,17 +167,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-2 mb-3" v-if="data.product[index].product_id">
-                                                            <label>
-                                                                {{ $t('global.middlePrice') }}
-                                                            </label>
-                                                            <input type="text"
-                                                               :class="['form-control']"
-                                                               disabled
-                                                               v-model="products[index].avgPrice"
-                                                            >
-                                                        </div>
-
                                                         <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0">
                                                             <label>{{ products[index].productPrice[0].measurement_unit.name }}
                                                                 ( {{ products[index].productPrice[0].available_quantity }} )
@@ -198,16 +186,16 @@
                                                                 {{ $t('global.Quantity') }}
                                                             </label>
                                                             <input
-                                                                   type="number"
-                                                                   min="0"
-                                                                   :class="[
+                                                                type="number"
+                                                                min="0"
+                                                                :class="[
                                                                          'form-control mb-1',
                                                                          products[index].isValidProd? '':'is-invalid',
                                                                           {'is-invalid':v$.product[index].branchQuantity.$error,
                                                                           'is-valid':!v$.product[index].branchQuantity.$invalid && products[index].isValidProd}
                                                                        ]"
-                                                                   @input="productPricePartialTotal(index)"
-                                                                   v-model="data.product[index].mainQuantity"
+                                                                @input="productPricePartialTotal(index)"
+                                                                v-model="data.product[index].mainQuantity"
                                                             >
                                                             <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                                             <div v-if="!products[index].isValidProd || v$.product[index].mainQuantity.$error">
@@ -217,12 +205,10 @@
                                                             </div>
                                                         </div>
 
-                                                        <div
-                                                            class="col-md-2 mb-3"
-                                                            v-if="products[index].productPrice.length > 0 && products[index].count_unit > 1">
+                                                        <div class="col-md-2 mb-3" v-if="products[index].productPrice.length > 0 && products[index].product.count_unit > 1">
                                                             <label>
-                                                                {{ products[index].productPrice[1].measurement_unit.name }}
-                                                                ({{ products[index].productPrice[1].available_quantity }})
+                                                                {{products[index].product.count_unit > 1 ? products[index].productPrice[1].measurement_unit.name : "---"}}
+                                                                ({{products[index].product.count_unit > 1 ? products[index].productPrice[1].available_quantity : "---" }})
                                                             </label>
                                                             <input
                                                                 type="number"
@@ -277,6 +263,12 @@
                                                                     data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger mt-1">
                                                                 <i class="far fa-trash-alt"></i> {{$t('global.Delete')}}
                                                             </button>
+                                                        </div>
+
+                                                        <div class="col-md-2 mb-3" v-if="data.product[index].product_id">
+                                                            <p class="middlePrice">
+                                                                {{ $t('global.middlePrice') }} : {{products[index].avgPrice}}
+                                                            </p>
                                                         </div>
 
                                                     </div>
@@ -335,20 +327,20 @@
                                                 <div class="table-responsive">
                                                     <table class="table table-center table-hover mb-0 datatable">
                                                         <thead class="account">
-                                                            <tr class="text-center">
-                                                                <th>{{ $t('global.TotalPriceBeforeDiscount') }}</th>
-                                                                <th>{{ $t('global.TotalPriceAfterDiscount') }}</th>
-                                                                <th>{{ $t('global.TotalTax') }}</th>
-                                                                <th>{{ $t('global.TotalPriceAfterTaxx') }}</th>
-                                                            </tr>
+                                                        <tr class="text-center">
+                                                            <th>{{ $t('global.TotalPriceBeforeDiscount') }}</th>
+                                                            <th>{{ $t('global.TotalPriceAfterDiscount') }}</th>
+                                                            <th>{{ $t('global.TotalTax') }}</th>
+                                                            <th>{{ $t('global.TotalPriceAfterTaxx') }}</th>
+                                                        </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr class="text-center">
-                                                                <td>{{totalProductbefourDiscount ?totalProductbefourDiscount.toFixed(2):0}}</td>
-                                                                <td>{{ totalProductAfterDiscount? totalProductAfterDiscount.toFixed(2):0 }}</td>
-                                                                <td>{{ totalTax? totalTax.toFixed(2): 0 }} %</td>
-                                                                <td>{{ TotalPriceAfterTaxx? (TotalPriceAfterTaxx).toFixed(2):0 }}</td>
-                                                            </tr>
+                                                        <tr class="text-center">
+                                                            <td>{{totalProductbefourDiscount ?totalProductbefourDiscount.toFixed(2):0}}</td>
+                                                            <td>{{ totalProductAfterDiscount? totalProductAfterDiscount.toFixed(2):0 }}</td>
+                                                            <td>{{ totalTax? totalTax.toFixed(2): 0 }} %</td>
+                                                            <td>{{ TotalPriceAfterTaxx? (TotalPriceAfterTaxx).toFixed(2):0 }}</td>
+                                                        </tr>
                                                         </tbody>
 
                                                     </table>
@@ -460,22 +452,22 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody v-if="data.product.length">
-                                                        <tr v-for="(it,index) in data.product" :key="index">
-                                                            <td>{{ index +1}}</td>
-                                                            <td>{{ products[index].product.name }}</td>
-                                                            <td>{{ data.product[index].mainQuantity }} ( {{products[index].productPrice[0].measurement_unit.name}} )</td>
-                                                            <td>{{ data.product[index].branchQuantity }} ( {{products[index].productPrice[1].measurement_unit.name}} )</td>
-                                                            <td>{{data.product[index].mainQuantity? data.product[index].mainPrice : '-'}}</td>
-                                                            <td>{{data.product[index].branchQuantity? data.product[index].branchPrice : '-'}}</td>
-                                                            <td>
+                                                    <tr v-for="(it,index) in data.product" :key="index">
+                                                        <td>{{ index +1}}</td>
+                                                        <td>{{ products[index].product.name }}</td>
+                                                        <td>{{ data.product[index].mainQuantity }} ( {{products[index].productPrice[0].measurement_unit.name}} )</td>
+                                                        <td>{{ products[index].product.count_unit > 1 ? data.product[index].branchQuantity : "-" }} ( {{ products[index].product.count_unit > 1 ? products[index].productPrice[1].measurement_unit.name : "---"}} )</td>
+                                                        <td>{{data.product[index].mainQuantity? data.product[index].mainPrice : '-'}}</td>
+                                                        <td>{{data.product[index].branchQuantity? data.product[index].branchPrice : '-'}}</td>
+                                                        <td>
                                                             {{
-                                                              parseFloat(
-                                                                  (data.product[index].mainQuantity * data.product[index].mainPrice) +
-                                                                  (data.product[index].branchQuantity * data.product[index].branchPrice)
-                                                              ).toFixed(2)
+                                                                parseFloat(
+                                                                    (data.product[index].mainQuantity * data.product[index].mainPrice) +
+                                                                    (data.product[index].branchQuantity * data.product[index].branchPrice)
+                                                                ).toFixed(2)
                                                             }}
-                                                            </td>
-                                                        </tr>
+                                                        </td>
+                                                    </tr>
                                                     </tbody>
                                                     <tbody  v-else>
                                                     <tr>
@@ -568,35 +560,35 @@ export default {
         let getProductStore = () => {
             loading.value = true;
             adminApi
-            .get(`/v1/dashboard/orderDirectStore?store_id=${addJob.data.store_id}&selling_method_id=${addJob.data.selling_method_id}`)
-            .then((res) => {
-                let l = res.data.data;
-                console.log(l)
-                products.value = l.products;
-                addJob.data.product= [{
-                    mainPrice: 0,
-                    branchPrice: 0,
-                    mainQuantity: 0,
-                    branchQuantity: 0,
-                    product_id:null,
-                    mainId: null,
-                    branchId: null
-                }];
-                productValidation.value = [{
-                    mainPrice: {required, numeric},
-                    branchPrice: {required, numeric},
-                    mainQuantity: { numeric, minValue: minValue(0),required},
-                    branchQuantity: {required,numeric, minValue: minValue(0)},
-                    product_id:{required}
-                }];
-                addJob.products= [{products:[],total:0,product:{},avgPrice:0,productPrice:[],isValidProd:true,search:'',name:''}];
-            })
-            .catch((err) => {
-                console.log(err.response);
-            })
-            .finally(() => {
-                loading.value = false;
-            });
+                .get(`/v1/dashboard/orderDirectStore?store_id=${addJob.data.store_id}&selling_method_id=${addJob.data.selling_method_id}`)
+                .then((res) => {
+                    let l = res.data.data;
+                    console.log(l)
+                    products.value = l.products;
+                    addJob.data.product= [{
+                        mainPrice: 0,
+                        branchPrice: 0,
+                        mainQuantity: 0,
+                        branchQuantity: 0,
+                        product_id:null,
+                        mainId: null,
+                        branchId: null
+                    }];
+                    productValidation.value = [{
+                        mainPrice: {required, numeric},
+                        branchPrice: {required, numeric},
+                        mainQuantity: { numeric, minValue: minValue(0),required},
+                        branchQuantity: {required,numeric, minValue: minValue(0)},
+                        product_id:{required}
+                    }];
+                    addJob.products= [{products:[],total:0,product:{},avgPrice:0,productPrice:[],isValidProd:true,search:'',name:''}];
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                })
+                .finally(() => {
+                    loading.value = false;
+                });
         };
 
         onMounted(() => {
@@ -613,7 +605,7 @@ export default {
                         branchQuantity: 0,
                         product_id:null,
                         mainId: null,
-                        branchId: null,
+                        branchId: '',
                     }
                 ],
                 discounts:[],
@@ -664,7 +656,7 @@ export default {
         };
         let showSenderName = (index) => {
             let item = dropDownSenders.value[index];
-            addJob.nameSender = item.name;
+            addJob.nameSender = `${item.id} - ${item.name}`;
             addJob.data.client_id = item.id;
             addJob.balance = item.sum_account;
             addJob.data.selling_method_id = item.client.selling_method_id;
@@ -695,22 +687,19 @@ export default {
             addJob.data.store_name = stores.value.find(e => e.id == addJob.data.store_id).name;
             addJob.products[index].productPrice = item.product_price;
             addJob.data.product[index].mainPrice = item.product_price[0].price;
-            addJob.data.product[index].branchPrice = item.product_price[1].price;
+            addJob.data.product[index].branchPrice = item.count_unit > 1 ? item.product_price[1].price : 0;
             addJob.data.product[index].mainId = item.product_price[0].id;
-            addJob.data.product[index].branchId = item.product_price[1].id;
+            addJob.data.product[index].branchId = item.count_unit > 1 ? item.product_price[1].id : "";
             addJob.products[index].name = item.name;
             addJob.data.product[index].product_id = item.id;
-            if(item.store_products.length > 1){
+            if(item.store_products.length >= 1){
                 let quantity = 0;
                 let price  = 0;
-                console.log(item.store_products);
                 item.store_products.forEach((e) => {
                     quantity += e.quantity;
                     price += e.purchase_product.price * e.quantity;
                 },0);
                 addJob.products[index].avgPrice = (price/quantity).toFixed(2);
-            }else {
-                addJob.products[index].avgPrice = item.product_price[0].price;
             }
             addJob.products[index].search = '';
             addJob.products[index].products = [];

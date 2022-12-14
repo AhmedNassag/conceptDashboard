@@ -360,7 +360,7 @@ use Illuminate\Support\Facades\Route;
              Route::get('leadClient','LeadController@leadClient');
              Route::post('storeClient','LeadController@storeClient');
              Route::post('addAction', 'LeadController@addAction');
-             Route::post('changeLeadClient/{id}','LeadController@changeLeadClient');
+             Route::post('changeLeadClient/{id}','LeadController@changeLeadToClient');
              Route::get('leadClientGet','LeadController@leadClientGet');
 
 

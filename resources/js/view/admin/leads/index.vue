@@ -119,7 +119,7 @@
                                                                                     <th>{{ item.name }}</th>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th>الموبيل</th>
+                                                                                    <th>الموبايل</th>
                                                                                     <th>{{ item.phone }}</th>
                                                                                 </tr>
                                                                                 <tr>

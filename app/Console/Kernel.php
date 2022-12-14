@@ -23,8 +23,11 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-         $schedule->command('follow lead:create')->everyMinute();
+        // $schedule->command('follow lead:create')->everyMinute();
+        $schedule->call(function () {
+            $posts = followLead::where('created_at', '<', now()->subDays(2)->toDateTimeString())->get();
+            $posts->each->forceDelete();
+        })->everyMinute();
     }
 
     /**

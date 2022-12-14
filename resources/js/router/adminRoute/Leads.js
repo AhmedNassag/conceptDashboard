@@ -3,6 +3,7 @@ import indexLeadSalesHome from "../../view/admin/Lead/home";
 import indexLead from "../../view/admin/Lead/index";
 import createLead from "../../view/admin/Lead/create";
 import editLead from "../../view/admin/Lead/edit";
+import changeLead from "../../view/admin/Lead/changeLead";
 
 import indexLeadComment from "../../view/admin/LeadComment/index";
 import createLeadComment from "../../view/admin/LeadComment/create";
@@ -64,6 +65,21 @@ export default [
                 path: 'edit/:idTarget(\\d+)/lead/:idLead(\\d+)',
                 name: 'editLead',
                 component: editLead,
+                props: true,
+                beforeEnter: (to, from,next) => {
+                    let permission = store.state.authAdmin.permission;
+
+                    if(permission.includes('Leads edit')){
+                        return next();
+                    }else{
+                        return next({name:'Page404'});
+                    }
+                }
+            },
+            {
+                path: 'changeLead/:idTarget(\\d+)/lead/:idLead(\\d+)',
+                name: 'changeLead',
+                component: changeLead,
                 props: true,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;

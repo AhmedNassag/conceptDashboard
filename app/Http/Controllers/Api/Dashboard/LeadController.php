@@ -218,4 +218,58 @@ class LeadController extends Controller
 
         return $this->sendResponse([], 'Data exited successfully');
     }
+
+
+    public function changeLeadToClient(Request $request, $id)
+    {
+        try {
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'email' => 'required|string|email|unique:users,email',
+                'province_id'  => 'required|integer|exists:provinces,id',
+                'area_id'  => 'required|integer|exists:areas,id',
+                'phone' => 'required|string|unique:users',
+                'address' => 'required|string|min:5|max:255',
+                'amount' => 'nullable|numeric'
+            ]);
+
+            if($v->fails()) {
+                return $this->sendError('There is an error in the data',$v->errors());
+            }
+
+            $lead = Lead::find($id);
+            if ($lead) {
+                $user = User::create([
+                    "name" => $request->name,
+                    "email" => $request->email,
+                    "auth_id" => 2,
+                    'role_name'=> ['client'],
+                    "status" => 0,
+                    'phone' => $request->phone,
+                    "code" => '+2'
+                ]);
+                $user->complement()->create([
+                    'province_id' => $request->province_id,
+                    'area_id' => $request->area_id,
+                    'selling_method_id' => 1,
+                    'device' => 2
+                ]);
+                $user->client()->create(['address' => $request->address]);
+                $user->clientAccounts()->create([
+                    'amount' => $request->amount ? $request->amount : 0
+                ]);
+
+                $lead->delete();
+
+                return $this->sendResponse([], 'Deleted successfully');
+            } else {
+                return $this->sendError('ID is not exist');
+            }
+
+        } catch (\Exception $e) {
+            return $this->sendError('An error occurred in the system');
+        }
+    }
+
 }

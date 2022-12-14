@@ -36,17 +36,17 @@ class OrderDirectController extends Controller
         ]);
 
         //
-//        $followLead = User::where('id',$order->user_id)->with('client')->first();
-//        if($followLead)
-//        {
-//            followLead::create([
-//                'name' => $followLead->name,
-//                'address' => $followLead->client->address,
-//                'email' => $followLead->email,
-//                'phone' => $followLead->phone,
-//                'seller_category_id' => 1,
-//            ]);
-//        }
+        $followLead = User::where('id',$order->user_id)->with('client')->first();
+        if($followLead)
+        {
+            followLead::create([
+                'name' => $followLead->name,
+                'address' => $followLead->client->address,
+                'email' => $followLead->email,
+                'phone' => $followLead->phone,
+                'seller_category_id' => 1,
+            ]);
+        }
         //
 
         return $this->sendResponse([], 'Data exited successfully');
@@ -199,7 +199,7 @@ class OrderDirectController extends Controller
      */
     public function store(Request $request)
     {
-//        try {
+        try {
             DB::beginTransaction();
 
             // Validator request
@@ -213,7 +213,7 @@ class OrderDirectController extends Controller
                 'priceOffer' => 'nullable|numeric',
                 'product.*.product_id' => 'required|integer|exists:products,id',
                 'product.*.mainId' => 'required|integer|exists:product_pricings,id',
-                'product.*.branchId' => 'required|integer|exists:product_pricings,id',
+                'product.*.branchId' => 'nullable|integer|exists:product_pricings,id',
                 'product.*.mainQuantity' => 'required|integer',
                 'product.*.branchQuantity' => 'required|integer'
             ]);
@@ -364,10 +364,10 @@ class OrderDirectController extends Controller
 
             return $this->sendResponse(['order' =>$order], 'Data exited successfully');
 
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            return $this->sendError('An error occurred in the system');
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
     }
 
 
@@ -436,7 +436,7 @@ class OrderDirectController extends Controller
                 'priceOffer' => 'nullable|numeric',
                 'product.*.product_id' => 'required|integer|exists:products,id',
                 'product.*.mainId' => 'required|integer|exists:product_pricings,id',
-                'product.*.branchId' => 'required|integer|exists:product_pricings,id',
+                'product.*.branchId' => 'nullable|integer|exists:product_pricings,id',
                 'product.*.mainQuantity' => 'required|integer',
                 'product.*.branchQuantity' => 'required|integer'
             ]);

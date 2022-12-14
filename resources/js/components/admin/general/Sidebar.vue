@@ -140,6 +140,7 @@
 <!--                    </li>-->
                     <!--end LeadClient-->
 
+
                     <!--start knowledge-->
                     <li
                         :class="[{'active': ['indexKnowledge','createKnowledge','editKnowledge'].includes($route.name)}]"
@@ -152,6 +153,7 @@
                     </li>
                     <!--end knowledge-->
 
+
                     <!--start supplier-->
                     <li
                         :class="[{'active': ['indexSupplier','createSupplier','editSupplier'].includes($route.name)}]"
@@ -163,6 +165,7 @@
                         </router-link>
                     </li>
                     <!--start supplier-->
+
 
                     <!--start buy-->
                     <li class="submenu" v-if="permission.includes('buy')">
@@ -200,8 +203,8 @@
                     </li>
                     <!--end buy-->
 
-                    <!--start store-->
 
+                    <!--start store-->
                     <li class="submenu" v-if="permission.includes('productManagement')">
                         <a href="#" ><i class="fab fa-product-hunt"></i> <span> {{ $t('sidebar.ProductManagement') }}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -280,11 +283,10 @@
 
                         </ul>
                     </li>
-
                     <!--end Store-->
 
-                    <!--start store-->
 
+                    <!--start store-->
                     <li class="submenu" v-if="permission.includes('StoreManagement')">
                         <a href="#" ><i class="fas fa-cubes"></i> <span> {{ $t('sidebar.StoreManagement') }}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -318,11 +320,10 @@
 
                         </ul>
                     </li>
-
                     <!--end store-->
 
-                    <!--start employee-->
 
+                    <!--start employee-->
                     <li class="submenu" v-if="permission.includes('role-employee')">
                         <a href="#" ><i class="fas fa-user-tie"></i> <span> {{ $t('global.EmployeesManagement') }}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -374,8 +375,8 @@
 
                         </ul>
                     </li>
-
                     <!--end employee-->
+
 
                     <!-- Start CRM Links -->
                     <li class="submenu" v-if="permission.includes('CRM')">
@@ -415,6 +416,7 @@
                         </ul>
                     </li>
                     <!-- End CRM Links -->
+
 
                     <!-- Start Problem Links -->
                     <li class="submenu" v-if="permission.includes('CRM')">
@@ -497,6 +499,7 @@
                         </ul>
                     </li>
                     <!-- End follow Links -->
+
 
 
                     <li class="submenu" v-if="permission.includes('platform Accounts')">
