@@ -74,13 +74,14 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+//        try {
             DB::beginTransaction();
 
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|unique:jobs,name',
-                'selling_method_id' => 'nullable'
+//                'selling_method_id' => 'nullable',
+//                'targetType' => 'nullable'
             ]);
 
             if ($v->fails()) {
@@ -90,17 +91,18 @@ class JobController extends Controller
             Job::create([
                 'name' => $request->name,
                 'Allow_adding_to_sales_team' => $request->Allow_adding_to_sales_team,
-                'selling_method_id' => $request->Allow_adding_to_sales_team ?  $request->selling_method_id : 0
+//                'selling_method_id' => $request->Allow_adding_to_sales_team ?  $request->selling_method_id : 0,
+//                'targetType' => $request->Allow_adding_to_sales_team ?  $request->targetType : Null
             ]);
 
             DB::commit();
 
             return $this->sendResponse([], 'Data exited successfully');
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            return $this->sendError('An error occurred in the system');
+//        }
 
     }
 
@@ -148,7 +150,8 @@ class JobController extends Controller
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|unique:jobs,name,'.$job->id,
-                'selling_method_id' => 'nullable'
+//                'selling_method_id' => 'nullable',
+//                'targetType' => 'nullable',
             ]);
 
             if ($v->fails()) {
@@ -158,7 +161,8 @@ class JobController extends Controller
             $job->update([
                 'name' => $request->name,
                 'Allow_adding_to_sales_team' => $request->Allow_adding_to_sales_team,
-                'selling_method_id' => $request->Allow_adding_to_sales_team ?  $request->selling_method_id : 0
+//                'selling_method_id' => $request->Allow_adding_to_sales_team ?  $request->selling_method_id : 0,
+//                'targetType' => $request->Allow_adding_to_sales_team ?  $request->targetType : 0
             ]);
 
             DB::commit();

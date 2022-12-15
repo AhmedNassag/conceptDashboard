@@ -1,4 +1,4 @@
-<template>
+\\\\<template>
     <div class="shadow"></div>
     <div class="main">
         <div class="lds-spinner">

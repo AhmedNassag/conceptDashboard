@@ -59,17 +59,31 @@
                                                 <input type="checkbox" id="validationCustom02" v-model="data.Allow_adding_to_sales_team" class="m-5" :checked="data.Allow_adding_to_sales_team">
                                             </div>
 
-                                            <div class="col-md-6 mb-12" v-if="data.Allow_adding_to_sales_team">
-                                                <label>طريقه البيع</label>
+<!--                                            <div class="col-md-6 mb-12" v-if="data.Allow_adding_to_sales_team">-->
+<!--                                                <label>طريقه البيع</label>-->
 
-                                                <select v-model="data.selling_method_id" :class="['form-select',{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}]">
-                                                    <option v-for="selling_method in selling_methods" :kay="selling_method.id" :value="selling_method.id">{{selling_method.name}}</option>
-                                                </select>
-                                                <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
-                                                <div class="invalid-feedback">
-                                                    <span class="text-danger" v-if="v$.selling_method_id.requiredIf.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>
-                                                </div>
-                                            </div>
+<!--                                                <select v-model="data.selling_method_id" :class="['form-select',{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}]">-->
+<!--                                                    <option v-for="selling_method in selling_methods" :kay="selling_method.id" :value="selling_method.id">{{selling_method.name}}</option>-->
+<!--                                                </select>-->
+<!--                                                <div class="valid-feedback">{{$t('global.LooksGood')}}</div>-->
+<!--                                                <div class="invalid-feedback">-->
+<!--                                                    <span class="text-danger" v-if="v$.selling_method_id.requiredIf.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+
+<!--                                            <div class="col-md-6 mb-12" v-if="data.Allow_adding_to_sales_team">-->
+<!--                                                <label>نوع البيع</label>-->
+
+<!--                                                <select v-model="data.targetType" :class="['form-select',{'is-invalid':v$.targetType.$error,'is-valid':!v$.targetType.$invalid}]">-->
+<!--                                                    <option value="0">{{$t('global.In Door')}}</option>-->
+<!--                                                    <option value="1">{{$t('global.Out Door')}}</option>-->
+<!--                                                </select>-->
+
+<!--                                                <div class="valid-feedback">{{$t('global.LooksGood')}}</div>-->
+<!--                                                <div class="invalid-feedback">-->
+<!--                                                    <span class="text-danger" v-if="v$.targetType.requiredIf.$invalid">{{$t('global.ThisFieldIsRequired')}}<br /> </span>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
 
                                         </div>
 
@@ -118,7 +132,8 @@ export default {
                     let l = res.data.data;
                     addJob.data.name = l.job.name;
                     selling_methods.value = l.selling_methods;
-                    addJob.data.selling_method_id = l.job.selling_method_id;
+                    // addJob.data.selling_method_id = l.job.selling_method_id;
+                    // addJob.data.targetType = l.job.targetType;
                     addJob.data.Allow_adding_to_sales_team = l.job.Allow_adding_to_sales_team;
                 })
                 .catch((err) => {
@@ -137,7 +152,8 @@ export default {
             data:{
                 name : '',
                 Allow_adding_to_sales_team:0,
-                selling_method_id: ''
+                // selling_method_id: '',
+                // targetType: '',
             }
         });
 
@@ -148,9 +164,12 @@ export default {
                     maxLength:maxLength(40),
                     required
                 },
-                selling_method_id:{
-                    requiredIf: requiredIf(addJob.data.Allow_adding_to_sales_team)
-                }
+                // selling_method_id:{
+                //     requiredIf: requiredIf(addJob.data.Allow_adding_to_sales_team)
+                // },
+                // targetType:{
+                //     requiredIf: requiredIf(addJob.data.Allow_adding_to_sales_team)
+                // },
             }
         });
 
@@ -170,20 +189,20 @@ export default {
                 this.errors = {};
 
                 adminApi.put(`/v1/dashboard/job/${this.id}`,this.data)
-                    .then((res) => {
-                        notify({
-                            title: `${this.t('global.EditSuccessfully')} <i class="fas fa-check-circle"></i>`,
-                            type: "success",
-                            duration: 5000,
-                            speed: 2000
-                        });
-                    })
-                    .catch((err) => {
-                        this.errors = err.response.data.errors;
-                    })
-                    .finally(() => {
-                        this.loading = false;
+                .then((res) => {
+                    notify({
+                        title: `${this.t('global.EditSuccessfully')} <i class="fas fa-check-circle"></i>`,
+                        type: "success",
+                        duration: 5000,
+                        speed: 2000
                     });
+                })
+                .catch((err) => {
+                    this.errors = err.response.data.errors;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
 
             }
         }

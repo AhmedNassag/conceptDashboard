@@ -84,9 +84,25 @@ import merchant from "./adminRoute/merchant";
 import leadFollowUps from "./adminRoute/leadFollowUps";
 import leadClient from "./adminRoute/leadClient";
 import leadSourse from "./adminRoute/leadSourse";
-import lead from "./adminRoute/lead";
-
-
+import leadd from "./adminRoute/leadd";
+//crm
+import targetPlan from './adminRoute/targetPlan';
+import TargetAchived from './adminRoute/TargetAchived';
+import sellerCategory from './adminRoute/sellerCategory';
+import leadsManagement from './adminRoute/leadsManagement';
+import Leads from './adminRoute/Leads';
+//problem
+import problemtargetPlan from './adminRoute/problemtargetPlan';
+import problemTargetAchived from './adminRoute/problemTargetAchived';
+import problemsellerCategory from './adminRoute/problemsellerCategory';
+import problemleadsManagement from './adminRoute/problemleadsManagement';
+import problemLeads from './adminRoute/problemLeads';
+//follow
+import followtargetPlan from './adminRoute/followtargetPlan';
+import followTargetAchived from './adminRoute/followTargetAchived';
+import followsellerCategory from './adminRoute/followsellerCategory';
+import followleadsManagement from './adminRoute/followleadsManagement';
+import followLeads from './adminRoute/followLeads';
 
 
 const routes = [
@@ -215,8 +231,25 @@ const routes = [
             ...merchant,
             ...leadFollowUps,
             ...leadSourse,
-            ...lead,
-            ...leadClient
+            ...leadd,
+            //crm
+            ...targetPlan,
+            ...TargetAchived,
+            ...sellerCategory,
+            ...leadsManagement,
+            ...Leads,
+            //problem
+            ...problemtargetPlan,
+            ...problemTargetAchived,
+            ...problemsellerCategory,
+            ...problemleadsManagement,
+            ...problemLeads,
+            //follow
+            ...followtargetPlan,
+            ...followTargetAchived,
+            ...followsellerCategory,
+            ...followleadsManagement,
+            ...followLeads,
         ]
     },
     {

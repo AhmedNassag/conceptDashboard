@@ -450,7 +450,7 @@ export default {
 <style scoped>
 
 .bg-1 {
-    background: #f5cd87  !important;
+    background: #103C67  !important;
 }
 
 .bg-1 i {

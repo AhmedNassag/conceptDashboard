@@ -31,4 +31,69 @@ class Employee extends Model
         return $this->hasMany(EmployeeShift::class);
     }
 
+
+    // CRM relations
+    public function sellerCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(SellerCategory::class,'employee_categories','employee_id','seller_category_id','id','id');
+    }
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class,'employee_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(LeadComment::class);
+    }
+
+    public function targetAchieved()
+    {
+        return $this->hasMany(TargetAchieved::class);
+    }
+
+
+    //problem relations
+    public function problemsellerCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(problemSellerCategory::class,'problem_employee_categories','employee_id','seller_category_id','id','id');
+    }
+
+    public function problemleads()
+    {
+        return $this->hasMany(problemLead::class,'employee_id');
+    }
+
+    public function problemcomments()
+    {
+        return $this->hasMany(problemLeadComment::class);
+    }
+
+    public function problemtargetAchieved()
+    {
+        return $this->hasMany(problemTargetAchieved::class);
+    }
+
+
+    //follow relations
+    public function followsellerCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(followSellerCategory::class,'follow_employee_categories','employee_id','seller_category_id','id','id');
+    }
+
+    public function followleads()
+    {
+        return $this->hasMany(followLead::class,'employee_id');
+    }
+
+    public function followcomments()
+    {
+        return $this->hasMany(followLeadComment::class);
+    }
+
+    public function followtargetAchieved()
+    {
+        return $this->hasMany(followTargetAchieved::class);
+    }
 }

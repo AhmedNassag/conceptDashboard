@@ -46,41 +46,42 @@
                                 <table class="table mb-0">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>{{ $t('global.Name') }}</th>
-                                        <th>{{ $t('global.Status') }}</th>
-<!--                                        <th>{{ $t('global.IsSalesTeam') }}</th>-->
-                                        <th>{{ $t('global.Action') }}</th>
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">{{ $t('global.Name') }}</th>
+                                        <th class="text-center">{{ $t('global.IsSalesTeam') }}</th>
+<!--                                        <th class="text-center">{{ $t('global.TargetType') }}</th>-->
+                                        <th class="text-center">{{ $t('global.Status') }}</th>
+                                        <th class="text-center">{{ $t('global.Action') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody v-if="jobs.length">
-                                    <tr v-for="(item,index) in jobs" :key="item.id">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>{{ item.name }}</td>
-<!--                                        <td>{{parseInt(item.Allow_adding_to_sales_team) ? $t('global.Yeas') : $t('global.No')}}</td>-->
-                                        <td>
-                                            <a href="#" @click="activationJob(item.id,item.name,item.active,index)">
-                                                <span :class="[parseInt(item.active) ? 'text-success hover': 'text-danger hover']">{{
-                                                        parseInt(item.active) ? $t('global.Active') : $t('global.Inactive')
-                                                    }}</span>
-                                            </a>
-                                        </td>
-                                        <td>
+                                        <tr v-for="(item,index) in jobs" :key="item.id">
+                                            <td class="text-center">{{ index + 1 }}</td>
+                                            <td class="text-center">{{ item.name }}</td>
+                                            <td class="text-center">{{parseInt(item.Allow_adding_to_sales_team) ? $t('global.Yeas') : $t('global.No')}}</td>
+<!--                                            <td class="text-center" v-if="item.Allow_adding_to_sales_team">{{parseInt(item.targetType == 0) ? $t('global.In Door') : $t('global.Out Door')}}</td>-->
+<!--                                            <td class="text-center" v-else>-&#45;&#45;</td>-->
+                                            <td class="text-center">
+                                                <a href="#" @click="activationJob(item.id,item.name,item.active,index)">
+                                                    <span :class="[parseInt(item.active) ? 'text-success hover': 'text-danger hover']">{{parseInt(item.active) ? $t('global.Active') : $t('global.Inactive') }}</span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
 
-                                            <router-link
-                                                :to="{name: 'editJob', params: {id:item.id}}"
-                                                v-if="permission.includes('job edit')"
-                                                class="btn btn-sm btn-success me-2">
-                                                <i class="far fa-edit"></i>
-                                            </router-link>
-                                            <a href="#" @click="deleteJob(item.id,item.name,index)"
-                                               v-if="permission.includes('job delete')"
-                                               data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
-                                        </td>
+                                                <router-link
+                                                    :to="{name: 'editJob', params: {id:item.id}}"
+                                                    v-if="permission.includes('job edit')"
+                                                    class="btn btn-sm btn-success me-2">
+                                                    <i class="far fa-edit"></i>
+                                                </router-link>
+                                                <a href="#" @click="deleteJob(item.id,item.name,index)"
+                                                   v-if="permission.includes('job delete')"
+                                                   data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            </td>
 
-                                    </tr>
+                                        </tr>
                                     </tbody>
                                     <tbody v-else>
                                         <tr>
@@ -203,22 +204,22 @@ export default {
                 if (result.isConfirmed) {
 
                     adminApi.get(`/v1/dashboard/activationJob/${id}`)
-                        .then((res) => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: `${active ? t('global.InactiveSuccessfully') :t('global.ActiveSuccessfully')}`,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            jobs.value[index]['active'] =  active ? 0:1
-                        })
-                        .catch((err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: `${t('global.ThereIsAnErrorInTheSystem')}`,
-                                text: `${t('global.YouCanNotModifyThisSafe')}`,
-                            });
+                    .then((res) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${active ? t('global.InactiveSuccessfully') :t('global.ActiveSuccessfully')}`,
+                            showConfirmButton: false,
+                            timer: 1500
                         });
+                        jobs.value[index]['active'] =  active ? 0:1
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `${t('global.ThereIsAnErrorInTheSystem')}`,
+                            text: `${t('global.YouCanNotModifyThisSafe')}`,
+                        });
+                    });
                 }
             });
         }

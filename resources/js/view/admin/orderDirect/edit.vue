@@ -479,8 +479,6 @@ import adminApi from "../../../api/adminAxios";
 import { notify } from "@kyvg/vue3-notification";
 import {useI18n} from "vue-i18n";
 import {useStore} from "vuex";
-
-
 export default {
     name: "create",
     data(){
@@ -503,14 +501,11 @@ export default {
         let invoicePrint = ref(false);
         let totalProductbefourDiscount = ref(0);
         let orderInvoice = 0;
-
         let store = useStore();
         let permission = computed(() => store.getters['authAdmin/permission']);
-
         let TotalPriceAfterTaxx = ref(0);
         let totalProductAfterDiscount = ref(0);
         let totalTax = ref(0);
-
         let getData = () => {
             loading.value = true;
             adminApi.get(`/v1/dashboard/orderDirect/${id.value}/edit`)
@@ -526,9 +521,7 @@ export default {
                     addJob.data.store_name = l.order.store.name;
                     addJob.selling_method_name = l.order.user.client.selling_method.name;
                     addJob.data.selling_method_id = l.order.user.client.selling_method_id;
-
                     l.order.order_details.forEach((q,index) => {
-
                         addJob.data.product.push({
                             mainPrice: 0,
                             branchPrice: 0,
@@ -546,7 +539,6 @@ export default {
                             product_id:{required}
                         });
                         addJob.products.push({products:[],total:0,product:{},avgPrice:0,productPrice:[],totalCount:0,count_unit:0,isValidProd:true,search:'',name:''});
-
                         addJob.data.product[index].mainPrice = q.price;
                         addJob.data.product[index].branchPrice = q.sub_price;
                         addJob.data.product[index].mainQuantity = q.quantity;
@@ -566,7 +558,6 @@ export default {
                             products.value.find(e => e.id == q.product_id).product_price;
                         addJob.products[index].totalCount = ((addJob.data.product[index].mainQuantity * addJob.products[index].count_unit) +
                             addJob.data.product[index].branchQuantity);
-
                         if(products.value.find(e => e.id == q.product_id).store_products.length > 1){
                             let quantity = 0;
                             let price  = 0;
@@ -579,11 +570,8 @@ export default {
                             addJob.products[index].avgPrice =
                                 addJob.products[index].productPrice[0].price;
                         }
-
                         productPricePartialTotal(index);
-
                     });
-
                     l.order.order_tax.forEach((e) => {
                         addJob.data.taxs.push(e.tax_id);
                     });
@@ -594,7 +582,6 @@ export default {
                         addJob.data.priceOffer = l.order.order_other_offer.offer;
                         addJob.data.nameOffer = l.order.order_other_offer.name;
                     }
-
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -603,11 +590,9 @@ export default {
                     loading.value = false;
                 });
         };
-
         onMounted(() => {
             getData();
         });
-
         let addJob =  reactive({
             data:{
                 product:[],
@@ -643,7 +628,6 @@ export default {
             }
         });
         const v$ = useVuelidate(rules,addJob.data);
-
         let searchProduct = (index) => {
             if(addJob.products[index].search){
                 let thisString = new RegExp(addJob.products[index].search,'i');
@@ -684,32 +668,26 @@ export default {
             items.forEach(e => e.classList.remove('active'));
             e.target.classList.add('active');
         };
-
         let productPricePartialTotal = (index) => {
             let mainPrice = addJob.data.product[index].mainPrice * addJob.data.product[index].mainQuantity;
             let branchPrice = addJob.data.product[index].branchPrice * addJob.data.product[index].branchQuantity;
             addJob.products[index].total = (mainPrice + branchPrice).toFixed(2);
-
             addJob.products[index].isValidProd =
                 ((addJob.data.product[index].mainQuantity * addJob.products[index].count_unit) +
                     addJob.data.product[index].branchQuantity) <=  addJob.products[index].productPrice[1].available_quantity + addJob.products[index].totalCount ;
-
             totalProductFun();
         };
-
         const totalProductFun = () => {
             totalProductbefourDiscount.value = 0;
             TotalPriceAfterTaxx.value = 0;
             totalProductAfterDiscount.value = 0;
             offerDiscount.value = 0;
             taxValue.value = 0;
-
             let total = 0;
             addJob.products.forEach((el) => {
                 total += parseFloat(el.total);
             });
             totalProductbefourDiscount.value = total;
-
             let offer = 0;
             totalTax.value = 0;
             offerDiscounts.value.forEach((el) => {
@@ -723,7 +701,6 @@ export default {
             });
             offerDiscount.value = offer;
             totalProductAfterDiscount.value = totalProductbefourDiscount.value - offer - addJob.data.priceOffer;
-
             taxs.value.forEach((el) => {
                 if(addJob.data.taxs.includes(el.id)){
                     totalTax.value += parseFloat(el.percentage);
@@ -732,7 +709,6 @@ export default {
             taxValue.value = ((totalProductAfterDiscount.value * totalTax.value) / 100);
             TotalPriceAfterTaxx.value = parseFloat((totalProductAfterDiscount.value) + ((totalProductAfterDiscount.value * totalTax.value) / 100));
         };
-
         const avgPricePiece = (index) => {
             if(addJob.data.product[index].mainPrice > addJob.products[index].product.product_price[0].price){
                 Swal.fire(
@@ -751,11 +727,9 @@ export default {
                 )
             }
         };
-
         let close=()=>{
             document.getElementById('close').click();
         };
-
         let dateFormat = () => {
             let now = new Date(Date.now());
             let st = `
@@ -766,29 +740,22 @@ export default {
             `;
             return st;
         };
-
         watch(() => addJob.data.discounts,(after, before) => {
             totalProductFun();
         });
-
         watch(totalProductbefourDiscount,(after, before) => {
             totalProductFun();
         });
-
         watch(() => addJob.data.taxs,(after, before) => {
             totalProductFun();
         });
-
         watch(() =>  addJob.data.priceOffer,(after, before) => {
             totalProductFun();
         });
-
         watch(() =>  addJob.data.shippingPrice,(after, before) => {
             totalProductFun();
         });
-
         document.addEventListener('keyup',(e) => {
-
             if(e.keyCode == 38){ //top arrow
                 addJob.products.forEach((item,ind) => {
                     if(item.products.length > 0){
@@ -814,7 +781,6 @@ export default {
                     }
                 });
             };
-
             if(e.keyCode == 40){ //down arrow
                 addJob.products.forEach((item,ind) => {
                     if(item.products.length > 0){
@@ -840,7 +806,6 @@ export default {
                     }
                 });
             };
-
             if(e.keyCode == 13){ //enter
                 addJob.products.forEach((item,ind) => {
                     if(item.products.length > 0){
@@ -852,13 +817,9 @@ export default {
                         item.products = [];
                     }
                 });
-
                 e.target.blur();
-
             };
-
         });
-
         document.addEventListener('click',(e) => {
             addJob.products.forEach((item,ind) => {
                 if(item.products.length > 0){
@@ -872,7 +833,6 @@ export default {
                 }
             });
         });
-
         let printData = () => {
             var printContents = document.getElementById('printData').innerHTML;
             var originalContents = document.body.innerHTML;
@@ -881,7 +841,6 @@ export default {
             document.body.innerHTML = originalContents;
             location.reload();
         }
-
         return {
             t,
             isButton,
@@ -916,26 +875,19 @@ export default {
     methods: {
         storeJob(){
             this.v$.$validate();
-
             let valid  = this.products.every(e => e.isValidProd);
-
             if(!this.v$.$error && valid){
-
                 this.loading = true;
                 this.errors = {};
-
                 adminApi.put(`/v1/dashboard/orderDirect/${this.id}`,this.data)
                     .then((res) => {
-
                         notify({
                             title: `${this.t('global.AddedSuccessfully')} <i class="fas fa-check-circle"></i>`,
                             type: "success",
                             duration: 5000,
                             speed: 2000
                         });
-
-                       this.invoicePrint = true;
-
+                        this.invoicePrint = true;
                     })
                     .catch((err) => {
                         this.errors = err.response.data.errors;
@@ -943,7 +895,6 @@ export default {
                     .finally(() => {
                         this.loading = false;
                     });
-
             }
         },
         addDebit(){
@@ -985,7 +936,7 @@ export default {
     position: relative;
 }
 .account{
-    background-color: #fcb00c;
+    background-color: #103C67;
     color: #000000 !important;
     border-radius: 5px;
 }

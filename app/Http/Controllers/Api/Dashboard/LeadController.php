@@ -5,241 +5,248 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Lead;
-use App\Models\LeadAction;
-use App\Models\LeadFollowUp;
-use App\Models\LeadSource;
-use App\Models\Product;
-use App\Models\Province;
+use App\Models\SellerCategory;
 use App\Models\User;
+use App\Notifications\Admin\ChangeEmployeeNotification;
 use App\Traits\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class LeadController extends Controller
 {
-
     use Message;
 
-    public function leadClientGet(){
-        // get user
-        $leads = Lead::with(['province:id,name','area:id,name','leadClient' => function ($q){
-            return $q->with('leadFollow:id,name','leadSource:id,name');
-        }])
-        ->whereStatus(false)
-        ->whereEmployeeId(auth()->user()->employee->id)
-        ->paginate(10);
-
-        $leadFollows = LeadFollowUp::get();
-        $leadSources = LeadSource::get();
-
-//        $products =  Product::select('id','name','barcode','count_unit')
-//            ->whereRelation('storeProducts.store','store_id',$request->store_id)
-//            ->whereRelation('productPrice','selling_method_id',$request->selling_method_id)
-//            ->with(['productPrice' => function ($q) use($request){
-//                $q->where('selling_method_id',$request->selling_method_id)->with('measurementUnit:id,name');
-//            },'storeProducts' => function ($q) {
-//                $q->with('purchaseProduct:id,price')
-//                    ->where('sub_quantity_order','>',0)
-//                    ->whereNotNull('purchase_product_id');
-//            }])->get();
-
-        return $this->sendResponse([
-            'leadClient' => $leads,
-            "leadFollows" => $leadFollows,
-            "leadSources" => $leadSources
-        ],'Data exited successfully');
-    }
-
-    public function leadClient(){
-        // get user
-        $leads = Lead::with(['province:id,name','area:id,name','leadClient' => function ($q){
-            return $q->with('leadFollow:id,name','leadSource:id,name');
-        }])
-        ->whereNull('employee_id')
-        ->limit(10)
-        ->get();
-
-        foreach ($leads as $lead){
-            $lead->update(['employee_id' => auth()->user()->employee->id]);
-        }
-
-        return $this->sendResponse([],'Data exited successfully');
-    }
-
-    public function leadActivity(Request $request)
-    {
-        // Validator request
-        $v = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'type' => 'required|in:merchant,client,company',
-            'province_id'  => 'required|integer|exists:provinces,id',
-            'area_id'  => 'required|integer|exists:areas,id',
-            'phone' => 'required|string|unique:leads,phone',
-            'address' => 'required|string|min:8|max:255',
-            'employee_id' => 'nullable'
-        ]);
-
-        if($v->fails()) {
-            return $this->sendError('There is an error in the data',$v->errors());
-        }
-
-        // start create user
-        Lead::create([
-            "name" => $request->name,
-            "province_id" => $request->province_id,
-            "area_id" => $request->area_id,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            "type" => $request->type,
-            "employee_id" => $request->employee_id
-        ]);
-
-        return $this->sendResponse([],'Data exited successfully');
-
-    }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        // get user
-        $leads = Lead::
-        with(['province:id,name','area:id,name','leadClient' => function ($q){
-            return $q->with('leadFollow:id,name','leadSource:id,name');
-        }])->
-        when($request->search, function ($q) use ($request) {
-            return $q->OrWhere('name', 'like', '%' . $request->search . '%')
-                ->orWhere('phone', 'like', '%' . $request->search . '%')
-                ->orWhere('email', 'like', '%' . $request->search . '%');
-        })->paginate(15);
+        $leads = Lead::with(['employee.user','sellerCategory','comments.employee.user'])->when($request->search, function ($q) use ($request) {
+            return $q->where('name','like','%'.$request->search.'%')
+            ->orWhere('phone','like','%'.$request->search.'%')
+            ->orWhere('email','like','%'.$request->search.'%')
+            ->orWhere('address','like','%'.$request->search.'%')
+            ->orWhereRelation('employee.user','name','like','%'.$request->search.'%')
+            ->orWhereRelation('sellerCategory','name','like','%'.$request->search.'%');
+        })->latest()->paginate(15);
 
-        return $this->sendResponse(['leads' => $leads],'Data exited successfully');
+        return $this->sendResponse(['leads' => $leads], 'Data exited successfully');
+    }
+
+    public function changeEmployeeLead($id)
+    {
+        $lead = Lead::find($id);
+
+
+        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
+        ->whereHas('job',function ($q){
+            $q->where('Allow_adding_to_sales_team',1);
+        })->whereRelation('sellerCategories','seller_categories.id',$lead->seller_category_id)->get();
+        return $this->sendResponse(['employees' => $employees,'lead'=>$lead], 'Data exited successfully');
+    }
+
+    public function updateEmployeeLead(Request $request,$id)
+    {
+        try {
+            DB::beginTransaction();
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'employee_id' => 'required|integer|exists:employees,id',
+            ]);
+
+            if ($v->fails()) {
+                return $this->sendError('There is an error in the data', $v->errors());
+            }
+
+            $data = $request->only(['employee_id']);
+            $lead = Lead::find($id);
+            $lead->update($data);
+
+            $user=Employee::find($request->employee_id)->user;
+            // $user->notify(new ChangeEmployeeNotification($lead->seller_category_id));
+
+            DB::commit();
+
+            return $this->sendResponse([], 'Data exited successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
     }
 
 
     public function create()
     {
-        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)->whereHas('job',function ($q){
-            $q->where('Allow_adding_to_sales_team',1);
-        })->get();
-        return $this->sendResponse(['employees' => $employees], 'Data exited successfully');
-    }
+        try {
 
+            $categories = SellerCategory::all();
+
+            return $this->sendResponse(['categories'=>$categories],'Data exited successfully');
+
+        }catch (\Exception $e){
+
+            return $this->sendError('An error occurred in the system');
+
+        }
+
+    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        // Validator request
-        $v = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'type' => 'required|in:merchant,client,company',
-            'province_id'  => 'required|integer|exists:provinces,id',
-            'area_id'  => 'required|integer|exists:areas,id',
-            'phone' => 'required|string|unique:leads,phone',
-            'address' => 'required|string|min:8|max:255',
-            'employee_id' => 'nullable'
-        ]);
+        try {
+            DB::beginTransaction();
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'name' => 'required|string|min:3',
+                'address' => 'nullable|string|min:3',
+                'email' => 'nullable|string|email|unique:leads,email',
+                'phone' => 'required|string|unique:leads,phone',
+                'seller_category_id' => 'required|integer|exists:seller_categories,id',
+            ]);
 
-        if($v->fails()) {
-            return $this->sendError('There is an error in the data',$v->errors());
+            if ($v->fails()) {
+                return $this->sendError('There is an error in the data', $v->errors());
+            }
+
+            $data = $request->only(['name','address','email','phone','seller_category_id']);
+
+            Lead::create($data);
+
+            DB::commit();
+
+            return $this->sendResponse([], 'Data exited successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
         }
 
-        // start create user
-        Lead::create([
-            "name" => $request->name,
-            "province_id" => $request->province_id,
-            "area_id" => $request->area_id,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            "type" => $request->type,
-            "employee_id" => $request->employee_id
-        ]);
-
-        return $this->sendResponse([],'Data exited successfully');
-
     }
 
-    public function show($id)
-    {
-        $lead =  Lead::find($id);
-        $actions = LeadAction::where('lead_id',$id)->with('employee.user','lead')->get();
-
-        return $this->sendResponse([
-            'lead' => $lead,
-            'actions' => $actions,
-        ],'Data exited successfully');
-    }
-
-
-    public function storeClient(Request $request)
-    {
-        // Validator request
-        $v = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'type' => 'required|in:merchant,client,company',
-            'province_id'  => 'required|integer|exists:provinces,id',
-            'area_id'  => 'required|integer|exists:areas,id',
-            'phone' => 'required|string|unique:leads,phone',
-            'address' => 'required|string|min:8|max:255',
-        ]);
-
-        if($v->fails()) {
-            return $this->sendError('There is an error in the data',$v->errors());
-        }
-
-        // start create user
-        Lead::create([
-            "name" => $request->name,
-            "province_id" => $request->province_id,
-            "area_id" => $request->area_id,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            "type" => $request->type,
-            "employee_id" => auth()->user()->employee->id
-        ]);
-
-        return $this->sendResponse([],'Data exited successfully');
-    }
-
-
-    public function addAction(Request $request)
-    {
-        // Validator request
-        $v = Validator::make($request->all(), [
-            'action' => 'required|string',
-            'lead_id'  => 'required|integer|exists:leads,id',
-        ]);
-
-        if($v->fails()) {
-            return $this->sendError('There is an error in the data',$v->errors());
-        }
-
-        // start create user
-        LeadAction::create([
-            "action" => $request->action,
-            "lead_id" => $request->lead_id,
-            "employee_id" => auth()->user()->employee->id
-        ]);
-
-        return $this->sendResponse([],'Data exited successfully');
-    }
-
-    public function changeLeadClient(Request $request, $id)
+    public function edit($id)
     {
         try {
             $lead = Lead::find($id);
+
+            $categories = SellerCategory::all();
+
+            return $this->sendResponse(['lead' => $lead, 'categories' => $categories], 'Data exited successfully');
+
+        } catch (\Exception $e) {
+
+            return $this->sendError('An error occurred in the system');
+        }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Lead $lead)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'name' => 'required|string|min:3',
+                'address' => 'nullable|string|min:3',
+                'email' => 'nullable|string|email|unique:leads,email' . ($lead->id ? ",$lead->id" : ''),
+                'phone' => 'required|string|unique:leads,phone' . ($lead->id ? ",$lead->id" : ''),
+                'seller_category_id' => 'required|integer|exists:seller_categories,id',
+            ]);
+
+            if ($v->fails()) {
+                return $this->sendError('There is an error in the data', $v->errors());
+            }
+
+            $data = $request->only(['name','address','email','phone','seller_category_id']);
+
+            $lead->update($data);
+
+            DB::commit();
+
+            return $this->sendResponse([], 'Data exited successfully');
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Lead $lead)
+    {
+        if ($lead->employee)
+        {
+            return $this->sendError('can not delete');
+        }
+
+        $lead->delete();
+
+        return $this->sendResponse([], 'Data exited successfully');
+    }
+
+
+    public function changeLeadToClient(Request $request, $id)
+    {
+        try {
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'email' => 'required|string|email|unique:users,email',
+                'province_id'  => 'required|integer|exists:provinces,id',
+                'area_id'  => 'required|integer|exists:areas,id',
+                'phone' => 'required|string|unique:users',
+                'address' => 'required|string|min:5|max:255',
+                'amount' => 'nullable|numeric'
+            ]);
+
+            if($v->fails()) {
+                return $this->sendError('There is an error in the data',$v->errors());
+            }
+
+            $lead = Lead::find($id);
             if ($lead) {
                 $user = User::create([
-                    "name" => $lead->name,
+                    "name" => $request->name,
                     "email" => $request->email,
                     "auth_id" => 2,
                     'role_name'=> ['client'],
                     "status" => 0,
-                    'phone' => $lead->phone,
+                    'phone' => $request->phone,
                     "code" => '+2'
                 ]);
                 $user->complement()->create([
@@ -248,7 +255,7 @@ class LeadController extends Controller
                     'selling_method_id' => 1,
                     'device' => 2
                 ]);
-                $user->client()->create(['address' => $lead->address]);
+                $user->client()->create(['address' => $request->address]);
                 $user->clientAccounts()->create([
                     'amount' => $request->amount ? $request->amount : 0
                 ]);
@@ -265,91 +272,4 @@ class LeadController extends Controller
         }
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $lead =  Lead::find($id);
-        $provinces = Province::select('id','name')->get();
-
-        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)->whereHas('job',function ($q){
-            $q->where('Allow_adding_to_sales_team',1);
-        })->get();
-
-        return $this->sendResponse([
-            'lead' => $lead,
-            'provinces' => $provinces,
-            'employees' => $employees
-        ],'Data exited successfully');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $user = Lead::find($id);
-        if($user){
-            // Validator request
-            $v = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'type' => 'required|in:merchant,client,company',
-                'province_id'  => 'required|integer|exists:provinces,id',
-                'area_id'  => 'required|integer|exists:areas,id',
-                'phone' => 'required|string|unique:leads,phone,'.$user->id,
-                'address' => 'required|string|min:8|max:255',
-                'employee_id' => 'nullable'
-            ]);
-
-            if($v->fails()) {
-                return $this->sendError('There is an error in the data',$v->errors());
-            }
-
-            // start create user
-            $user->update([
-                "name" => $request->name,
-                "province_id" => $request->province_id,
-                "area_id" => $request->area_id,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                "type" => $request->type,
-                "employee_id" => $request->employee_id
-            ]);
-
-            return $this->sendResponse([],'Data exited successfully');
-
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try {
-            $lead = Lead::find($id);
-            if ($lead) {
-
-                $lead->delete();
-                return $this->sendResponse([], 'Deleted successfully');
-            } else {
-                return $this->sendError('ID is not exist');
-            }
-
-        } catch (\Exception $e) {
-            return $this->sendError('An error occurred in the system');
-        }
-    }
 }

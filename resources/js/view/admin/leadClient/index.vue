@@ -86,7 +86,7 @@
                                                 :to="{name: 'changeLeadClient',params:{id:item.id}}"
                                                 :title="$t('global.changeLead')"
                                                 class="btn btn-sm btn-info me-2">
-                                                <i class="far fa-edit"></i> {{$t('global.changeLead')}}
+                                                <i class="fa fa-check"></i> {{$t('global.changeLead')}}
                                             </router-link>
 <!--                                            <a class="btn btn-sm btn-info me-2" href="#" @click="changeLeadClient(item.id,index)">{{$t('global.changeLead')}}</a>-->
                                         </td>
