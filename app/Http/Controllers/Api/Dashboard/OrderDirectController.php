@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\OrderStatus;
 use App\Models\OrderStoreProduct;
+use App\Models\PeriodicMaintenance;
 use App\Models\Product;
 use App\Models\ProductPricing;
 use App\Models\Store;
@@ -30,12 +31,13 @@ class OrderDirectController extends Controller
     public function activeOrder($id)
     {
         $order = Order::find($id);
+        return $order;
 
         $order->update([
             "order_status_id" => 5
         ]);
 
-        //
+        // add order to follow after selling
         $followLead = User::where('id',$order->user_id)->with('client')->first();
         if($followLead)
         {
@@ -47,7 +49,15 @@ class OrderDirectController extends Controller
                 'seller_category_id' => 1,
             ]);
         }
-        //
+
+        // add order to periodicMaintenance
+        PeriodicMaintenance::create([
+            'order_id' => $order->id,
+            'quantity' => $order->order_details->quantity,
+            'price' => $order->id,
+            'next_maintenance' => now(),
+        ]);
+
 
         return $this->sendResponse([], 'Data exited successfully');
     }
@@ -422,7 +432,7 @@ class OrderDirectController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        try {
+        try {
             DB::beginTransaction();
 
             // Validator request
@@ -597,10 +607,10 @@ class OrderDirectController extends Controller
 
             return $this->sendResponse([], 'Data exited successfully');
 
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            return $this->sendError('An error occurred in the system');
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
     }
 
     /**

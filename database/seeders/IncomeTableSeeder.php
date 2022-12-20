@@ -29,5 +29,9 @@ class IncomeTableSeeder extends Seeder
         Income::create([
             'name'=>'حساب جارى شريك',
         ]);
+
+        Income::create([
+            'name'=>'قطع غيار وصيانات',
+        ]);
     }
 }

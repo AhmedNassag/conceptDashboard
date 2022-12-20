@@ -71,4 +71,8 @@ class Order extends Model
         return $this->hasMany(ClientIncome::class,'order_id');
     }
 
+    public function periodicMaintenance(){
+        return $this->hasOne(PeriodicMaintenance::class,'order_id');
+    }
+
 }

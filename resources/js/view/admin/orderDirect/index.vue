@@ -421,8 +421,7 @@
 
                                                                                             <div class="col-md-4 mb-3" v-if="data.type_invoice == 0 || data.type_invoice == 2">
                                                                                                 <label>{{$t('global.client')}}</label>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       v-model="data.name_supplier" disabled>
+                                                                                                <input type="text" class="form-control" v-model="data.name_supplier" disabled>
                                                                                             </div>
 
                                                                                             <div class="col-md-4 mb-3" v-if="data.type_invoice == 0 || data.type_invoice == 2">

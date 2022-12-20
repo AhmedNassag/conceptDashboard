@@ -103,7 +103,8 @@ import followTargetAchived from './adminRoute/followTargetAchived';
 import followsellerCategory from './adminRoute/followsellerCategory';
 import followleadsManagement from './adminRoute/followleadsManagement';
 import followLeads from './adminRoute/followLeads';
-
+//periodicMaintenance
+import periodicMaintenance from './adminRoute/periodicMaintenance';
 
 const routes = [
     {
@@ -250,6 +251,8 @@ const routes = [
             ...followsellerCategory,
             ...followleadsManagement,
             ...followLeads,
+            //periodicMaintenance
+            ...periodicMaintenance,
         ]
     },
     {
