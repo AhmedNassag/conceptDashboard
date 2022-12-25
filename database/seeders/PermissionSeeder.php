@@ -208,6 +208,13 @@ class PermissionSeeder extends Seeder
             ['name' => 'followTargetAchieved delete', 'role' => 'CRM', 'category' => 'CRM'],
             //end follow
 
+            //start periodicMaintenance
+            ['name' => 'periodicMaintenance read','role' => '','category' => 'employee'],
+            ['name' => 'periodicMaintenance create','role' => '','category' => 'employee'],
+            ['name' => 'periodicMaintenance edit','role' => '','category' => 'employee'],
+            ['name' => 'periodicMaintenance delete','role' => '','category' => 'employee'],
+            //end periodicMaintenance
+
             ['name' => 'CreditCapacity read','role' => '','category' => 'Credit Capacity'],
             ['name' => 'CreditCapacity edit','role' => '','category' => 'Credit Capacity'],
 

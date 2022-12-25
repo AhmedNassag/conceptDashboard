@@ -363,7 +363,6 @@ use Illuminate\Support\Facades\Route;
              Route::post('changeLeadClient/{id}','LeadController@changeLeadToClient');
              Route::get('leadClientGet','LeadController@leadClientGet');
 
-
              // crm
              Route::resource('targetPlan', 'TargetPlanController');
              Route::resource('target', 'TargetController');
@@ -399,6 +398,12 @@ use Illuminate\Support\Facades\Route;
              Route::get('followgetTenLead/{id}', 'followSalesLeadController@getTenLead');
              Route::resource('followleadComment', 'followLeadCommentController');
              Route::resource('followtargetAchieved', 'followTargetAchievedController');
+
+             //PeriodicMaintenance
+             Route::resource('periodicMaintenance','PeriodicMaintenanceController');
+             Route::get('activationPeriodicMaintenance/{id}','PeriodicMaintenanceController@activationPeriodic');
+             Route::get('nearPeriodicMaintenance','PeriodicMaintenanceController@nearPeriodic');
+             Route::post('confirmPeriodic/{id}','PeriodicMaintenanceController@confirmPeriodic');
          });
 
      });

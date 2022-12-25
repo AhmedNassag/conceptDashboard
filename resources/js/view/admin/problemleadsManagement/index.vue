@@ -78,9 +78,9 @@
                                                <i class="far fa-trash-alt"></i>
                                             </a>
 
-                                            <router-link v-if="permission.includes('problemLeadsManagement changeEmployee')" :to="{name: 'ProblemChangeEmployee', params: {lang: locale || 'ar',id:item.id}}" class="btn btn-sm btn-warning me-2">
-                                                <i class="fa fa-user-plus"></i>
-                                            </router-link>
+<!--                                            <router-link v-if="permission.includes('problemLeadsManagement changeEmployee')" :to="{name: 'ProblemChangeEmployee', params: {lang: locale || 'ar',id:item.id}}" class="btn btn-sm btn-warning me-2">-->
+<!--                                                <i class="fa fa-user-plus"></i>-->
+<!--                                            </router-link>-->
 
                                             <a href="javascript:void(0);"
                                                class="btn btn-sm btn-info me-2" data-bs-toggle="modal"

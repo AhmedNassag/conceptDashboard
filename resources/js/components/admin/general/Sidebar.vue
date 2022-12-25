@@ -501,6 +501,33 @@
                     <!-- End follow Links -->
 
 
+                    <!--start periodicMaintenance-->
+                    <li class="submenu" v-if="permission.includes('periodicMaintenance read')">
+                        <a href="#"><i class="fas fa-cogs"></i><span> {{ $t('global.MaintenanceManagement') }}</span><span :class="['menu-arrow menu-arrow-ar']"></span></a>
+                        <ul>
+
+                            <li
+                                :class="[{'active': ['indexPeriodicMaintenance','createPeriodicMaintenance','editPeriodicMaintenance'].includes($route.name)}]"
+                                v-if="permission.includes('periodicMaintenance read')"
+                            >
+                                <router-link :to="{name:'indexPeriodicMaintenance'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t('sidebar.Maintenance') }}
+                                </router-link>
+                            </li>
+
+                            <li
+                                :class="[{'active': ['nearPeriodicMaintenance','delayPeriodicMaintenance','confirmPeriodicMaintenance'].includes($route.name)}]"
+                                v-if="permission.includes('periodicMaintenance read')"
+                            >
+                                <router-link :to="{name:'nearPeriodicMaintenance'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t('sidebar.nearMaintenance') }}
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--End periodicMaintenance-->
+
+
 
                     <li class="submenu" v-if="permission.includes('platform Accounts')">
                         <a href="#" ><i class="fas fa-coins"></i> <span> {{$t('sidebar.Accounts')}}</span>  <span :class="['menu-arrow',this.$i18n.locale == 'ar'?'menu-arrow-ar':'']"></span></a>

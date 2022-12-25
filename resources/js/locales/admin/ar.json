@@ -43,13 +43,15 @@
         "client": "العملاء",
         "OrderDirect": "الطلبات المباشره",
         "upcomingPayment": "مديونات العملاء",
-        "Knowledge": "طرق التعرف علينا ",
+        "Knowledge": "طرق التعرف علينا",
         "userCompany": "عملاء الشركات",
         "merchant": "عملاء التجار",
         "LeadFollowUps": "متابعه العملاء",
-        "leadSourse": "مصادر العملاء ",
+        "leadSourse": "مصادر العملاء",
         "lead": "اداره عملاء غير محتملين",
-        "leadClient": " عملاء غير محتملين"
+        "leadClient": " عملاء غير محتملين",
+        "Maintenance": "جدول الصيانات",
+        "nearMaintenance": "الصيانات القريبة"
     },
     "global": {
         "Search":"بحث",
@@ -333,7 +335,6 @@
         "followClientRelationManagement": "إدارة خدمة بعد البيع",
         "followLeadsManagement": "إدارة عملاء بعد البيع",
         "followLeads": "عملاء بعد البيع",
-        "followLeadsManagement": "إدارة عملاء بعد البيع",
         "followSalesEmployeeChange": "تغيير موظف بعد البيع",
         "follow Description": "وصف العطل",
         "ClientRelationManagement": "إدارة علاقات العملاء",
@@ -657,7 +658,8 @@
         "incomeReturn": "مردودات مبيعات",
         "wax": "شمع",
         "model": "الموديل",
-        "SparePart": "قطع الغيار"
+        "SparePart": "قطع الغيار",
+        "MaintenanceManagement": "إدارة الصيانة الدورية"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",
@@ -1026,6 +1028,10 @@
         "targetPlan delete": "حذف خطة تحقيق الهدف",
         "targetPlan edit": "تعديل خطة تحقيق الهدف",
         "targetPlan read": "عرض خطة تحقيق الهدف",
-        "callCenterManagement": "إدارة خدمة العملاء"
+        "callCenterManagement": "إدارة خدمة العملاء",
+        "periodicMaintenance read": "عرض الصيانة الدورية",
+        "periodicMaintenance create": "إضافة الصيانة الدورية",
+        "periodicMaintenance edit": "تعديل الصيانة الدورية",
+        "periodicMaintenance delete": "حذف الصيانة الدورية"
     }
 }

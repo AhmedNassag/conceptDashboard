@@ -71,7 +71,7 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.price') }}</label>
+                                                <label for="validationCustom03">{{ $t('global.Description') }}</label>
                                                 <textarea class="form-control"
                                                           v-model.trim="v$.description.$model"
                                                           id="validationCustom03"

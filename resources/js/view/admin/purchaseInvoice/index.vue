@@ -337,10 +337,10 @@ export default {
         let dateFormat = (item) => {
             let now = new Date(item);
             let st = `
-                 ${now.getUTCHours()}:${now.getUTCMinutes()}:${now.getUTCSeconds()}
+                ${now.getUTCHours()}:${now.getUTCMinutes()}:${now.getUTCSeconds()}
                 ${now.getUTCFullYear().toString()}
-                 /${(now.getUTCMonth() + 1).toString()}
-                 /${now.getUTCDate()}
+                /${(now.getUTCMonth() + 1).toString()}
+                /${now.getUTCDate()}
             `;
             return st;
         }

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\ClientAccount;
 use App\Models\ClientIncome;
+use App\Models\followLead;
 use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\OrderRetuen;
 use App\Models\OrderStatus;
 use App\Models\OrderStoreProduct;
+use App\Models\PeriodicMaintenance;
 use App\Models\StoreProduct;
 use App\Models\User;
 use App\Notifications\Admin\AddNotification;
@@ -18,6 +20,7 @@ use App\Traits\NotificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class OrderStatusController extends Controller
 {
@@ -54,7 +57,8 @@ class OrderStatusController extends Controller
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $order = Order::find($request->order_id);
+            $order = Order::with('orderDetails.product.maintenance')->find($request->order_id);
+
             $order->update([
                'order_status_id' => $request->order_status_id,
                'representative_id' => $request->representative_id ? $request->representative_id : $order->representative_id,
@@ -101,6 +105,29 @@ class OrderStatusController extends Controller
                     $body = " تم استلام الطلب رقم " . $request->order_id . " بنجاح شكرا لك شريك النجاح ";
                     $type = "order status";
                     $productData = $order;
+
+                    // add order to follow after selling
+                    $followLead = User::where('id',$order->user_id)->with('client')->first();
+                    if($followLead)
+                    {
+                        followLead::create([
+                            'name' => $followLead->name,
+                            'address' => $followLead->client->address,
+                            'email' => $followLead->email,
+                            'phone' => $followLead->phone,
+                            'seller_category_id' => 1,
+                        ]);
+                    }
+
+                    // add order to periodicMaintenance
+                    PeriodicMaintenance::create([
+                        'order_id' => $order->id,
+                        'name' => $order->user->name,
+                        'quantity' => $order->orderDetails[0]->quantity,
+                        'price' => ($order->orderDetails[0]->product->maintenance->price) * ($order->orderDetails[0]->quantity),
+                        'next_maintenance' => Carbon::now()->addDays($order->orderDetails[0]->product->maintenance->period),
+                    ]);
+
 
                     $this->notification($tokens,$body,$type,$productData);
                     break;
