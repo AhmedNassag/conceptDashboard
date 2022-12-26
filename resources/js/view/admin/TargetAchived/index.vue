@@ -72,7 +72,6 @@
                                         <td v-if="id > 4">{{ item.commission }}</td>
                                         <td v-if="id > 4">{{ (item.amount * item.commission)/100 }}</td>
                                         <td v-if="id == 1 || id == 2 || id == 3 || id == 4">{{ item.commission }}</td>
-
                                         <td>
                                             {{ dateFormat(item.created_at) }}
                                         </td>

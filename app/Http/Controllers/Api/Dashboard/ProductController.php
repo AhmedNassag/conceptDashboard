@@ -349,8 +349,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        DB::beginTransaction();
-//        try {
+       DB::beginTransaction();
+       try {
 
             $product = Product::find($id);
 
@@ -526,11 +526,11 @@ class ProductController extends Controller
 
             DB::commit();
             return $this->sendResponse([], 'Data exited successfully');
-//        } catch (\Exception $e) {
-//
-//            DB::rollBack();
-//            return $this->sendError('An error occurred in the system');
-//        }
+       } catch (\Exception $e) {
+
+           DB::rollBack();
+           return $this->sendError('An error occurred in the system');
+       }
     }
 
 

@@ -102,6 +102,10 @@ class OrderDirectController extends Controller
                 $q->when($request->order_id, function ($q) use ($request) {
                     $q->where('id', $request->order_id);
                 });
+            })->where(function ($q) use ($request) {
+                $q->when($request->orderType, function ($q) use ($request) {
+                    $q->where('is_tax', $request->orderType);
+                });
             })->
             latest()->paginate(10);
 
@@ -288,19 +292,20 @@ class OrderDirectController extends Controller
                 'shippingPrice' => $request->shippingPrice ? 0:$request->shippingPrice,
                 'total' => $totalAfterTax,
                 'is_shipping' =>  0,
-                'order_status' => 0
+                'order_status' => 0,
+                'is_tax' => $request->discounts ? 1 : 0,
             ]);
 
             //
-            $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
-            if(!$auth)
-            {
-                TargetAchieved::create([
-                    'count' => $totalAfterTax,
-                    'employee_id' => auth()->user()->id,
-                    'date' => now(),
-                ]);
-            }
+            // $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
+            // if(!$auth)
+            // {
+            //     TargetAchieved::create([
+            //         'count' => $totalAfterTax,
+            //         'employee_id' => auth()->user()->id,
+            //         'date' => now(),
+            //     ]);
+            // }
             //
 
 

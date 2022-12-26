@@ -219,7 +219,7 @@
                                                 <label>{{ $t('department.ChooseDepartment') }}</label>
 
                                                 <select v-model="data.department_id" :class="['form-select',{'is-invalid':v$.department_id.$error,'is-valid':!v$.department_id.$invalid}]">
-                                                    <option v-for="department in mainDepartment" :kay="department.id" :value="department.id">{{department.name}}</option>
+                                                    <option v-for="department in mainDepartment" :key="department.id" :value="department.id">{{department.name}}</option>
                                                 </select>
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                                 <div class="invalid-feedback">
@@ -232,7 +232,7 @@
                                                 <label>{{ $t('job.ChooseJob') }}</label>
 
                                                 <select v-model="data.job_id" :class="['form-select',{'is-invalid':v$.job_id.$error,'is-valid':!v$.job_id.$invalid}]">
-                                                    <option v-for="job in mainJob" :kay="job.id" :value="job.id">{{job.name}}</option>
+                                                    <option v-for="job in mainJob" :key="job.id" :value="job.id">{{job.name}}</option>
                                                 </select>
 
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
@@ -245,8 +245,8 @@
                                             <div class="col-md-6 mb-12">
                                                 <label>المخزن</label>
 
-                                                <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
-                                                    <option v-for="store in stores" :kay="store.id" :value="store.id">{{store.name}}</option>
+                                                <select multiple v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
+                                                    <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                 </select>
 
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
@@ -377,7 +377,7 @@
                                                         <label>{{ $t('global.ChooseRole') }}</label>
 
                                                         <select v-model="data.role_name" :class="['form-select',{'is-invalid':v$.role_name.$error,'is-valid':!v$.role_name.$invalid}]">
-                                                            <option v-for="role in mainRole" :kay="role.id" :value="role.name">{{role.name}}</option>
+                                                            <option v-for="role in mainRole" :key="role.id" :value="role.name">{{role.name}}</option>
                                                         </select>
 
                                                         <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
@@ -548,7 +548,7 @@ export default {
                 bank_iban: '',
                 bank_swift: '',
                 name: '',
-                store_id:'',
+                store_id:[],
                 email: '',
                 password: '',
                 confirmtion: '',
@@ -770,7 +770,7 @@ export default {
             this.data.birth_date = '';
             this.data.hiring_date = '';
             this.data.salary = '';
-            this.data.store_id = '';
+            this.data.store_id = [];
             this.data.file= {}
         }
     }

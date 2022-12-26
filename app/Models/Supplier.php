@@ -48,4 +48,9 @@ class Supplier extends Model
         return $this->hasMany(SupplierIncome::class);
     }
 
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+
 }

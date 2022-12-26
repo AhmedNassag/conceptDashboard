@@ -13,7 +13,7 @@
                                     الرئيسية
                                 </router-link>
                             </li>
-                            <li class="breadcrumb-item active">المنتاجات</li>
+                            <li class="breadcrumb-item active">المنتجات</li>
                         </ul>
                     </div>
 
@@ -48,8 +48,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>اسم المنتج</th>
-                                        <th> الفئه</th>
-                                        <th>الشركه</th>
+                                        <th>الفئه</th>
+                                        <th>البراند</th>
                                         <th>الصورة</th>
                                         <th>الحاله</th>
                                         <th>الاجراءات</th>

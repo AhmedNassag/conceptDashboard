@@ -54,10 +54,10 @@
                                                         <div class="form-group">
                                                             <label>{{$t('global.Name')}}</label>
                                                             <input type="text" class="form-control"
-                                                                   v-model.trim="v$.name.$model"
-                                                                   id="validationCustom03"
-                                                                   :placeholder="$t('global.Name')"
-                                                                   :class="{'is-invalid':v$.name.$error,'is-valid':!v$.name.$invalid}"
+                                                                v-model.trim="v$.name.$model"
+                                                                id="validationCustom03"
+                                                                :placeholder="$t('global.Name')"
+                                                                :class="{'is-invalid':v$.name.$error,'is-valid':!v$.name.$invalid}"
                                                             >
                                                             <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                                             <div class="invalid-feedback">
@@ -76,18 +76,17 @@
                                                             <h5 class="card-title">{{$t('global.Permissions')}}</h5>
                                                         </div>
                                                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-                                                            <div class="col mb-3 d-flex" v-for="permission in permissions" :kay="permission.id">
+                                                            <div class="col mb-3 d-flex" v-for="permission in permissions" :key="permission.id">
                                                                 <div class="card flex-fill">
                                                                     <div class="card-body p-3 text-center">
                                                                         <p class="card-text f-12">{{ $t(`permission.${permission.name}`) }} </p>
                                                                     </div>
                                                                     <div class="card-footer">
-                                                                        <label class="form-group toggle-switch mb-0"
-                                                                               :for="'notification_switch'+permission.id">
+                                                                        <label class="form-group toggle-switch mb-0" :for="'notification_switch'+permission.id">
                                                                             <input type="checkbox"
-                                                                                   class="toggle-switch-input"
-                                                                                   :id="'notification_switch'+permission.id" :value="permission.id"
-                                                                                   v-model="v$.permission.$model">
+                                                                                class="toggle-switch-input"
+                                                                                :id="'notification_switch'+permission.id" :value="permission.id"
+                                                                                v-model="v$.permission.$model">
                                                                             <span class="toggle-switch-label mx-auto">
                                                                                 <span class="toggle-switch-indicator"></span>
                                                                             </span>
@@ -107,18 +106,17 @@
                                                             <h5 class="card-title">{{$t('notification.Notifications')}}</h5>
                                                         </div>
                                                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
-                                                            <div class="col mb-3 d-flex" v-for="notify in notifies" :kay="notify.id">
+                                                            <div class="col mb-3 d-flex" v-for="notify in notifies" :key="notify.id">
                                                                 <div class="card flex-fill">
                                                                     <div class="card-body p-3 text-center">
                                                                         <p class="card-text f-12">{{ $t(`notification.${notify.name}`) }} </p>
                                                                     </div>
                                                                     <div class="card-footer">
-                                                                        <label class="form-group toggle-switch mb-0"
-                                                                               :for="'notification_switch-'+notify.id">
+                                                                        <label class="form-group toggle-switch mb-0" :for="'notification_switch-'+notify.id">
                                                                             <input type="checkbox"
-                                                                                   class="toggle-switch-input"
-                                                                                   :id="'notification_switch-'+notify.id" :value="notify.id"
-                                                                                   v-model="v$.notify.$model">
+                                                                                class="toggle-switch-input"
+                                                                                :id="'notification_switch-'+notify.id" :value="notify.id"
+                                                                                v-model="v$.notify.$model">
                                                                             <span class="toggle-switch-label mx-auto">
                                                                                 <span class="toggle-switch-indicator"></span>
                                                                             </span>

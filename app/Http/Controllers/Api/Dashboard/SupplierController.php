@@ -9,7 +9,6 @@ use App\Models\SupplierAccount;
 use App\Traits\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
@@ -70,7 +69,7 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             DB::beginTransaction();
 
             // Validator request
@@ -83,12 +82,14 @@ class SupplierController extends Controller
                 'name' => ['nullable','string'],
                 'phone' => ['nullable','string'],
                 'amount' => ['required'],
+                'commercialRegister' => 'required|file|mimes:png,jpg,jpeg',
+                'taxCard' => 'required|file|mimes:png,jpg,jpeg',
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $data = $request->only(['name_supplier','address','phone_supplier','commercial_record','tax_card','name','phone','amount']);
+            $data = $request->only(['name_supplier','address','phone_supplier','commercial_record','tax_card','name','phone','amount','commercialRegister','taxCard']);
 
             $supplier = Supplier::create($data);
 
@@ -99,12 +100,45 @@ class SupplierController extends Controller
 
             DB::commit();
 
+            if ($request->hasFile('commercialRegister')) {
+
+                $file_size = $request->commercialRegister->getSize();
+                $file_type = $request->commercialRegister->getMimeType();
+                $image = time() . 2 . '.' . $request->commercialRegister->getClientOriginalName();
+
+                // picture move
+                $request->commercialRegister->storeAs('supplier', $image, 'general');
+
+                $supplier->media()->create([
+                    'file_name' => asset('upload/supplier/' . $image),
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 2
+                ]);
+            }
+
+            if ($request->hasFile('taxCard')) {
+
+                $file_size = $request->taxCard->getSize();
+                $file_type = $request->taxCard->getMimeType();
+                $image = time() . 3 . '.' . $request->taxCard->getClientOriginalName();
+
+                // picture move
+                $request->taxCard->storeAs('supplier', $image, 'general');
+
+                $supplier->media()->create([
+                    'file_name' => asset('upload/supplier/' . $image),
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 3
+                ]);
+            }
             return $this->sendResponse([], 'Data exited successfully');
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->sendError('An error occurred in the system');
+        // }
     }
 
 

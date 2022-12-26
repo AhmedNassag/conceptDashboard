@@ -49,27 +49,34 @@
                                         <th>#</th>
                                         <th>اسم قطعه الغيار</th>
                                         <th>{{ $t('global.price') }}</th>
+                                        <th>{{ $t('global.image') }}</th>
                                         <th>تاريخ الانشاء</th>
+                                        <th>الإجراءات</th>
                                     </tr>
                                     </thead>
                                     <tbody v-if="spareParts.length">
-                                    <tr v-for="(item,index) in spareParts"  :key="item.id">
+                                    <tr v-for="(item,index) in spareParts" :key="item.id">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.name }}</td>
                                         <td>{{item.price}}</td>
-                                        <td>{{ dateFormat(item.created_at) }}</td>
-
                                         <td>
-
+                                            <img
+                                                :src="'/upload/sparePart/' + item.media.file_name"
+                                                :alt="item.name"
+                                                class="custom-img"
+                                            />
+                                        </td>
+                                        <td>{{ dateFormat(item.created_at) }}</td>
+                                        <td>
                                             <router-link
-                                                :to="{name: 'editSparePart',params:{id:item.id}}"
-                                               v-if="permission.includes('sellingMethod edit')"
-                                               class="btn btn-sm btn-success me-2">
+                                                :to="{name:'editSparePart',params:{id:item.id}}"
+                                                v-if="permission.includes('sellingMethod edit')"
+                                                class="btn btn-sm btn-success me-2">
                                                 <i class="far fa-edit"></i>
                                             </router-link>
                                             <a href="#" @click="deleteSpareParts(item.id,index)"
                                                 v-if="permission.includes('sellingMethod delete')"
-                                               data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
+                                                data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
                                                 <i class="far fa-trash-alt"></i>
                                             </a>
                                         </td>
@@ -230,5 +237,31 @@ export default {
     padding: 3px;
     border-radius: 7px;
 }
+.card {
+    position: relative;
+}
 
+.btn-custom {
+    width: 30%;
+}
+
+.custom {
+    border: 1px solid #D7D7D7;
+    padding: 2px;
+    border-radius: 5px;
+    width: 35%;
+}
+
+.btn {
+    color: #fff;
+}
+.hover:hover{
+    border: 2px solid;
+    padding: 3px;
+    border-radius: 7px;
+}
+
+.custom-img {
+    width: 100px;
+}
 </style>

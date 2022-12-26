@@ -50,6 +50,9 @@
                                         <th>اسم الشمع</th>
                                         <th>{{ $t('global.price') }}</th>
                                         <th>{{ $t('global.model') }}</th>
+                                        <th>{{ $t('global.type') }}</th>
+                                        <th>{{ $t('global.origin') }}</th>
+                                        <th>{{ $t('global.period') }}</th>
                                         <th>تم الانشاء</th>
                                         <th>الاجراءات</th>
                                     </tr>
@@ -57,12 +60,14 @@
                                     <tbody v-if="filterWaxes.length">
                                     <tr v-for="(item,index) in filterWaxes"  :key="item.id">
                                         <td>{{ index + 1 }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{item.price}}</td>
-                                        <td>{{item.model}}</td>
+                                        <td>{{ item.name ? item.name : '---'}}</td>
+                                        <td>{{ item.price ? item.price : '---'}}</td>
+                                        <td>{{ item.model ? item.model : '---'}}</td>
+                                        <td>{{ item.type ? item.type : '---'}}</td>
+                                        <td>{{ item.origin ? item.origin : '---'}}</td>
+                                        <td>{{ item.period ? item.period : '---'}}</td>
                                         <td>{{ dateFormat(item.created_at) }}</td>
                                         <td>
-
                                             <router-link
                                                :to="{name: 'editFilterWax',params:{id:item.id}}"
                                                v-if="permission.includes('sellingMethod edit')"
@@ -75,7 +80,6 @@
                                                 <i class="far fa-trash-alt"></i>
                                             </a>
                                         </td>
-
                                     </tr>
                                     </tbody>
                                     <tbody v-else>
@@ -129,17 +133,17 @@ export default {
             loading.value = true;
 
             adminApi.get(`/v1/dashboard/filterWax?page=${page}&search=${search.value}`)
-                .then((res) => {
-                    let l = res.data.data;
-                    filterWaxesPaginate.value = l.filterWaxes;
-                    filterWaxes.value = l.filterWaxes.data;
-                })
-                .catch((err) => {
-                    console.log(err.response.data);
-                })
-                .finally(() => {
-                    loading.value = false;
-                });
+            .then((res) => {
+                let l = res.data.data;
+                filterWaxesPaginate.value = l.filterWaxes;
+                filterWaxes.value = l.filterWaxes.data;
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                loading.value = false;
+            });
         }
 
         onMounted(() => {
@@ -177,23 +181,23 @@ export default {
                 if (result.isConfirmed) {
 
                     adminApi.delete(`/v1/dashboard/filterWax/${id}`)
-                        .then((res) => {
-                            filterWaxes.value.splice(index, 1);
+                    .then((res) => {
+                        filterWaxes.value.splice(index, 1);
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: `تم الحذف بنجاح`,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        })
-                        .catch((err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: `يوجد خطا`,
-                                text: `يوجد خطا في النظام!`,
-                            });
+                        Swal.fire({
+                            icon: 'success',
+                            title: `تم الحذف بنجاح`,
+                            showConfirmButton: false,
+                            timer: 1500
                         });
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `يوجد خطا`,
+                            text: `يوجد خطا في النظام!`,
+                        });
+                    });
                 }
             });
         }

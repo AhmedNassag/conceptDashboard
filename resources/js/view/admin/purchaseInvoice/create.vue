@@ -67,7 +67,7 @@
                                                 <label>{{ $t('global.ChooseStore') }}</label>
 
                                                 <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
-                                                    <option v-for="store in stores" :kay="store.id" :value="store.id">{{store.name}}</option>
+                                                    <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                 </select>
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                                 <div class="invalid-feedback">
@@ -118,7 +118,7 @@
                                                     <div class="col-md-12 mb-12 head-account">
                                                         <h3>{{ $t('global.Products') }}</h3>
                                                     </div>
-                                                    <div v-for="(it,index) in data.product" class="col-md-12 mb-12 body-account row">
+                                                    <div v-for="(it,index) in data.product" :key="it.id" class="col-md-12 mb-12 body-account row">
 
                                                         <div class="col-md-3 mb-3 position-relative">
                                                             <label>{{ $t('global.Products') }}</label>
@@ -294,7 +294,7 @@
                                             <div class="col-md-4 mb-3">
                                                 <label>{{$t('treasury.ChooseTreasury')}} <span v-if="data.treasury_id" class="amount">{{$t('global.Balance')}} : {{parseFloat(Math.round(treasury_amount))}}</span> </label>
                                                 <select v-model="data.treasury_id" class="form-select" :class="{'is-invalid':v$.treasury_id.$error,'is-valid':!v$.treasury_id.$invalid}">
-                                                    <option v-for="treasury in treasuries" :kay="treasury.id" :value="treasury.id">{{treasury.name}}</option>
+                                                    <option v-for="treasury in treasuries" :key="treasury.id" :value="treasury.id">{{treasury.name}}</option>
                                                 </select>
 
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>

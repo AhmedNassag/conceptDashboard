@@ -31,6 +31,11 @@ class Employee extends Model
         return $this->hasMany(EmployeeShift::class);
     }
 
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class, 'employee_stores', 'employee_id','store_id', 'id', 'id');
+    }
+
 
     // CRM relations
     public function sellerCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

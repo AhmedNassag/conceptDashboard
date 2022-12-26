@@ -56,4 +56,9 @@ class Store extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function employees()
+    {
+        return $this->belongsToMany(Employee::class, 'employee_stores', 'employee_id','store_id', 'id', 'id');
+    }
+
 }

@@ -208,7 +208,7 @@
                                                 <label>{{ $t('department.ChooseDepartment') }}</label>
 
                                                 <select v-model="data.department_id" :class="['form-select',{'is-invalid':v$.department_id.$error,'is-valid':!v$.department_id.$invalid}]">
-                                                    <option v-for="department in departments" :kay="department.id" :value="department.id">{{department.name}}</option>
+                                                    <option v-for="department in departments" :key="department.id" :value="department.id">{{department.name}}</option>
                                                 </select>
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                                 <div class="invalid-feedback">
@@ -221,7 +221,7 @@
                                                 <label>{{ $t('job.ChooseJob') }}</label>
 
                                                 <select v-model="data.job_id" :class="['form-select',{'is-invalid':v$.job_id.$error,'is-valid':!v$.job_id.$invalid}]">
-                                                    <option v-for="job in jobs" :kay="job.id" :value="job.id">{{job.name}}</option>
+                                                    <option v-for="job in jobs" :key="job.id" :value="job.id">{{job.name}}</option>
                                                 </select>
 
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
@@ -234,8 +234,8 @@
                                             <div class="col-md-6 mb-12">
                                                 <label>المخزن</label>
 
-                                                <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
-                                                    <option v-for="store in stores" :kay="store.id" :value="store.id">{{store.name}}</option>
+                                                <select multiple v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
+                                                    <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                 </select>
 
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
@@ -366,7 +366,7 @@
                                                         <label>{{ $t('global.ChooseRole') }}</label>
 
                                                         <select v-model="data.role_name" :class="['form-select',{'is-invalid':v$.role_name.$error,'is-valid':!v$.role_name.$invalid}]">
-                                                            <option v-for="role in roles" :kay="role.id" :value="role.name">{{role.name}}</option>
+                                                            <option v-for="role in roles" :key="role.id" :value="role.name">{{role.name}}</option>
                                                         </select>
 
                                                         <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
@@ -511,6 +511,9 @@ export default {
                     addEmployee.data.hiring_date = l.employee.hiring_date;
                     addEmployee.data.salary = l.employee.salary;
                     addEmployee.data.store_id = l.employee.store_id;
+                    l.employee.store_id.forEach((e) => {
+                        addEmployee.data.store_id.push(e.id);
+                    });
                     image.value = l.media;
                 })
                 .catch((err) => {
@@ -535,7 +538,7 @@ export default {
                 email: '',
                 department_id: '',
                 job_id: '',
-                store_id: '',
+                store_id: [],
                 phone: '',
                 role_name: '',
                 address: '',
@@ -643,7 +646,7 @@ export default {
                 formData.append('salary',this.data.salary);
                 formData.append('file',this.data.file);
                 formData.append('_method','PUT');
-                formData.append('store_id',this.data.store_id);
+                formData.append('store_id',this.data.store_id ? this.data.store_id : '');
 
                 adminApi.post(`/v1/dashboard/employee/${this.id}`,formData)
                     .then((res) => {

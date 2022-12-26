@@ -7,6 +7,7 @@ use App\Models\SparePart;
 use App\Traits\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class SparePartController extends Controller
@@ -20,8 +21,8 @@ class SparePartController extends Controller
      */
     public function index(Request $request)
     {
-        $sparePart = SparePart::
-        when($request->search, function ($q) use ($request) {
+        $sparePart = SparePart::with('media:file_name,mediable_id')
+        ->when($request->search, function ($q) use ($request) {
             return $q->where('name', 'like', '%' . $request->search . '%');
         })
             ->latest()->paginate(10);
@@ -45,7 +46,8 @@ class SparePartController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'description' => ['required','string'],
-                'price' => ['required']
+                'price' => ['required'],
+                'file' => 'required|file|mimes:png,jpg,jpeg',
             ]);
 
             if ($v->fails()) {
@@ -55,6 +57,22 @@ class SparePartController extends Controller
 
             $sparePart = SparePart::create($data);
 
+            if ($request->hasFile('file')) {
+
+                $file_size = $request->file->getSize();
+                $file_type = $request->file->getMimeType();
+                $image = time() . '.' . $request->file->getClientOriginalName();
+
+                // picture move
+                $request->file->storeAs('sparePart', $image, 'general');
+
+                $sparePart->media()->create([
+                    'file_name' => $image,
+                    'file_size' => $file_size,
+                    'file_type' => $file_type,
+                    'file_sort' => 1
+                ]);
+            }
             DB::commit();
 
             return $this->sendResponse([], 'Data exited successfully');
@@ -76,7 +94,7 @@ class SparePartController extends Controller
     {
         try {
 
-            $sparePart = SparePart::find($id);
+            $sparePart = SparePart::with('media:file_name,mediable_id')->find($id);
 
             return $this->sendResponse(['sparePart' => $sparePart], 'Data exited successfully');
 
@@ -98,14 +116,14 @@ class SparePartController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $sparePart = SparePart::find($id);
 
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'description' => ['required','string'],
-                'price' => ['required']
+                'price' => ['required'],
+                // 'file' => 'nullable' . ($request->hasFile('file') ? '|file|mimes:jpeg,jpg,png' : ''),
             ]);
 
             if ($v->fails()) {
@@ -116,6 +134,27 @@ class SparePartController extends Controller
 
             $sparePart->update($data);
 
+            // if ($request->hasFile('file')) {
+
+            //     if (File::exists('upload/sparePart/' . $sparePart->media->file_name)) {
+            //         unlink('upload/sparePart/' . $sparePart->media->file_name);
+            //     }
+            //     $sparePart->media->delete();
+
+            //     $file_size = $request->file->getSize();
+            //     $file_type = $request->file->getMimeType();
+            //     $image = time() . '.' . $request->file->getClientOriginalName();
+
+            //     // picture move
+            //     $request->file->storeAs('sparePart', $image, 'general');
+
+            //     $sparePart->media()->create([
+            //         'file_name' => $image,
+            //         'file_size' => $file_size,
+            //         'file_type' => $file_type,
+            //         'file_sort' => 1
+            //     ]);
+            // }
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
         }catch (\Exception $e){
