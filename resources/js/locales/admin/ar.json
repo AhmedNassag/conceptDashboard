@@ -51,7 +51,8 @@
         "lead": "اداره عملاء غير محتملين",
         "leadClient": " عملاء غير محتملين",
         "Maintenance": "جدول الصيانات",
-        "nearMaintenance": "الصيانات القريبة"
+        "nearMaintenance": "الصيانات القريبة",
+        "companyProfile":"ملف الشركة"
     },
     "global": {
         "Search":"بحث",
@@ -662,7 +663,11 @@
         "wax": "شمع",
         "model": "الموديل",
         "SparePart": "قطع الغيار",
-        "MaintenanceManagement": "إدارة الصيانة الدورية"
+        "MaintenanceManagement": "إدارة الصيانة الدورية",
+        "companyProfile":"ملف الشركة",
+        "taxCard":"البطاقة الضريبية",
+        "commercialRecord": "السجل التجارى",
+        "commercialRecordImage": "صورة السجل التجارى"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",

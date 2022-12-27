@@ -183,7 +183,6 @@
                                                                                             {{ item.currency }}
                                                                                         </p>
                                                                                         <p>{{$t('global.discountValue')}} : {{ item.discount_offer }} {{ item.currency }}</p>
-
                                                                                         <p v-if="item.order_other_offer">
                                                                                             {{$t('global.otherDiscount')}} :
                                                                                             {{ item.order_other_offer.offer }}
@@ -193,6 +192,8 @@
 
                                                                                     <div class="col-md-6">
                                                                                         <p>{{$t('global.DateOrder')}} : {{dateFormat(item.created_at)}}</p>
+                                                                                        <p>{{$t('global.commercialRecord')}} : {{companyProfile.commercial_record}}</p>
+                                                                                        <p>{{$t('global.taxCard')}} : {{companyProfile.tax_card}}</p>
                                                                                         <p>
                                                                                             {{$t('global.TotalPriceAfterDiscount')}} :
                                                                                             {{
@@ -212,15 +213,15 @@
 
                                                                                 <table class="table table-center table-hover mb-0 datatable">
                                                                                     <thead>
-                                                                                    <tr>
-                                                                                        <th>#</th>
-                                                                                        <th>{{ $t('global.Products') }}</th>
-                                                                                        <th>{{ $t('global.full') }}</th>
-                                                                                        <th>{{ $t('global.partial') }}</th>
-                                                                                        <th>{{ $t('global.fullPrice') }}</th>
-                                                                                        <th>{{ $t('global.partialPrice') }}</th>
-                                                                                        <th>{{ $t('global.TotalPrice') }}</th>
-                                                                                    </tr>
+                                                                                        <tr>
+                                                                                            <th>#</th>
+                                                                                            <th>{{ $t('global.Products') }}</th>
+                                                                                            <th>{{ $t('global.full') }}</th>
+                                                                                            <th>{{ $t('global.partial') }}</th>
+                                                                                            <th>{{ $t('global.fullPrice') }}</th>
+                                                                                            <th>{{ $t('global.partialPrice') }}</th>
+                                                                                            <th>{{ $t('global.TotalPrice') }}</th>
+                                                                                        </tr>
                                                                                     </thead>
                                                                                     <tbody v-if="item.order_details.length">
                                                                                         <tr v-for="(it,index) in item.order_details" :key="it.id">
@@ -230,12 +231,7 @@
                                                                                             <td>{{ it.sub_quantity ? it.sub_quantity + ' ( '+it.sub_measurement_unit.name+' ) ' : '-' }} </td>
                                                                                             <td>{{ it.quantity ? it.price : '-'}}</td>
                                                                                             <td>{{ it.sub_quantity ? it.sub_price : '-'}}</td>
-                                                                                            <td>
-                                                                                                {{
-                                                                                                    parseFloat((it.quantity * it.price) + (it.sub_quantity * it.sub_price))
-                                                                                                    .toFixed(2)
-                                                                                                }}
-                                                                                            </td>
+                                                                                            <td>{{ parseFloat((it.quantity * it.price) + (it.sub_quantity * it.sub_price)).toFixed(2) }} </td>
                                                                                         </tr>
                                                                                     </tbody>
                                                                                     <tbody  v-else>
@@ -520,6 +516,7 @@ export default {
         let order_id = ref('');
         let orderStatus = ref([]);
         let treasuries = ref([]);
+        let companyProfile = ref([]);
         let loading = ref(false);
         let productValidation = ref([]);
         let ordersPaginate = ref({});
@@ -538,6 +535,7 @@ export default {
                     orderStatus.value = l.orderStatus;
                     treasury_amount.value = l.treasuries[0].amount;
                     treasuries.value = l.treasuries;
+                    companyProfile.value = l.companyProfile;
                 })
                 .catch((err) => {
                     console.log(err.response.data);
@@ -594,7 +592,8 @@ export default {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
-            }).then((result) => {
+            })
+            .then((result) => {
                 if (result.isConfirmed) {
 
                     adminApi.delete(`/v1/dashboard/orderDirect/${id}`)
@@ -643,14 +642,12 @@ export default {
                 order_status_id:'',
                 representative_id:'',
                 order_id:'',
-
                 treasury_id:1,
                 type_invoice:1,
                 name_supplier:'',
                 sender_id:0,
                 treasury_amount:0,
                 sender_amount:0,
-
                 products:[]
             },
         });
@@ -843,6 +840,7 @@ export default {
             changeSubQuantity,
             changeReturnSubQuantity,
             treasuries,
+            companyProfile,
             v$,
             t,
             treasury_amount

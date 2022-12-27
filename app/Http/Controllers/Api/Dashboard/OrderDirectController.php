@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\CompanyProfile;
 use App\Models\followLead;
 use App\Models\OfferDiscount;
 use App\Models\Order;
@@ -69,8 +70,7 @@ class OrderDirectController extends Controller
      */
     public function index(Request $request)
     {
-        $orders= Order::
-        where('is_online',0)
+        $orders= Order::where('is_online',0)
         ->whereNotIn('order_status_id',[6,7])
         ->with('orderOtherOffer')
         ->with([
@@ -113,7 +113,9 @@ class OrderDirectController extends Controller
 
         $treasuries = Treasury::where('active',1)->get();
 
-        return $this->sendResponse(['orders' => $orders,'orderStatus' => $orderStatus,'treasuries' => $treasuries], 'Data exited successfully');
+        $companyProfile = CompanyProfile::first();
+
+        return $this->sendResponse(['orders' => $orders,'orderStatus' => $orderStatus,'treasuries' => $treasuries, 'companyProfile' => $companyProfile], 'Data exited successfully');
     }
 
 

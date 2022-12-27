@@ -213,7 +213,7 @@ class EmployeeController extends Controller
     {
         try {
 
-            $employee = Employee::with('user:id,name,email,phone,status,role_name')->find($id);
+            $employee = Employee::with('user:id,name,email,phone,status,role_name')->with('stores')->find($id);
             $media = $employee->user->media->file_name;
             $employee['bank'] = $employee->user->banks;
             $department = Department::where('active', 1)->get();

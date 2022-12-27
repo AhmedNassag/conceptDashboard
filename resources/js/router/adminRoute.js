@@ -105,6 +105,8 @@ import followleadsManagement from './adminRoute/followleadsManagement';
 import followLeads from './adminRoute/followLeads';
 //periodicMaintenance
 import periodicMaintenance from './adminRoute/periodicMaintenance';
+//companyProfile
+import companyProfile from './adminRoute/companyProfile';
 
 const routes = [
     {
@@ -231,6 +233,7 @@ const routes = [
             ...userCompany,
             ...merchant,
             ...leadFollowUps,
+            ...leadClient,
             ...leadSourse,
             ...leadd,
             //crm
@@ -253,6 +256,8 @@ const routes = [
             ...followLeads,
             //periodicMaintenance
             ...periodicMaintenance,
+            //compnayProfile
+            ...companyProfile,
         ]
     },
     {

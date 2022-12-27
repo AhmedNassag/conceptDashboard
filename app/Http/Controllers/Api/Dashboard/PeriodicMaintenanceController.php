@@ -180,7 +180,7 @@ class PeriodicMaintenanceController extends Controller
 
     public function nearPeriodic(Request $request)
     {
-        $periodicMaintenances = PeriodicMaintenance::where('status',1)
+        $periodicMaintenances = PeriodicMaintenance::where('collector', Null)->where('status',1)
             ->where('next_maintenance','<=',Carbon::now()->addDays(2))
             ->when($request->search, function ($q) use ($request) {
                 return $q->where('quantity', 'like', '%' . $request->search . '%')

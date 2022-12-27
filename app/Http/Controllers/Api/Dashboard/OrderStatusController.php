@@ -45,7 +45,7 @@ class OrderStatusController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             DB::beginTransaction();
             // Validator request
             $v = Validator::make($request->all(), [
@@ -57,7 +57,7 @@ class OrderStatusController extends Controller
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $order = Order::with('orderDetails.product.maintenance')->find($request->order_id);
+            $order = Order::with('orderDetails.product.filterWax')->find($request->order_id);
 
             $order->update([
                'order_status_id' => $request->order_status_id,
@@ -119,15 +119,25 @@ class OrderStatusController extends Controller
                         ]);
                     }
 
-                    // add order to periodicMaintenance
-                    PeriodicMaintenance::create([
-                        'order_id' => $order->id,
-                        'name' => $order->user->name,
-                        'quantity' => $order->orderDetails[0]->quantity,
-                        'price' => ($order->orderDetails[0]->product->maintenance->price) * ($order->orderDetails[0]->quantity),
-                        'next_maintenance' => Carbon::now()->addDays($order->orderDetails[0]->product->maintenance->period),
-                    ]);
+                    $filterWax = $order->orderDetails->first()->product->filterWax;
+                    $count = $filterWax->count();
 
+                    for($i = 0; $i < $count; $i++)
+                    {
+                        // add order to periodicMaintenance
+                        $periodic = PeriodicMaintenance::create([
+                            'order_id' => $order->id,
+                            'name' => $order->user->name,
+                            'quantity' => $order->orderDetails[0]->quantity,
+                            'price' => ($filterWax[$i]->price) * ($order->orderDetails[0]->quantity),
+                            'next_maintenance' => Carbon::now()->addDays($filterWax[$i]->period),
+                            // 'order_id' => 1,
+                            // 'name' => 'name',
+                            // 'quantity' => 1,
+                            // 'price' => 1,
+                            // 'next_maintenance' => date("Y-m-d H:i:s"),
+                        ]);
+                    }
 
                     $this->notification($tokens,$body,$type,$productData);
                     break;
@@ -183,10 +193,10 @@ class OrderStatusController extends Controller
 
             return $this->sendResponse([], 'Data exited successfully');
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->sendError('An error occurred in the system');
+        // }
     }
     //return all product
 

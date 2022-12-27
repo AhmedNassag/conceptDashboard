@@ -465,6 +465,7 @@
 
                                             </div>
 
+                                            <!--
                                             <div class="col-md-12 mb-3 mt-5">
                                                 <div class="sec-body row">
                                                     <div class="col-md-12 mb-12 sec-head">
@@ -472,7 +473,6 @@
                                                             مواعيد الصيانات
                                                         </h3>
                                                     </div>
-
                                                     <div class="col-md-3 mb-3">
                                                         <label>سعر الصيانه</label>
                                                         <input type="number" class="form-control"
@@ -487,7 +487,6 @@
                                                             <span v-if="v$.price_maintenance.numeric.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-md-3 mb-3">
                                                         <label>المده</label>
                                                         <input type="number" class="form-control"
@@ -501,7 +500,6 @@
                                                             <span v-if="v$.period_maintenance.integer.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-md-3 mb-3">
                                                         <label>نوع الصيانة </label>
                                                         <select
@@ -519,10 +517,9 @@
                                                             <span v-if="v$.type_maintenance.integer.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
                                                         </div>
                                                     </div>
-
                                                 </div>
-
                                             </div>
+                                            -->
 
                                         </div>
 

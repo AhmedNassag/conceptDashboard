@@ -68,13 +68,13 @@
                                                    :to="{name: 'delayPeriodicMaintenance',params:{id:item.id}}"
                                                    v-if="permission.includes('periodicMaintenance edit')"
                                                    class="btn btn-sm btn-info me-2">
-                                                   <i class="far fa-edit">تأجيل ميعاد الصيانة</i>
+                                                   <i class="far fa-edit"> تأجيل ميعاد الصيانة </i>
                                                 </router-link>
                                                 <router-link
                                                     :to="{name: 'confirmPeriodicMaintenance',params:{id:item.id}}"
                                                     v-if="permission.includes('periodicMaintenance edit')"
                                                     class="btn btn-sm btn-success me-2">
-                                                    <i class="fas fa-check-circle">تأكيد عمل الصيانة</i>
+                                                    <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
                                                 </router-link>
                                             </td>
                                         </tr>

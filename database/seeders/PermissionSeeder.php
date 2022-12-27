@@ -16,10 +16,19 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
+            //start companyProfile
+            ['name' => 'companyProfile read','role' => '','category' => 'companyProfile'],
+            ['name' => 'companyProfile create', 'role' => '', 'category' => 'companyProfile'],
+            ['name' => 'companyProfile edit', 'role' => '', 'category' => 'companyProfile'],
+            ['name' => 'companyProfile delete', 'role' => '', 'category' => 'companyProfile'],
+            //end companyProfile
+
+            //start supplier
             ['name' => 'supplier read','role' => '','category' => 'supplier'],
             ['name' => 'supplier create','role' => '','category' => 'supplier'],
             ['name' => 'supplier edit','role' => '','category' => 'supplier'],
             ['name' => 'supplier delete','role' => '','category' => 'supplier'],
+            //end supplier
 
             // start product Management
             ['name' => 'category read','role' => 'productManagement','category' => 'category'],
@@ -67,16 +76,19 @@ class PermissionSeeder extends Seeder
             ['name' => 'areas delete','role' => 'areaManagement','category' => 'Areas'],
             // end Area Management
 
-
+            //start discount
             ['name' => 'discount read','role' => '','category' => 'Discount'],
             ['name' => 'discount create','role' => '','category' => 'Discount'],
             ['name' => 'discount edit','role' => '','category' => 'Discount'],
             ['name' => 'discount delete','role' => '','category' => 'Discount'],
+            //end discount
 
+            //start tax
             ['name' => 'tax read','role' => '','category' => 'Tax'],
             ['name' => 'tax create','role' => '','category' => 'Tax'],
             ['name' => 'tax edit','role' => '','category' => 'Tax'],
             ['name' => 'tax delete','role' => '','category' => 'Tax'],
+            //end tax
 
             // start Store Management
             ['name' => 'store read','role' => 'StoreManagement','category' => 'Store Management'],
@@ -324,7 +336,6 @@ class PermissionSeeder extends Seeder
             ['name' => 'CapitalOwnerAccount create','role' => 'platform Accounts','category' => 'platform Accounts'],
             ['name' => 'CapitalOwnerAccount edit','role' => 'platform Accounts','category' => 'platform Accounts'],
             ['name' => 'CapitalOwnerAccount delete','role' => 'platform Accounts','category' => 'platform Accounts'],
-
             // end platform Accounts
 
             // start Suggestion
