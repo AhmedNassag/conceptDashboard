@@ -20,7 +20,7 @@ class CreatePeriodicMaintenancesTable extends Migration
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
             $table->string('collector')->nullable();
-            $table->date('next_maintenance');
+            $table->date('next_maintenance')->default(now())->nullable();
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();

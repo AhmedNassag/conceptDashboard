@@ -188,7 +188,7 @@ class PeriodicMaintenanceController extends Controller
                     ->orWhere('price','like','%'.$request->search.'%')
                     ->orWhere('next_maintenance','like','%'.$request->search.'%');
             })
-            ->latest()->paginate(10);
+            ->orderBy('name','Asc')->latest()->paginate(10);
 
         return $this->sendResponse(['periodicMaintenances' => $periodicMaintenances], 'Data exited successfully');
     }

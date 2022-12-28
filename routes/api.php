@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\MobileApp\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 
 Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],function () {
 
@@ -27,7 +29,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
     });
     //api token_access
 
-    //start web
+    /****************************** start web ******************************/
     Route::group([ 'prefix' => 'web','namespace' => 'Web'],function () {
 
         //check token
@@ -54,11 +56,11 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         });
 
     });
-    //end web
+    /****************************** end web ******************************/
 
+
+    /****************************** start Dashboard ******************************/
     Route::middleware(['auth:api'])->group(function () {
-
-        //start Dashboard
         Route::group(['prefix' => 'dashboard','namespace' => 'Dashboard'],function () {
 
             //start Notification
@@ -76,7 +78,6 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //start role
             Route::resource('role','RoleController');
-
 
             //department
             Route::resource('department','DepartmentController');
@@ -325,7 +326,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::resource('clientIncomes','ClientIncomesController')->except('show');
 
             //Supplier Account Statement
-             Route::resource('SupplierAccountStatement','SupplierAccountStatementController');
+            Route::resource('SupplierAccountStatement','SupplierAccountStatementController');
 
             //client Account Statement
             Route::resource('clientAccountStatement','ClientAccountStatementController');
@@ -405,15 +406,16 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             //companyProfile
             Route::resource('companyProfile', 'CompanyProfileController');
         });
-
-     });
+    });
+    /****************************** end dashboard ******************************/
 
 
 
     #######################################################################################################################
     ######################################   Start Mobile Api   ###########################################################
     #######################################################################################################################
-    //start Api mobile
+
+    /****************************** start Api mobile ******************************/
     Route::group([ 'prefix' => 'mobile','namespace' => 'MobileApp','middleware' => ['closeApp']],function () {
 
         //provinces with areas
@@ -426,7 +428,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         Route::get('setting','SettingController@setting');
 
         //check token
-        Route::get('checkToken',  'AuthController@authorizeUser');
+        Route::get('checkToken','AuthController@authorizeUser');
 
         //start Register[company,merchant,client]
         Route::post('company','RegisterController@companyRegister');
@@ -446,8 +448,8 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         Route::middleware(['auth:api'])->group(function () {
 
             Route::get('me','AuthMobileController@me');
-            Route::post('changePassword',  'AuthMobileController@changePassword');
-            Route::put('updateProfile',  'ProfileController@updateProfile');
+            Route::post('changePassword','AuthMobileController@changePassword');
+            Route::put('updateProfile','ProfileController@updateProfile');
 
             //ads
             Route::get('popupAds','AdsController@popupAds');
@@ -491,12 +493,19 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             //get client Debts
             Route::get('clientDebts',  'ClientDebtsController@clientDebts');
 
+            //periodicMaintenance
+            Route::post('periodicMaintenance', 'PeriodicMaintenanceController@store');
+            Route::post('delayPeriodicMaintenance', 'PeriodicMaintenanceController@update');
+
+            //problemLead
+            Route::post('problemLead', 'ProblemLeadController@store');
+
             //start logout
             Route::post('logout','AuthController@logout');
-         });
-
+        });
     });
-    //end Api mobile
+    /****************************** end Api mobile ******************************/
+
     #######################################################################################################################
     ######################################   Start Mobile Api   ###########################################################
     #######################################################################################################################
@@ -510,8 +519,8 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
         Route::middleware(['auth:api'])->group(function () {
 
-            Route::get('me',  'AuthRepresentativeController@me');
-            Route::post('changePassword',  'AuthRepresentativeController@changePassword');
+            Route::get('me','AuthRepresentativeController@me');
+            Route::post('changePassword','AuthRepresentativeController@changePassword');
             Route::get('representativeOrder','OrderController@getRepresentativeOrder');
             Route::get('orderDelivered/{id}','NotificationOrderController@orderDelivered');
             Route::get('orderReturned/{id}','NotificationOrderController@orderReturned');
@@ -520,8 +529,98 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
     });
     //end representative
- });
+});
 
 
+/*******************************************************************************/
+/****************************** start Api mobile ******************************/
+Route::group(['prefix' => 'mobile', 'namespace' => 'MobileApp', 'middleware' => ['closeApp']], function () {
 
+    //provinces with areas
+    Route::get('provinces','ProvinceController@province');
 
+    //selling Method
+    Route::get('sellingMethod','SellingMethodController@sellingMethod');
+
+    //setting
+    Route::get('setting','SettingController@setting');
+
+    //check token
+    Route::get('checkToken','AuthController@authorizeUser');
+
+    //start Register[company,merchant,client]
+    Route::post('company','RegisterController@companyRegister');
+    Route::post('merchant','RegisterController@merchantRegister');
+    Route::post('client','RegisterController@clientRegister');
+    Route::get('province','RegisterController@province');
+    Route::get('area/{area}','RegisterController@area');
+
+    //start reset[company,merchant,client]
+    Route::post('forgot-password','AuthController@forgotPassword');
+    Route::post('confirmOtp','AuthController@confirmOtp');
+    Route::post('reset-password','AuthController@reset');
+
+    //start Login[company,merchant,client]
+    Route::post('login','AuthController@login');
+
+    // Route::middleware(['auth:api'])->group(function () {
+
+        Route::get('me','AuthMobileController@me');
+        Route::post('changePassword','AuthMobileController@changePassword');
+        Route::put('updateProfile','ProfileController@updateProfile');
+
+        //ads
+        Route::get('popupAds','AdsController@popupAds');
+        Route::get('slidersAds','AdsController@slidersAds');
+
+        //category
+        Route::get('categoryHome','CategoryController@categoryHome');
+        Route::get('category', 'CategoryController@category');
+        Route::get('subCategory/{id}','CategoryController@subCategory');
+
+        //company
+        Route::get('company/{id}','CompanyController@companyBySubCategoryId');
+        Route::get('company', 'CompanyController@company');
+        Route::get('companyHome','CompanyController@companyHome');
+
+        //products
+        Route::get('productCompany/{id}','ProductController@productCompany');
+        Route::get('getProductByBarcode/{barcode}','ProductController@getProductByBarcode');
+        Route::get('products','ProductController@products');
+        Route::get('pestProduct','ProductController@pestProduct');
+        Route::get('similarProducts/{id}','ProductController@similarProducts');
+
+        //suggestion
+        Route::get('getSuggestion','SuggestionClientController@getSuggestion');
+        Route::post('suggestion','SuggestionClientController@suggestion');
+
+        //get taxes
+        Route::get('getTaxes','TaxController@getTaxes');
+
+        //get shipping price
+        Route::get('shippingPrice','ShippingController@shippingPrice');
+
+        //check coupon
+        Route::post('checkCoupon','CouponController@checkCoupon');
+
+        //order
+        Route::post('order','OrderController@order');
+        Route::get('trackingOrder','OrderController@trackingOrder');
+        Route::get('pendingOrders','OrderController@pendingOrders');
+
+        //get client Debts
+        Route::get('clientDebts','ClientDebtsController@clientDebts');
+
+        //periodicMaintenance
+        Route::post('periodicMaintenance','PeriodicMaintenanceController@store');
+        Route::post('delayPeriodicMaintenance/{id}','PeriodicMaintenanceController@update');
+
+        //problemLead
+        Route::post('problemLead','ProblemLeadController@store');
+
+        //start logout
+        Route::post('logout','AuthController@logout');
+    // });
+});
+/****************************** end Api mobile ******************************/
+/*******************************************************************************/

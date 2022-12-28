@@ -111,7 +111,7 @@ class problemLeadController extends Controller
                 'name' => 'required|string|min:3',
                 'address' => 'nullable|string|min:3',
                 'description' => 'nullable|string|min:3',
-                'phone' => 'required|string|unique:problem_leads,phone',
+                'phone' => 'required|string',
                 'seller_category_id' => 'required|integer|exists:problem_seller_categories,id',
             ]);
 
@@ -168,7 +168,7 @@ class problemLeadController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lead $lead)
+    public function update(Request $request, $id)
     {
         try {
 
@@ -178,8 +178,8 @@ class problemLeadController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => 'required|string|min:3',
                 'address' => 'nullable|string|min:3',
-                'description' => 'nullable|string|min:3' . ($lead->id ? ",$lead->id" : ''),
-                'phone' => 'required|string|unique:problem_leads,phone' . ($lead->id ? ",$lead->id" : ''),
+                'description' => 'nullable|string|min:3',
+                'phone' => 'required|string',
                 'seller_category_id' => 'required|integer|exists:problem_seller_categories,id',
             ]);
 
