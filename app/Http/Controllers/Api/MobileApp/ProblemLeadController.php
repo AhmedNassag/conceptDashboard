@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Validator;
 class ProblemLeadController extends Controller
 {
     use Message;
-    // public $selling_method;
+    public $selling_method;
 
-    // public function __construct()
-    // {
-    //     $this->selling_method = auth()->user()->client->selling_method_id;
-    // }
+    public function __construct()
+    {
+        $this->selling_method = auth()->user()->client->selling_method_id;
+    }
 
     /**
      * Display a listing of the resource.
