@@ -26,12 +26,12 @@ class followLeadController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::with('user.client')->where(function ($query) {
-            $query->where('order_status_id', '=', 5)
-                ->orWhere('order_status_id', '=', 7);
-        })->where('updated_at', '>=', now()->subDays(2)->toDateTimeString())
-            ->get();
-        return $orders;
+//        $orders = Order::with('user.client')->where(function ($query) {
+//            $query->where('order_status_id', '=', 5)
+//                ->orWhere('order_status_id', '=', 7);
+//        })->where('updated_at', '>=', now()->subDays(2)->toDateTimeString())
+//            ->get();
+
         $leads = followLead::with(['employee.user','sellerCategory','comments.employee.user'])->when($request->search, function ($q) use ($request) {
             return $q->where('name','like','%'.$request->search.'%')
             ->orWhere('phone','like','%'.$request->search.'%')

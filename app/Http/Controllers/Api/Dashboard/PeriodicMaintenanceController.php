@@ -197,7 +197,7 @@ class PeriodicMaintenanceController extends Controller
     public function confirmPeriodic(Request $request, $id)
     {
         DB::beginTransaction();
-//        try {
+        try {
 
             $periodicMaintenance = PeriodicMaintenance::find($id);
 
@@ -235,11 +235,11 @@ class PeriodicMaintenanceController extends Controller
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
 
-//        }catch (\Exception $e){
-//
-//            DB::rollBack();
-//            return $this->sendError('An error occurred in the system');
-//        }
+        }catch (\Exception $e){
+
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
     }
 
 }
