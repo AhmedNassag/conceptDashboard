@@ -18,6 +18,9 @@ class CreateFilterWaxesTable extends Migration
             $table->string('name');
             $table->double('price',20,2)->default(0);
             $table->string('model')->nullable();
+            $table->string('type')->nullable();
+            $table->string('origin')->nullable();
+            $table->string('period')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

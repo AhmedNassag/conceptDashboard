@@ -159,25 +159,77 @@
                                                             {{ $t('global.TheBalanceOfTheFirstDuration') }}
                                                         </h3>
                                                     </div>
-
                                                     <div class="col-md-12 mb-12" >
                                                         <label for="validationCustom02">{{ $t('global.Amount') }}</label>
                                                         <input type="number" step="0.1"
-                                                               class="form-control"
-                                                               v-model.trim="v$.amount.$model"
-                                                               id="validationCustom11"
-                                                               :class="{'is-invalid':v$.amount.$error,'is-valid':!v$.amount.$invalid}"
-                                                               :placeholder="$t('global.Amount')"
+                                                            class="form-control"
+                                                            v-model.trim="v$.amount.$model"
+                                                            id="validationCustom11"
+                                                            :class="{'is-invalid':v$.amount.$error,'is-valid':!v$.amount.$invalid}"
+                                                            :placeholder="$t('global.Amount')"
                                                         >
                                                         <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                         <div class="invalid-feedback">
                                                             <span v-if="v$.amount.decimal.$invalid"> هذا الحقل يجب ان يكون رقم<br /> </span>
                                                         </div>
                                                     </div>
-
                                                 </div>
-
                                             </div>
+
+                                            <!--start images-->
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview1"
+                                                        id="mediaPackage1"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صورة السجل التجاري</span>
+                                                <p class="num-of-files">{{numberOfImage1 ? numberOfImage1 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images1" v-show="data.commercialRegister && numberOfImage1"></div>
+                                                <div class="container-images" v-show="!numberOfImage1">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview2"
+                                                        id="mediaPackage2"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صوره البطاقه الضربيه</span>
+                                                <p class="num-of-files">{{numberOfImage2 ? numberOfImage2 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images2" v-show="data.taxCard && numberOfImage2"></div>
+                                                <div class="container-images" v-show="!numberOfImage2">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <!--end images-->
+
 
                                         </div>
 
@@ -211,6 +263,8 @@ export default {
     },
     setup(){
         let loading = ref(false);
+        let numberOfImage1 = ref(0);
+        let numberOfImage2 = ref(0);
 
         //start design
         let addSupplier =  reactive({
@@ -222,7 +276,9 @@ export default {
                 tax_card : '',
                 name : '',
                 phone : '',
-                amount:0
+                commercialRegister: {},
+                taxCard: {},
+                amount:0,
             }
         });
 
@@ -266,8 +322,67 @@ export default {
 
         const v$ = useVuelidate(rules,addSupplier.data);
 
+        let preview1 = (e) => {
 
-        return {loading,...toRefs(addSupplier),v$};
+            let containerImages = document.querySelector('#container-images1');
+            if(numberOfImage1.value){
+                containerImages.innerHTML = '';
+            }
+            addSupplier.data.commercialRegister = {};
+
+            numberOfImage1.value = e.target.files.length;
+
+            addSupplier.data.commercialRegister = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addSupplier.data.commercialRegister.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addSupplier.data.commercialRegister);
+
+        };
+
+        let preview2 = (e) => {
+
+            let containerImages = document.querySelector('#container-images2');
+            if(numberOfImage2.value){
+                containerImages.innerHTML = '';
+            }
+            addSupplier.data.taxCard = {};
+
+            numberOfImage2.value = e.target.files.length;
+
+            addSupplier.data.taxCard = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addSupplier.data.taxCard.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addSupplier.data.taxCard);
+
+        };
+
+        return {loading,...toRefs(addSupplier),v$,preview1,preview2,numberOfImage1,numberOfImage2};
     },
     methods: {
         storeSupplier(){
@@ -278,25 +393,34 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.post(`/v1/dashboard/supplier`,this.data)
-                    .then((res) => {
+                let formData = new FormData();
+                formData.append('name_supplier',this.data.name_supplier);
+                formData.append('address',this.data.address);
+                formData.append('phone_supplier',this.data.phone_supplier);
+                formData.append('tax_card',this.data.tax_card);
+                formData.append('name',this.data.name);
+                formData.append('phone',this.data.phone);
+                formData.append('commercialRegister',this.data.commercialRegister);
+                formData.append('taxCard',this.data.taxCard);
+                formData.append('amount',this.data.amount);
 
-                        notify({
-                            title: `تم الاضافه بنجاح <i class="fas fa-check-circle"></i>`,
-                            type: "success",
-                            duration: 5000,
-                            speed: 2000
-                        });
-
-                        this.resetForm();
-                        this.$nextTick(() => { this.v$.$reset() });
-                    })
-                    .catch((err) => {
-                        this.errors = err.response.data.errors;
-                    })
-                    .finally(() => {
-                        this.loading = false;
+                adminApi.post(`/v1/dashboard/supplier`,formData)
+                .then((res) => {
+                    notify({
+                        title: `تم الاضافه بنجاح <i class="fas fa-check-circle"></i>`,
+                        type: "success",
+                        duration: 5000,
+                        speed: 2000
                     });
+                    this.resetForm();
+                    this.$nextTick(() => { this.v$.$reset() });
+                })
+                .catch((err) => {
+                    this.errors = err.response.data.errors;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
 
             }
         },
@@ -309,6 +433,10 @@ export default {
             this.data.name = '';
             this.data.phone = '';
             this.data.amount = 0;
+            document.querySelector('#mediaPackage1').value = '';
+            document.querySelector('#mediaPackage2').value = '';
+            document.querySelector('#container-images1').innerHTML = '';
+            document.querySelector('#container-images2').innerHTML = '';
         }
     }
 }
@@ -318,6 +446,86 @@ export default {
 .coustom-select {
     height: 100px;
 }
+.card{
+    position: relative;
+}
+
+.sec-body{
+    border: 3px solid #fcb00c;
+    border-radius: 20px;
+    padding: 10px;
+}
+.sec-head{
+    background-color: #fcb00c;
+    color: #000;
+    border-radius: 11px;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 8px;
+    margin-top: 10px;
+}
+.sec-body:hover .sec-head{
+    border: 3px solid #fcb00c;
+    padding: 2px;
+    border-radius: 11px;
+    background-color: #ffff;
+}
+.sec-head h3{
+    font-weight: 700;
+}
+.coustom-select {
+    height: 100px;
+}
+.card{
+    position: relative;
+}
+
+.waves-effect {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    line-height: 34px;
+    margin: auto;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+
+.num-of-files{
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+.container-images {
+    width: 90%;
+    position: relative;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #f7f7f7;
+}
+
 .card{
     position: relative;
 }

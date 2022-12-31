@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
+=======
+use App\Models\CompanyProfile;
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 use App\Models\followLead;
 use App\Models\OfferDiscount;
 use App\Models\Order;
@@ -69,8 +73,7 @@ class OrderDirectController extends Controller
      */
     public function index(Request $request)
     {
-        $orders= Order::
-        where('is_online',0)
+        $orders= Order::where('is_online',0)
         ->whereNotIn('order_status_id',[6,7])
         ->with('orderOtherOffer')
         ->with([
@@ -102,6 +105,10 @@ class OrderDirectController extends Controller
                 $q->when($request->order_id, function ($q) use ($request) {
                     $q->where('id', $request->order_id);
                 });
+            })->where(function ($q) use ($request) {
+                $q->when($request->orderType, function ($q) use ($request) {
+                    $q->where('is_tax', $request->orderType);
+                });
             })->
             latest()->paginate(10);
 
@@ -109,7 +116,9 @@ class OrderDirectController extends Controller
 
         $treasuries = Treasury::where('active',1)->get();
 
-        return $this->sendResponse(['orders' => $orders,'orderStatus' => $orderStatus,'treasuries' => $treasuries], 'Data exited successfully');
+        $companyProfile = CompanyProfile::first();
+
+        return $this->sendResponse(['orders' => $orders,'orderStatus' => $orderStatus,'treasuries' => $treasuries, 'companyProfile' => $companyProfile], 'Data exited successfully');
     }
 
 
@@ -288,10 +297,12 @@ class OrderDirectController extends Controller
                 'shippingPrice' => $request->shippingPrice ? 0:$request->shippingPrice,
                 'total' => $totalAfterTax,
                 'is_shipping' =>  0,
-                'order_status' => 0
+                'order_status' => 0,
+                'is_tax' => $request->discounts ? 1 : 0,
             ]);
 
             //
+<<<<<<< HEAD
             $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
             if(!$auth)
             {
@@ -301,6 +312,17 @@ class OrderDirectController extends Controller
                     'date' => now(),
                 ]);
             }
+=======
+            // $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
+            // if(!$auth)
+            // {
+            //     TargetAchieved::create([
+            //         'count' => $totalAfterTax,
+            //         'employee_id' => auth()->user()->id,
+            //         'date' => now(),
+            //     ]);
+            // }
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
             //
 
 

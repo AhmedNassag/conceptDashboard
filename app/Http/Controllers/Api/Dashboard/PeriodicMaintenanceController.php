@@ -180,7 +180,11 @@ class PeriodicMaintenanceController extends Controller
 
     public function nearPeriodic(Request $request)
     {
+<<<<<<< HEAD
         $periodicMaintenances = PeriodicMaintenance::where('status',1)
+=======
+        $periodicMaintenances = PeriodicMaintenance::where('collector', Null)->where('status',1)
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
             ->where('next_maintenance','<=',Carbon::now()->addDays(2))
             ->when($request->search, function ($q) use ($request) {
                 return $q->where('quantity', 'like', '%' . $request->search . '%')
@@ -188,7 +192,11 @@ class PeriodicMaintenanceController extends Controller
                     ->orWhere('price','like','%'.$request->search.'%')
                     ->orWhere('next_maintenance','like','%'.$request->search.'%');
             })
+<<<<<<< HEAD
             ->latest()->paginate(10);
+=======
+            ->orderBy('name','Asc')->latest()->paginate(10);
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 
         return $this->sendResponse(['periodicMaintenances' => $periodicMaintenances], 'Data exited successfully');
     }

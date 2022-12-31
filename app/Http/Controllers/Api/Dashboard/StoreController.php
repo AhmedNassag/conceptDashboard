@@ -23,13 +23,12 @@ class StoreController extends Controller
      */
     public function index(Request $request)
     {
-        $stores = Store::
-        with('province:id,name', 'area:id,name')
-            ->when($request->search, function ($q) use ($request) {
+        $stores = Store::with('province:id,name', 'area:id,name')
+        ->when($request->search, function ($q) use ($request) {
 
-                return $q->where('name', 'like', "%" . $request->search . "%");
+            return $q->where('name', 'like', "%" . $request->search . "%");
 
-            })->latest()->paginate(10);
+        })->latest()->paginate(10);
 
         return $this->sendResponse(['stores' => $stores], 'Data exited successfully');
     }

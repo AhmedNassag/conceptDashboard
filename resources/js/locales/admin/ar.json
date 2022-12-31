@@ -18,7 +18,7 @@
         "Management": "ادارة",
         "Department": "أقسام",
         "Jobs": "الوظائف",
-        "company": "الشركات",
+        "company": "البراندات",
         "supplier": "الموردين",
         "products": "المنتجات",
         "coupon": "الكوبونات",
@@ -51,7 +51,12 @@
         "lead": "اداره عملاء غير محتملين",
         "leadClient": " عملاء غير محتملين",
         "Maintenance": "جدول الصيانات",
+<<<<<<< HEAD
         "nearMaintenance": "الصيانات القريبة"
+=======
+        "nearMaintenance": "الصيانات القريبة",
+        "companyProfile":"ملف الشركة"
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
     },
     "global": {
         "Search":"بحث",
@@ -96,6 +101,8 @@
         "Name":"الاسم",
         "viewDetails": "عرض التفاصيل",
         "type": "النوع",
+        "origin":"بلد المنشأ",
+        "period":"موعد الصيانة",
         "TotalIncome": "اجمالى الايرادات",
         "NameEnIsRequired": "الاسم باللغة الانجليزية مطلوب .",
         "PaymentDateIsRequired": "تاريخ الدفع مطلوب .",
@@ -398,8 +405,8 @@
         "priceBeforeDiscount": "السعر قبل الخصم",
         "priceDiscount": "السعر",
         "priceAfterDiscount": "السعر بعد الخصم",
-        "productionDate": "تاريخ الانتاج",
-        "expiryDate": "تاريخ الصلاحية",
+        "productionDate": "تاريخ الشراء",
+        "expiryDate": "تاريخ التوريد",
         "ThisFieldIsRequired": "هذا الحقل مطلوب",
         "ThisFieldIsNumeric": "هذا الحقل يجب ان يكون رقم .",
         "TotalPriceBeforeDiscount": "اجمالى السعر قبل الخصم",
@@ -466,13 +473,13 @@
         "showProducts": "عرض المنتجات",
         "barcode": "باركود",
         "image": "الصورة",
-        "company": "الشركة",
+        "company": "البراند",
         "category": "الفئة",
         "ProductDetailsInStore": "تفاصيل وكميات المنتج فى المخزن",
         "showProductStore": "عرض منتجات المخزن",
         "ThereIsALoss": "يوجد خسارة",
         "EarnedDiscount": "الخصم المكتسب ",
-        "ChooseCompany":"اختر الشركة",
+        "ChooseCompany":"اختر البراند",
         "nameOrMobile": "الاسم او رقم التليفون",
         "AccountStatement": "كشف حساب",
         "methodPrice": "طرق البيع",
@@ -561,8 +568,9 @@
         "TheBalanceOfTheFirstDuration": "رصيد اول المدة",
         "InvoiceResourceType": "نوع مورد الفاتورة",
         "client": "العميل",
-        "countUnitsIN": "عدد الوحدات داخل",
+        "countUnitsIN": "عدد المكونات داخل",
         "price": "سعر",
+        "ShowSalesMovement":"حركة شراء الأصناف",
         "ChooseClient": "اختر العميل",
         "Balance": "الرصيد",
         "Invoice account with customer account": " معرفة اجمالى حساب الفاتورة مع حساب العميل",
@@ -659,7 +667,15 @@
         "wax": "شمع",
         "model": "الموديل",
         "SparePart": "قطع الغيار",
+<<<<<<< HEAD
         "MaintenanceManagement": "إدارة الصيانة الدورية"
+=======
+        "MaintenanceManagement": "إدارة الصيانة الدورية",
+        "companyProfile":"ملف الشركة",
+        "taxCard":"البطاقة الضريبية",
+        "commercialRecord": "السجل التجارى",
+        "commercialRecordImage": "صورة السجل التجارى"
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",
@@ -791,10 +807,10 @@
         "subCategory create" : "اضافه الفئات الفرعيه",
         "subCategory edit" : "تعديل الفئات الفرعيه",
         "subCategory delete" : "حذف الفئات الفرعيه",
-        "company read" : "عرض الشركات",
-        "company create" : "اضافه الشركات",
-        "company edit" : "تعديل الشركات",
-        "company delete" : "حذف الشركات",
+        "company read" : "عرض البراندات",
+        "company create" : "اضافه البراندات",
+        "company edit" : "تعديل البراندات",
+        "company delete" : "حذف البراندات",
         "measureUnit read" : "عرض وحدات القياس",
         "measureUnit create" : "اضافه وحدات القياس",
         "measureUnit edit" : "تعديل وحدات القياس",

@@ -43,105 +43,107 @@
                             <div class="table-responsive">
                                 <table class="table mb-0">
                                     <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ $t('global.barcode') }}</th>
-                                        <th>{{ $t('global.Name') }}</th>
-                                        <th>{{ $t('global.company') }}</th>
-                                        <th>{{ $t('global.category') }}</th>
-                                        <th>{{ $t('global.subCategory') }}</th>
-                                        <th>{{$t('global.Notes')}}</th>
-                                        <th>{{ $t('global.Action') }}</th>
-                                    </tr>
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th class="text-center">{{ $t('global.barcode') }}</th>
+                                            <th class="text-center">{{ $t('global.Name') }}</th>
+                                            <th class="text-center">{{ $t('global.company') }}</th>
+                                            <th class="text-center">{{ $t('global.category') }}</th>
+                                            <th class="text-center">{{ $t('global.subCategory') }}</th>
+                                            <th class="text-center">{{$t('global.Notes')}}</th>
+                                            <th class="text-center">{{ $t('global.Action') }}</th>
+                                        </tr>
                                     </thead>
                                     <tbody v-if="products.length">
-                                    <tr v-for="(item,index) in products"  :key="item.id">
-                                        <td> <span v-if="item.error || item.quantity < item.Re_order_limit" class="fas fa-exclamation-circle red-text" aria-hidden="true"></span> {{ item.id}}</td>                                        <td>{{ item.barcode }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.company.name }}</td>
-                                        <td>{{ item.category.name }}</td>
-                                        <td>{{ item.sub_category.name }}</td>
-                                        <td v-if="item.error" class="danger"> {{$t('global.Expired')}} </td>
-                                        <td v-else-if="item.quantity < item.Re_order_limit"  class="wrong"> {{$t('global.QuantityIsLow')}} </td>
-                                        <td v-else-if="item.quantity > item.maximum_product"  class="great"> {{$t('global.QuantityIsBig')}} </td>
-                                        <td v-else > {{$t('global.ThereIsNo')}} </td>
-                                        <td>
-                                            <a href="javascript:void(0);"
-                                               class="btn btn-sm btn-info me-2" data-bs-toggle="modal"
-                                               :data-bs-target="'#edit-category-'+item.id">
-                                                <i class="fas fa-book-open"></i> {{$t('global.Show')}}
-                                            </a>
-                                        </td>
+                                        <tr v-for="(item) in products" :key="item.id">
+                                            <td class="text-center"> <span v-if="item.error || item.quantity < item.Re_order_limit" class="fas fa-exclamation-circle red-text" aria-hidden="true"></span> {{ item.id}}</td>                                        <td>{{ item.barcode }}</td>
+                                            <td class="text-center">{{ item.name }}</td>
+                                            <td class="text-center">{{ item.company.name }}</td>
+                                            <td class="text-center">{{ item.category.name }}</td>
+                                            <td class="text-center">{{ item.sub_category.name }}</td>
+                                            <td class="text-center danger" v-if="item.error"> {{$t('global.Expired')}} </td>
+                                            <td class="text-center wrong" v-else-if="item.quantity < item.Re_order_limit"> {{$t('global.QuantityIsLow')}} </td>
+                                            <td class="text-center great" v-else-if="item.quantity > item.maximum_product"> {{$t('global.QuantityIsBig')}} </td>
+                                            <td class="text-center" v-else > {{$t('global.ThereIsNo')}} </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0);"
+                                                class="btn btn-sm btn-info me-2" data-bs-toggle="modal"
+                                                :data-bs-target="'#edit-category-'+item.id">
+                                                    <i class="fas fa-book-open"></i> {{$t('global.ShowSalesMovement')}}
+                                                </a>
+                                            </td>
 
 
 
 
-                                        <!-- Edit Modal -->
-                                        <div class="modal fade custom-modal" :id="'edit-category-'+item.id">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content" id="print">
+                                            <!-- Edit Modal -->
+                                            <div class="modal fade custom-modal" :id="'edit-category-'+item.id">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content" id="print">
 
-                                                    <!-- Modal Header -->
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">
-                                                            {{ $t('global.ProductDetailsInStore') }}</h4>
-                                                        <button :id="'close'"  type="button" class="close print-button" data-bs-dismiss="modal">
-                                                            <span>&times;</span></button>
-                                                    </div>
+                                                        <!-- Modal Header -->
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">
+                                                                {{ $t('global.ProductDetailsInStore') }}</h4>
+                                                            <button :id="'close'"  type="button" class="close print-button" data-bs-dismiss="modal">
+                                                                <span>&times;</span></button>
+                                                        </div>
 
-                                                    <!-- Modal body -->
-                                                    <div class="modal-body row" >
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body row" >
 
-                                                        <div class="card bg-white projects-card">
-                                                            <div class="card-body pt-0">
-                                                                <div class="tab-content pt-0">
-                                                                    <div role="tabpanel" class="tab-pane fade active show">
-                                                                        <loader v-if="loading"/>
-                                                                        <div class="table-responsive">
-                                                                            <table class="table table-center table-hover mb-0 datatable">
-                                                                                <thead>
-                                                                                <tr>
-                                                                                    <th>#</th>
-                                                                                    <th>{{ $t('global.productStatus') }}</th>
-                                                                                    <th>{{ $t('global.Quantity') }} ({{item.main_measurement_unit.name}})</th>
-                                                                                    <th>{{ $t('global.count') }} ({{item.sub_measurement_unit.name}}) {{ $t('global.in') }} ({{item.main_measurement_unit.name}})</th>
-                                                                                    <th>{{ $t('global.Quantity') }} ({{item.sub_measurement_unit.name}})</th>
-                                                                                    <th>{{ $t('global.productionDate') }}</th>
-                                                                                    <th>{{ $t('global.expiryDate') }}</th>
-                                                                                    <th>{{$t('global.Notes')}}</th>
-                                                                                </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                <tr v-for="(it,index) in item.store_products" v-if="item.store_products" :key="it.id">
-                                                                                    <td>{{ index +1}}</td>
-                                                                                    <td>{{ it.product_status.name }}</td>
-                                                                                    <td>{{ it.main_quantity }}</td>
-                                                                                    <td>{{ it.count_unit }}</td>
-                                                                                    <td>{{ it.sub_quantity_order }}</td>
-                                                                                    <td>{{ it.count_unit > 1 ? it.sub_quantity_order : '---' }}</td>                                                                                    <td>{{ it.expiry_date ?? '---' }}</td>
-                                                                                    <td v-if="it.expiry_date < date_now" class="danger"> {{$t('global.Expired')}} </td>
-                                                                                    <td v-else > {{$t('global.ThereIsNo')}} </td>
-                                                                                </tr>
-                                                                                <tr v-else>
-                                                                                    <th class="text-center" colspan="7">{{ $t('global.NoDataFound') }}</th>
-                                                                                </tr>
+                                                            <div class="card bg-white projects-card">
+                                                                <div class="card-body pt-0">
+                                                                    <div class="tab-content pt-0">
+                                                                        <div role="tabpanel" class="tab-pane fade active show">
+                                                                            <loader v-if="loading"/>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-center table-hover mb-0 datatable">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th class="text-center">#</th>
+                                                                                        <th class="text-center">{{ $t('global.productStatus') }}</th>
+                                                                                        <th class="text-center">{{ $t('global.Quantity') }} ({{item.main_measurement_unit.name}})</th>
+                                                                                        <th class="text-center">{{ $t('global.count') }} ({{item.sub_measurement_unit.name}}) {{ $t('global.in') }} ({{item.main_measurement_unit.name}})</th>
+                                                                                        <th class="text-center">{{ $t('global.Quantity') }} ({{item.sub_measurement_unit.name}})</th>
+                                                                                        <th class="text-center">{{ $t('global.productionDate') }}</th>
+                                                                                        <th class="text-center">{{ $t('global.expiryDate') }}</th>
+                                                                                        <th class="text-center">{{$t('global.Notes')}}</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody v-if="item.store_products">
+                                                                                        <tr v-for="(it,index) in item.store_products" :key="it.id">
+                                                                                            <td class="text-center">{{ index +1}}</td>
+                                                                                            <td class="text-center">{{ it.product_status.name }}</td>
+                                                                                            <td class="text-center">{{ it.main_quantity }}</td>
+                                                                                            <td class="text-center">{{ it.count_unit }}</td>
+                                                                                            <td class="text-center">{{ it.sub_quantity_order }}</td>
+                                                                                            <!-- <td>{{ it.count_unit > 1 ? it.sub_quantity_order : '---' }}</td> -->
+                                                                                            <td class="text-center">{{ it.production_date ? it.production_date : '---' }}</td>                                                                                     <td>{{ it.expiry_date ?? '---' }}</td>
+                                                                                            <td class="text-center danger" v-if="it.expiry_date < date_now"> {{$t('global.Expired')}} </td>
+                                                                                            <td class="text-center" v-else> {{$t('global.ThereIsNo')}} </td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                    <tbody v-else>
+                                                                                        <tr>
+                                                                                            <th class="text-center" colspan="7">{{ $t('global.NoDataFound') }}</th>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
 
-                                                                                </tbody>
-                                                                            </table>
                                                                         </div>
-
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- /Edit Modal -->
+                                            <!-- /Edit Modal -->
 
-                                    </tr>
+                                        </tr>
                                     </tbody>
                                     <tbody v-else>
                                         <tr>

@@ -9,10 +9,10 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">الشركات</h3>
+                        <h3 class="page-title">البراندات</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexCompany'}">الشركات</router-link></li>
-                            <li class="breadcrumb-item active">تعديل الشركه</li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexCompany'}">البراندات</router-link></li>
+                            <li class="breadcrumb-item active">تعديل البراند</li>
                         </ul>
                     </div>
                 </div>
@@ -41,11 +41,11 @@
                                         <div class="form-row row">
 
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">اسم الشركه</label>
+                                                <label for="validationCustom01">اسم البراند</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.name.$model"
                                                        id="validationCustom01"
-                                                       placeholder="اسم الشركه"
+                                                       placeholder="اسم البراند"
                                                        :class="{'is-invalid':v$.name.$error,'is-valid':!v$.name.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>

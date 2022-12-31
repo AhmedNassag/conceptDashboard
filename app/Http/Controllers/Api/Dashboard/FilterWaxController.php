@@ -22,8 +22,11 @@ class FilterWaxController extends Controller
     {
         $filterWaxes = FilterWax::
         when($request->search, function ($q) use ($request) {
-            return $q->where('name', 'like', '%' . $request->search . '%');
-
+            return $q->where('name', 'like', '%' . $request->search . '%')
+            ->orWhere('price', 'like', '%' . $request->search . '%')
+            ->orWhere('model', 'like', '%' . $request->search . '%')
+            ->orWhere('type', 'like', '%' . $request->search . '%')
+            ->orWhere('origin', 'like', '%' . $request->search . '%');
         })
         ->latest()->paginate(10);
 
@@ -46,13 +49,16 @@ class FilterWaxController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'price' => ['required'],
-                'model' => ['required','string']
+                'model' => ['required','string'],
+                'type' => ['required', 'string'],
+                'origin' => ['required','string'],
+                'period' => ['required']
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $data = $request->only(['name','price','model']);
+            $data = $request->only(['name','price','model','type','origin', 'period']);
 
             $filterWax = FilterWax::create($data);
 
@@ -105,14 +111,17 @@ class FilterWaxController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'price' => ['required'],
-                'model' => ['required','string']
+                'model' => ['required','string'],
+                'type' => ['required', 'string'],
+                'origin' => ['required', 'string'],
+                'period' => ['required']
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
-            $data = $request->only(['name','price','model']);
+            $data = $request->only(['name','price','model','type','origin','period']);
 
             $filterMax->update($data);
 

@@ -105,6 +105,11 @@ import followleadsManagement from './adminRoute/followleadsManagement';
 import followLeads from './adminRoute/followLeads';
 //periodicMaintenance
 import periodicMaintenance from './adminRoute/periodicMaintenance';
+<<<<<<< HEAD
+=======
+//companyProfile
+import companyProfile from './adminRoute/companyProfile';
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 
 const routes = [
     {
@@ -231,6 +236,7 @@ const routes = [
             ...userCompany,
             ...merchant,
             ...leadFollowUps,
+            ...leadClient,
             ...leadSourse,
             ...leadd,
             //crm
@@ -253,6 +259,11 @@ const routes = [
             ...followLeads,
             //periodicMaintenance
             ...periodicMaintenance,
+<<<<<<< HEAD
+=======
+            //compnayProfile
+            ...companyProfile,
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
         ]
     },
     {

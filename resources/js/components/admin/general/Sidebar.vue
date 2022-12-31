@@ -738,7 +738,6 @@
                     <!--end Suggestions-->
 
                     <!--start ads-->
-
                     <li class="submenu" v-if="permission.includes('ads')">
                         <a href="#" ><i class="fas fa-ad"></i> <span> {{$t('global.adsManegment')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -772,11 +771,9 @@
 
                         </ul>
                     </li>
-
                     <!--end ads-->
 
                     <!--start area-->
-
                     <li class="submenu" v-if="permission.includes('areaManagement')">
                         <a href="#" ><i class="fas fa-city"></i> <span> {{$t('global.AreasManagement')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -801,11 +798,9 @@
 
                         </ul>
                     </li>
-
                     <!--end area-->
 
                     <!--start  report-->
-
                     <li class="submenu">
                         <a href="#" ><i class="fas fa-clipboard-list"></i> <span> {{$t('global.report')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
@@ -866,7 +861,6 @@
 
                         </ul>
                     </li>
-
                     <!--end  report-->
 
                     <li
@@ -918,6 +912,18 @@
                             <span>{{ $t('global.CreditCapacity') }}</span>
                         </router-link>
                     </li>
+
+                    <!--start companyProfile-->
+                    <li
+                        :class="[{'active': ['indexcompanyProfile','createcompanyProfile','editcompanyProfile'].includes($route.name)}]"
+                        v-if="permission.includes('companyProfile read')"
+                    >
+                        <router-link :to="{name:'indexCompanyProfile'}" >
+                            <i class="fas fa-cogs"></i>
+                            <span>{{ $t('sidebar.companyProfile') }}</span>
+                        </router-link>
+                    </li>
+                    <!--end companyProfile-->
 
                     <!--start setting-->
                     <li

@@ -27,20 +27,25 @@ class ProductController extends Controller
             ['status',1],
             ['company_id',$id],
             ['sell_app',1],
-        ])->whereHas('selling_method',function ($q) use($store_id){
+        ])
+        ->whereHas('selling_method',function ($q) use($store_id){
             $q->where('status',1);
             $q->where('selling_methods.id',$this->selling_method);
-        })->whereHas('productPrice',function ($q){
+        })
+        ->whereHas('productPrice',function ($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
-        })->whereHas('storeProducts',function ($q) use ($store_id){
+        })
+        ->whereHas('storeProducts',function ($q) use ($store_id){
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
-        })->with(['media','productPrice'=>function($q){
+        })
+        ->with(['media','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
-        }])->latest()->paginate(15);
+        }])
+        ->latest()->paginate(15);
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }
@@ -51,25 +56,31 @@ class ProductController extends Controller
         where([
             ['status',1],
             ['sell_app',1],
-        ])->whereHas('selling_method',function ($q) use($store_id){
+        ])
+        ->whereHas('selling_method',function ($q) use($store_id){
             $q->where('status',1);
             $q->where('selling_methods.id',$this->selling_method);
-        })->whereHas('productPrice',function ($q){
+        })
+        ->whereHas('productPrice',function ($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
-        })->whereHas('storeProducts',function ($q) use ($store_id){
+        })
+        ->whereHas('storeProducts',function ($q) use ($store_id){
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
-        })->with(['media','productPrice'=>function($q){
+        })
+        ->with(['media','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
-        }])->where(function ($q) use($request){
+        }])
+        ->where(function ($q) use($request){
             $q->when($request->search,function ($q) use ($request){
                 return $q->where('name','like',"%". $request->search ."%")
-                    ->orWhere('barcode','like',"%". $request->search ."%");
+                ->orWhere('barcode','like',"%". $request->search ."%");
             });
-        })->latest("products.created_at")->paginate(15);
+        })
+        ->latest("products.created_at")->paginate(15);
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }
@@ -80,20 +91,25 @@ class ProductController extends Controller
             ['status',1],
             ['sell_app',1],
             ['barcode',$barcode],
-        ])->whereHas('selling_method',function ($q) use($store_id){
+        ])
+        ->whereHas('selling_method',function ($q) use($store_id){
             $q->where('status',1);
             $q->where('selling_methods.id',$this->selling_method);
-        })->whereHas('productPrice',function ($q){
+        })
+        ->whereHas('productPrice',function ($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
-        })->whereHas('storeProducts',function ($q) use ($store_id){
+        })
+        ->whereHas('storeProducts',function ($q) use ($store_id){
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
-        })->with(['media','productPrice'=>function($q){
+        })
+        ->with(['media','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
-        }])->get();
+        }])
+        ->get();
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }
@@ -103,20 +119,25 @@ class ProductController extends Controller
         $products = Product::where([
             ['status',1],
             ['sell_app',1],
-        ])->whereHas('selling_method',function ($q) use($store_id){
+        ])
+        ->whereHas('selling_method',function ($q) use($store_id){
             $q->where('status',1);
             $q->where('selling_methods.id',$this->selling_method);
-        })->whereHas('productPrice',function ($q){
+        })
+        ->whereHas('productPrice',function ($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
-        })->whereHas('storeProducts',function ($q) use ($store_id){
+        })
+        ->whereHas('storeProducts',function ($q) use ($store_id){
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
-        })->with(['media','productPrice'=>function($q){
+        })
+        ->with(['media','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
-        }])->inRandomOrder()->limit(10)->get();
+        }])
+        ->inRandomOrder()->limit(10)->get();
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }
@@ -128,20 +149,25 @@ class ProductController extends Controller
             ['status',1],
             ['sell_app',1],
             ['sub_category_id',$id],
-        ])->whereHas('selling_method',function ($q) use($store_id){
+        ])
+        ->whereHas('selling_method',function ($q) use($store_id){
             $q->where('status',1);
             $q->where('selling_methods.id',$this->selling_method);
-        })->whereHas('productPrice',function ($q){
+        })
+        ->whereHas('productPrice',function ($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
-        })->whereHas('storeProducts',function ($q) use ($store_id){
+        })
+        ->whereHas('storeProducts',function ($q) use ($store_id){
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
-        })->with(['media','productPrice'=>function($q){
+        })
+        ->with(['media','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
-        }])->inRandomOrder()->limit(3)->get();
+        }])
+        ->inRandomOrder()->limit(3)->get();
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }

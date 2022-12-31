@@ -364,4 +364,84 @@ export default {
 .sec-head h3{
     font-weight: 700;
 }
+.coustom-select {
+    height: 100px;
+}
+.card{
+    position: relative;
+}
+
+.waves-effect {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    line-height: 34px;
+    margin: auto;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+
+.num-of-files{
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+.container-images {
+    width: 90%;
+    position: relative;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #f7f7f7;
+}
+
+.card{
+    position: relative;
+}
+
+.sec-body{
+    border: 3px solid #fcb00c;
+    border-radius: 20px;
+    padding: 10px;
+}
+.sec-head{
+    background-color: #fcb00c;
+    color: #000;
+    border-radius: 11px;
+    padding: 5px;
+    text-align: center;
+    margin-bottom: 8px;
+    margin-top: 10px;
+}
+.sec-body:hover .sec-head{
+    border: 3px solid #fcb00c;
+    padding: 2px;
+    border-radius: 11px;
+    background-color: #ffff;
+}
+.sec-head h3{
+    font-weight: 700;
+}
 </style>

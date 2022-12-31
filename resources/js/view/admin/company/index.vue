@@ -6,14 +6,14 @@
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h3 class="page-title">الشركات</h3>
+                        <h3 class="page-title">البراندات</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <router-link :to="{name: 'dashboard'}">
                                     الرئيسية
                                 </router-link>
                             </li>
-                            <li class="breadcrumb-item active">الشركات</li>
+                            <li class="breadcrumb-item active">البراندات</li>
                         </ul>
                     </div>
 
@@ -47,7 +47,7 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>اسم الشركه</th>
+                                        <th>اسم البراند</th>
                                         <th>الصوره</th>
                                         <th>تاريخ الانشاء</th>
                                         <th>الحاله</th>
@@ -68,8 +68,9 @@
                                         <th>{{dateFormat(item.created_at)}}</th>
                                         <td>
                                             <a href="#" @click="activationCompany(item.id,item.status,index)">
-                                                <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">{{
-                                                        parseInt(item.status) ? 'تفعيل' : 'ايقاف تفعيل' }}</span>
+                                                <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">
+                                                    {{ parseInt(item.status) ? 'تفعيل' : 'ايقاف تفعيل' }}
+                                                </span>
                                             </a>
                                         </td>
                                         <td>

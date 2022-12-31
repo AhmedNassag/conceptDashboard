@@ -84,6 +84,32 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-12 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview"
+                                                        id="mediaPackage"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">اقصي  حجم لا يتعدي 2mb</span>
+                                                <p class="num-of-files">{{numberOfImage ? numberOfImage + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images" v-show="data.file && numberOfImage"></div>
+                                                <div class="container-images" v-show="!numberOfImage">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">اضافه</button>
@@ -122,7 +148,8 @@ export default {
             data:{
                 name : '',
                 price : 0,
-                description: ''
+                description: '',
+                file : {}
             }
         });
 
@@ -139,6 +166,9 @@ export default {
                 },
                 description: {
                     required
+                },
+                file: {
+                    required
                 }
             }
         });
@@ -147,7 +177,39 @@ export default {
         const v$ = useVuelidate(rules,addSellingMethod.data);
 
 
-        return {loading,...toRefs(addSellingMethod),v$};
+        let preview = (e) => {
+
+            let containerImages = document.querySelector('#container-images');
+            if(numberOfImage.value){
+                containerImages.innerHTML = '';
+            }
+            addSellingMethod.data.file = {};
+
+            numberOfImage.value = e.target.files.length;
+
+            addSellingMethod.data.file = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addSellingMethod.data.file.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addSellingMethod.data.file);
+
+        };
+
+        const numberOfImage = ref(0);
+
+        return {loading,...toRefs(addSellingMethod),v$,preview,numberOfImage};
     },
     methods: {
         storeSellingMethod(){
@@ -157,26 +219,30 @@ export default {
 
                 this.loading = true;
                 this.errors = {};
+                let formData = new FormData();
+                formData.append('name',this.data.name);
+                formData.append('price',this.data.price);
+                formData.append('description',this.data.description);
+                formData.append('file',this.data.file);
 
-                adminApi.post(`/v1/dashboard/sparePart`,this.data)
-                    .then((res) => {
 
-                        notify({
-                            title: `تم الاضافه بنجاح <i class="fas fa-check-circle"></i>`,
-                            type: "success",
-                            duration: 5000,
-                            speed: 2000
-                        });
-
-                        this.resetForm();
-                        this.$nextTick(() => { this.v$.$reset() });
-                    })
-                    .catch((err) => {
-                        this.errors = err.response.data.errors;
-                    })
-                    .finally(() => {
-                        this.loading = false;
+                adminApi.post(`/v1/dashboard/sparePart`,formData)
+                .then((res) => {
+                    notify({
+                        title: `تم الاضافه بنجاح <i class="fas fa-check-circle"></i>`,
+                        type: "success",
+                        duration: 5000,
+                        speed: 2000
                     });
+                    this.resetForm();
+                    this.$nextTick(() => { this.v$.$reset() });
+                })
+                .catch((err) => {
+                    this.errors = err.response.data.errors;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
 
             }
         },
@@ -184,6 +250,10 @@ export default {
             this.data.name = '';
             this.data.price = 0;
             this.data.description = 0;
+            this.data.file = {};
+            this.numberOfImage = 0;
+            let containerImages = document.querySelector('#container-images');
+            containerImages.innerHTML = '';
         }
     }
 }
@@ -195,5 +265,57 @@ export default {
 }
 .card{
     position: relative;
+}
+.coustom-select {
+    height: 100px;
+}
+.card{
+    position: relative;
+}
+
+.waves-effect {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    line-height: 34px;
+    margin: auto;
+}
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+
+.num-of-files{
+    text-align: center;
+    margin: 20px 0 30px;
+}
+
+.container-images {
+    width: 90%;
+    position: relative;
+    margin: auto;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #f7f7f7;
 }
 </style>

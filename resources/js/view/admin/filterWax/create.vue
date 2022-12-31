@@ -58,7 +58,7 @@
 
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom02">{{ $t('global.price') }}</label>
-                                                <input type="text" class="form-control"
+                                                <input type="number" class="form-control"
                                                        v-model.trim="v$.price.$model"
                                                        id="validationCustom02"
                                                        :placeholder="$t('global.price')"
@@ -75,7 +75,7 @@
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.model.$model"
                                                        id="validationCustom03"
-                                                       :placeholder="$t('global.price')"
+                                                       :placeholder="$t('global.model')"
                                                        :class="{'is-invalid':v$.model.$error,'is-valid':!v$.model.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
@@ -85,6 +85,58 @@
                                                     <span v-if="v$.model.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.model.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
+
+                                            <!--start type-->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom03">{{ $t('global.type') }}</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.type.$model"
+                                                       id="validationCustom03"
+                                                       :placeholder="$t('global.type')"
+                                                       :class="{'is-invalid':v$.type.$error,'is-valid':!v$.type.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.type.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.type.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.type.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.type.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.type.maxLength.$params.max }} حرف</span>
+                                                </div>
+                                            </div>
+                                            <!--end type-->
+
+                                            <!--start origin-->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom03">{{ $t('global.origin') }}</label>
+                                                <input type="text" class="form-control"
+                                                       v-model.trim="v$.origin.$model"
+                                                       id="validationCustom03"
+                                                       :placeholder="$t('global.origin')"
+                                                       :class="{'is-invalid':v$.origin.$error,'is-valid':!v$.origin.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.origin.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.origin.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.origin.minLength.$params.min }} حرف  <br /></span>
+                                                    <span v-if="v$.origin.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.origin.maxLength.$params.max }} حرف</span>
+                                                </div>
+                                            </div>
+                                            <!--end origin-->
+
+                                            <!--start period-->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom02">{{ $t('global.period') }}</label>
+                                                <input type="number" class="form-control"
+                                                       v-model.trim="v$.period.$model"
+                                                       id="validationCustom02"
+                                                       :placeholder="$t('global.period')"
+                                                       :class="{'is-invalid':v$.period.$error,'is-valid':!v$.period.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.period.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end period-->
 
                                         </div>
 
@@ -124,7 +176,10 @@ export default {
             data:{
                 name : '',
                 price: 0,
-                model: ''
+                model: '',
+                type: '',
+                origin: '',
+                period: 0
             }
         });
 
@@ -143,6 +198,20 @@ export default {
                     minLength: minLength(3),
                     maxLength:maxLength(70),
                     required
+                },
+                type: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                origin: {
+                    minLength: minLength(3),
+                    maxLength:maxLength(70),
+                    required
+                },
+                period: {
+                    required,
+                    numeric
                 }
             }
         });
@@ -163,24 +232,24 @@ export default {
                 this.errors = {};
 
                 adminApi.post(`/v1/dashboard/filterWax`,this.data)
-                    .then((res) => {
+                .then((res) => {
 
-                        notify({
-                            title: `تم الاضافه بنجاح <i class="fas fa-check-circle"></i>`,
-                            type: "success",
-                            duration: 5000,
-                            speed: 2000
-                        });
-
-                        this.resetForm();
-                        this.$nextTick(() => { this.v$.$reset() });
-                    })
-                    .catch((err) => {
-                        this.errors = err.response.data.errors;
-                    })
-                    .finally(() => {
-                        this.loading = false;
+                    notify({
+                        title: `تم الاضافه بنجاح <i class="fas fa-check-circle"></i>`,
+                        type: "success",
+                        duration: 5000,
+                        speed: 2000
                     });
+
+                    this.resetForm();
+                    this.$nextTick(() => { this.v$.$reset() });
+                })
+                .catch((err) => {
+                    this.errors = err.response.data.errors;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
 
             }
         },
@@ -188,6 +257,9 @@ export default {
             this.data.name = '';
             this.data.price = 0;
             this.data.model = '';
+            this.data.type = '';
+            this.data.origin = '';
+            this.data.period = '';
         }
     }
 }

@@ -36,7 +36,7 @@ class SuggestionClientController extends Controller
             'user_id'=> auth()->id(),
         ]);
         $id = $data->id;
-        $message = " يوجد اقتراح او شكوى من العميل " .auth()->user()->name;
+        $message = "يوجد اقتراح او شكوى من العميل" .auth()->user()->name;
         $image = auth()->user()->image_path;
         User::whereAuthId(1)
             ->whereRelation('roles.notify','name','Add Suggestion')

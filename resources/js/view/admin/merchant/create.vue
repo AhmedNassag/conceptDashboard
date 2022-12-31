@@ -174,11 +174,11 @@
                                                     <div class="col-md-12 mb-12" >
                                                         <label for="validationCustom02">{{ $t('global.Amount') }}</label>
                                                         <input type="number" step="0.1"
-                                                               class="form-control"
-                                                               v-model.trim="v$.amount.$model"
-                                                               id="validationCustom11"
-                                                               :class="{'is-invalid':v$.amount.$error,'is-valid':!v$.amount.$invalid}"
-                                                               :placeholder="$t('global.Amount')"
+                                                            class="form-control"
+                                                            v-model.trim="v$.amount.$model"
+                                                            id="validationCustom11"
+                                                            :class="{'is-invalid':v$.amount.$error,'is-valid':!v$.amount.$invalid}"
+                                                            :placeholder="$t('global.Amount')"
                                                         >
                                                         <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                         <div class="invalid-feedback">

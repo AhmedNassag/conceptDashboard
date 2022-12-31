@@ -78,7 +78,7 @@
                                                     :class="{'is-invalid':v$.category_id.$error,'is-valid':!v$.category_id.$invalid}"
                                                 >
                                                     <option value="">---</option>
-                                                    <option v-for="category in categories" :value="category.id" >
+                                                    <option v-for="category in categories" :key="category.id" :value="category.id" >
                                                         {{ category.name }}
                                                     </option>
                                                 </select>
@@ -97,7 +97,7 @@
                                                     :class="{'is-invalid':v$.sub_category_id.$error,'is-valid':!v$.sub_category_id.$invalid}"
                                                 >
                                                     <option value="">---</option>
-                                                    <option v-for="category in subCategories" :value="category.id" >
+                                                    <option v-for="category in subCategories" :key="category.id" :value="category.id" >
                                                         {{ category.name }}
                                                     </option>
                                                 </select>
@@ -108,7 +108,7 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label >الشركات</label>
+                                                <label>البراندات</label>
                                                 <select
                                                     name="type"
                                                     class="form-control"
@@ -116,7 +116,7 @@
                                                     :class="{'is-invalid':v$.company_id.$error,'is-valid':!v$.company_id.$invalid}"
                                                 >
                                                     <option value="">---</option>
-                                                    <option v-for="company in companies" :value="company.id" >
+                                                    <option v-for="company in companies" :key="company.id" :value="company.id" >
                                                         {{ company.name }}
                                                     </option>
                                                 </select>
@@ -135,7 +135,7 @@
                                                     :class="{'is-invalid':v$.main_measurement_unit_id.$error,'is-valid':!v$.main_measurement_unit_id.$invalid}"
                                                 >
                                                     <option value="">---</option>
-                                                    <option v-for="measure in measures" :value="measure.id" >
+                                                    <option v-for="measure in measures" :key="measure.id" :value="measure.id" >
                                                         {{ measure.name }}
                                                     </option>
                                                 </select>
@@ -169,7 +169,7 @@
                                                     :class="{'is-invalid':v$.sub_measurement_unit_id.$error,'is-valid':!v$.sub_measurement_unit_id.$invalid}"
                                                 >
                                                     <option value="">---</option>
-                                                    <option v-for="measure in measures" :value="measure.id" >
+                                                    <option v-for="measure in measures" :key="measure.id" :value="measure.id" >
                                                         {{ measure.name }}
                                                     </option>
                                                 </select>
@@ -188,7 +188,7 @@
                                                     v-model="v$.selling_method.$model"
                                                     :class="{'is-invalid':v$.selling_method.$error,'is-valid':!v$.selling_method.$invalid}"
                                                 >
-                                                    <option v-for="sellingMethod in sellingMethods" :value="sellingMethod.id" >
+                                                    <option v-for="sellingMethod in sellingMethods" :key="sellingMethod.id" :value="sellingMethod.id" >
                                                         {{ sellingMethod.name }}
                                                     </option>
                                                 </select>
@@ -373,7 +373,7 @@
                                                 <div class="container-images" id="container-images1" v-show="data.files && numberOfImage1"></div>
                                                 <div class="container-images">
                                                     <figure style="width: 100%;" class="row">
-                                                        <figcaption v-for="(file,index) in images" style="position: relative;margin-top: 8px" class="col-4">
+                                                        <figcaption v-for="(file,index) in images" :key="file.id" style="position: relative;margin-top: 8px" class="col-4">
                                                             <a href="#" class="delete" @click.prevent="deleteOne(file.id,index)">X</a>
                                                             <img
                                                                 style="width: 100%"
@@ -453,7 +453,7 @@
                                                         <label>{{ $t('global.ChooseStore') }}</label>
 
                                                         <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
-                                                            <option v-for="store in stores" :kay="store.id" :value="store.id">{{store.name}}</option>
+                                                            <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                         </select>
                                                         <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
                                                         <div class="invalid-feedback">
@@ -465,6 +465,7 @@
 
                                             </div>
 
+                                            <!--
                                             <div class="col-md-12 mb-3 mt-5">
                                                 <div class="sec-body row">
                                                     <div class="col-md-12 mb-12 sec-head">
@@ -472,7 +473,6 @@
                                                             مواعيد الصيانات
                                                         </h3>
                                                     </div>
-
                                                     <div class="col-md-3 mb-3">
                                                         <label>سعر الصيانه</label>
                                                         <input type="number" class="form-control"
@@ -487,7 +487,6 @@
                                                             <span v-if="v$.price_maintenance.numeric.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-md-3 mb-3">
                                                         <label>المده</label>
                                                         <input type="number" class="form-control"
@@ -501,7 +500,6 @@
                                                             <span v-if="v$.period_maintenance.integer.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-md-3 mb-3">
                                                         <label>نوع الصيانة </label>
                                                         <select
@@ -519,10 +517,9 @@
                                                             <span v-if="v$.type_maintenance.integer.$invalid">{{$t('global.ThisFieldIsNumeric')}} <br /></span>
                                                         </div>
                                                     </div>
-
                                                 </div>
-
                                             </div>
+                                            -->
 
                                         </div>
 

@@ -35,7 +35,7 @@ class RoleController extends Controller
     public function create()
     {
         try {
-            $permission = Permission::select('id','name')->get();
+            $permission = Permission::select('id','name')->orderBy('category', 'asc')->get();
             $notifies = Notify::select('id','name')->get();
 
             return $this->sendResponse(['permission'=>$permission,'notifies' => $notifies],'Data exited successfully');

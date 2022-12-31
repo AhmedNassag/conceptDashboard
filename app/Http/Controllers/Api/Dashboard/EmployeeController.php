@@ -144,7 +144,7 @@ class EmployeeController extends Controller
                 'hiring_date' => 'required|date',
                 'salary' => 'required',
                 'file' => 'image|mimes:jpeg,jpg,png,webp|max:5048',
-                'store_id' => 'nullable'
+                'store_id.*' => 'nullable'
             ]);
 
             if ($v->fails()) {
@@ -166,7 +166,7 @@ class EmployeeController extends Controller
             $user->employee()->create([
                 'department_id' => $request->department_id,
                 'job_id' => $request->job_id,
-                'store_id' => $request->store_id,
+                // 'store_id' => $request->store_id,
                 'address' => $request->address,
                 'National_ID' => $request->National_ID,
                 'birth_date' => $request->birth_date,
@@ -194,6 +194,11 @@ class EmployeeController extends Controller
                 'file_sort' => 1
             ]);
 
+            $stores = explode(',', $request->store_id);
+            if (count($stores) > 0 && $request->store_id) {
+                $user->employee->stores()->attach($stores);
+            }
+
             DB::commit();
             return $this->sendResponse([], 'Data exited successfully');
 
@@ -208,7 +213,7 @@ class EmployeeController extends Controller
     {
         try {
 
-            $employee = Employee::with('user:id,name,email,phone,status,role_name')->find($id);
+            $employee = Employee::with('user:id,name,email,phone,status,role_name')->with('stores')->find($id);
             $media = $employee->user->media->file_name;
             $employee['bank'] = $employee->user->banks;
             $department = Department::where('active', 1)->get();
@@ -256,7 +261,7 @@ class EmployeeController extends Controller
                 'birth_date' => 'required|date',
                 'hiring_date' => 'required|date',
                 'salary' => 'required',
-                'store_id' => 'nullable',
+                'store_id.*' => 'nullable',
                 'file' => 'nullable' . ($request->hasFile('file') ? '|mimes:jpeg,jpg,png,webp|max:5048' : ''),
             ]);
 
@@ -281,7 +286,7 @@ class EmployeeController extends Controller
                 'birth_date' => $request->birth_date,
                 'hiring_date' => $request->hiring_date,
                 'salary' => $request->salary,
-                'store_id' => $request->store_id,
+                // 'store_id' => $request->store_id,
             ]);
 
             $employee->user->banks->first()->update([
@@ -311,6 +316,10 @@ class EmployeeController extends Controller
                 ]);
             }
 
+            $stores = explode(',', $request->store_id);
+            if (count($stores) > 0 && $request->store_id) {
+                $employee->stores()->sync($stores);
+            }
             DB::commit();
 
             return $this->sendResponse([], 'Data exited successfully');
