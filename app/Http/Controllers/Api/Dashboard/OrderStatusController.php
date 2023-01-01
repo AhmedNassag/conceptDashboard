@@ -57,7 +57,11 @@ class OrderStatusController extends Controller
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
+<<<<<<< HEAD
+            $order = Order::with('orderDetails.product.maintenance')->find($request->order_id);
+=======
             $order = Order::with('orderDetails.product.filterWax')->find($request->order_id);
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 
             $order->update([
                'order_status_id' => $request->order_status_id,
@@ -119,6 +123,17 @@ class OrderStatusController extends Controller
                         ]);
                     }
 
+<<<<<<< HEAD
+                    // add order to periodicMaintenance
+                    PeriodicMaintenance::create([
+                        'order_id' => $order->id,
+                        'name' => $order->user->name,
+                        'quantity' => $order->orderDetails[0]->quantity,
+                        'price' => ($order->orderDetails[0]->product->maintenance->price) * ($order->orderDetails[0]->quantity),
+                        'next_maintenance' => Carbon::now()->addDays($order->orderDetails[0]->product->maintenance->period),
+                    ]);
+
+=======
                     $filterWax = $order->orderDetails->first()->product->filterWax;
                     $count = $filterWax->count();
 
@@ -139,6 +154,7 @@ class OrderStatusController extends Controller
                             // 'next_maintenance' => date("Y-m-d H:i:s"),
                         ]);
                     }
+>>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 
                     $this->notification($tokens,$body,$type,$productData);
                     break;
