@@ -204,19 +204,10 @@
                     <!--end buy-->
 
 
-                    <!--start store-->
+                    <!--start product-->
                     <li class="submenu" v-if="permission.includes('productManagement')">
                         <a href="#" ><i class="fab fa-product-hunt"></i> <span> {{ $t('sidebar.ProductManagement') }}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
-
-                            <li
-                                :class="[{'active': ['indexCompany','createCompany','editCompany'].includes($route.name)}]"
-                                v-if="permission.includes('company read')"
-                            >
-                                <router-link :to="{name:'indexCompany'}" :class="['sidebar-menu-rtl']">
-                                    {{ $t('sidebar.company') }}
-                                </router-link>
-                            </li>
 
                             <li
                                 :class="[{'active': ['indexCategory','createCategory','editCategory'].includes($route.name)}]"
@@ -233,6 +224,15 @@
                             >
                                 <router-link :to="{name:'indexSubCategory'}" :class="['sidebar-menu-rtl']">
                                     {{ $t('global.subCategory') }}
+                                </router-link>
+                            </li>
+
+                            <li
+                                :class="[{'active': ['indexCompany','createCompany','editCompany'].includes($route.name)}]"
+                                v-if="permission.includes('company read')"
+                            >
+                                <router-link :to="{name:'indexCompany'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t('sidebar.company') }}
                                 </router-link>
                             </li>
 
@@ -283,7 +283,7 @@
 
                         </ul>
                     </li>
-                    <!--end Store-->
+                    <!--end product-->
 
 
                     <!--start store-->

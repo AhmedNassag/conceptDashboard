@@ -17,7 +17,7 @@ class CreateStoreProducts extends Migration
             $table->id();
             $table->foreignId('examination_record_id')->nullable()->constrained('examination_records')->cascadeOnDelete();
             $table->foreignId('product_status_id')->default(1)->constrained('product_statuses')->cascadeOnDelete();
-            $table->foreignId('sub_category_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('sub_category_id')->default(Null)->nullable()->constrained('categories')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->foreignId('purchase_product_id')->nullable()->constrained('purchase_products')->cascadeOnDelete();

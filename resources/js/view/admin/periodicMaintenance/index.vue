@@ -50,8 +50,8 @@
                                         <th class="text-center">رقم الطلب</th>
                                         <th class="text-center">اسم العميل</th>
                                         <th class="text-center">عدد الأجهزة</th>
-                                        <th class="text-center">سعر الصيانة</th>
-                                        <th class="text-center">مبلغ التحصيل</th>
+                                        <th class="text-center">اسم الشمعة</th>
+                                        <!-- <th class="text-center">مبلغ التحصيل</th> -->
                                         <th class="text-center">موعد الصيانة القادم</th>
                                         <th class="text-center">ملاحظات</th>
                                         <th class="text-center">تاريخ التركيب</th>
@@ -66,7 +66,7 @@
                                         <td class="text-center">{{ item.name ? item.name : '---' }}</td>
                                         <td class="text-center">{{ item.quantity ? item.quantity : '---' }}</td>
                                         <td class="text-center">{{ item.price ? item.price : '---' }}</td>
-                                        <td class="text-center">{{ item.collector ? item.collector : '---' }}</td>
+                                        <!-- <td class="text-center">{{ item.collector ? item.collector : '---' }}</td> -->
                                         <td class="text-center">{{ item.next_maintenance ? item.next_maintenance : '---' }}</td>
                                         <td class="text-center">{{ item.note ? item.note : '---' }}</td>
                                         <td class="text-center">{{ dateFormat(item.created_at) }}</td>

@@ -49,7 +49,7 @@
                                         <th class="text-center">#</th>
                                         <th class="text-center">اسم العميل</th>
                                         <th class="text-center">عدد الأجهزة</th>
-                                        <th class="text-center">سعر الصيانة</th>
+                                        <th class="text-center">اسم الشمعة</th>
                                         <th class="text-center">موعد الصيانة القادم</th>
                                         <th class="text-center">تاريخ التركيب</th>
                                         <th class="text-center">الاجراءات</th>
@@ -70,12 +70,17 @@
                                                    class="btn btn-sm btn-info me-2">
                                                    <i class="far fa-edit"> تأجيل ميعاد الصيانة </i>
                                                 </router-link>
-                                                <router-link
+                                                <!-- <router-link
                                                     :to="{name: 'confirmPeriodicMaintenance',params:{id:item.id}}"
                                                     v-if="permission.includes('periodicMaintenance edit')"
                                                     class="btn btn-sm btn-success me-2">
                                                     <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
-                                                </router-link>
+                                                </router-link> -->
+                                                <a href="#" @click="confirmPeriodic(item.id)">
+                                                <span class="btn btn-sm btn-success me-2">
+                                                    <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
+                                                </span>
+                                            </a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -163,11 +168,39 @@ export default {
         };
 
 
+        function confirmPeriodic(id) {
+            Swal.fire({
+                title: `'هل انت متاكد من عمل الصيانة ؟' `,
+                text: `لم تتمكن من التراجع عن هذا`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    adminApi.post(`/v1/dashboard/confirmPeriodic/${id}`)
+                    .then((res) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: `'تم التأكيد بنجاح'`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `يوجد خطا`,
+                            text: `يوجد خطا في النظام!`,
+                        });
+                    });
+                }
+            });
+        }
 
 
-
-
-        return {dateFormat,periodicMaintenances, loading,permission, getPeriodicMaintenance, search, periodicMaintenancesPaginate};
+        return {dateFormat,periodicMaintenances, loading,permission, getPeriodicMaintenance, search, periodicMaintenancesPaginate, confirmPeriodic};
 
     },
     data() {

@@ -48,8 +48,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>اسم قطعه الغيار</th>
-                                        <th>{{ $t('global.price') }}</th>
-                                        <th>{{ $t('global.image') }}</th>
+                                        <!-- <th>{{ $t('global.price') }}</th> -->
+                                        <!-- <th>{{ $t('global.image') }}</th> -->
                                         <th>تاريخ الانشاء</th>
                                         <th>الإجراءات</th>
                                     </tr>
@@ -58,14 +58,14 @@
                                     <tr v-for="(item,index) in spareParts" :key="item.id">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.name }}</td>
-                                        <td>{{item.price}}</td>
-                                        <td>
+                                        <!-- <td>{{ item.price }}</td> -->
+                                        <!-- <td>
                                             <img
                                                 :src="'/upload/sparePart/' + item.media.file_name"
                                                 :alt="item.name"
                                                 class="custom-img"
                                             />
-                                        </td>
+                                        </td> -->
                                         <td>{{ dateFormat(item.created_at) }}</td>
                                         <td>
                                             <router-link

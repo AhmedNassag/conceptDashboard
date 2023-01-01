@@ -972,6 +972,7 @@
         "SuggestionClients read": "عرض اقتراح او شكوي من العميل",
         "addNotificationApp create": "اضافة اشعار للتطبيق",
         "clientAccountStatement read": "عرض كشف حساب العميل",
+        "supplierAccountStatement read": "عرض كشف حساب المورد",
         "financialCondition read": "عرض الوضع المالى",
         "followLeads create": "إضافة عملاء ما بعد البيع",
         "followLeads delete": "حذف عملاء ما بعد البيع",
@@ -1040,6 +1041,10 @@
         "periodicMaintenance read": "عرض الصيانة الدورية",
         "periodicMaintenance create": "إضافة الصيانة الدورية",
         "periodicMaintenance edit": "تعديل الصيانة الدورية",
-        "periodicMaintenance delete": "حذف الصيانة الدورية"
+        "periodicMaintenance delete": "حذف الصيانة الدورية",
+        "companyProfile read": "عرض ملف الشركة",
+        "companyProfile create": "إضافة ملف الشركة",
+        "companyProfile edit": "تعديل ملف الشركة",
+        "companyProfile delete": "حذف ملف الشركة"
     }
 }
