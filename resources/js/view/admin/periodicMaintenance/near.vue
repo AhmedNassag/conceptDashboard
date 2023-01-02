@@ -67,24 +67,20 @@
                                                 <router-link
                                                    :to="{name: 'delayPeriodicMaintenance',params:{id:item.id}}"
                                                    v-if="permission.includes('periodicMaintenance edit')"
-                                                   class="btn btn-sm btn-info me-2"
-                                                >
-                                                   <i class="far fa-edit">تأجيل ميعاد الصيانة</i>
+                                                   class="btn btn-sm btn-info me-2">
+                                                   <i class="far fa-edit"> تأجيل ميعاد الصيانة </i>
                                                 </router-link>
                                                 <!-- <router-link
                                                     :to="{name: 'confirmPeriodicMaintenance',params:{id:item.id}}"
                                                     v-if="permission.includes('periodicMaintenance edit')"
                                                     class="btn btn-sm btn-success me-2">
-<<<<<<< HEAD
-                                                    <i class="fas fa-check-circle">تأكيد عمل الصيانة</i>
-=======
                                                     <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
                                                 </router-link> -->
                                                 <a href="#" @click="confirmPeriodic(item.id)">
-                                                    <span class="btn btn-sm btn-success me-2">
-                                                        <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
-                                                    </span>
-                                                </a>
+                                                <span class="btn btn-sm btn-success me-2">
+                                                    <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
+                                                </span>
+                                            </a>
                                             </td>
                                         </tr>
                                     </tbody>

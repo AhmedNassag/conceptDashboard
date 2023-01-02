@@ -31,14 +31,11 @@ class Employee extends Model
         return $this->hasMany(EmployeeShift::class);
     }
 
-<<<<<<< HEAD
-=======
     public function stores()
     {
         return $this->belongsToMany(Store::class, 'employee_stores', 'employee_id','store_id', 'id', 'id');
     }
 
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 
     // CRM relations
     public function sellerCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

@@ -271,12 +271,6 @@
                                                             </p>
                                                         </div>
 
-                                                        <div class="col-md-2 mb-3" v-if="data.product[index].product_id">
-                                                            <p class="middlePrice">
-                                                                {{ $t('global.middlePrice') }} : {{products[index].avgPrice}}
-                                                            </p>
-                                                        </div>
-
                                                     </div>
                                                 </div>
 

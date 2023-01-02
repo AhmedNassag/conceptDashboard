@@ -560,58 +560,6 @@ Route::group(['prefix' => 'mobile', 'namespace' => 'MobileApp', 'middleware' => 
     Route::post('confirmOtp','AuthController@confirmOtp');
     Route::post('reset-password','AuthController@reset');
 
-<<<<<<< HEAD
-             // start lead
-             Route::resource('lead','LeadController');
-             Route::get('leadClient','LeadController@leadClient');
-             Route::post('storeClient','LeadController@storeClient');
-             Route::post('addAction', 'LeadController@addAction');
-             Route::post('changeLeadClient/{id}','LeadController@changeLeadToClient');
-             Route::get('leadClientGet','LeadController@leadClientGet');
-
-             // crm
-             Route::resource('targetPlan', 'TargetPlanController');
-             Route::resource('target', 'TargetController');
-             Route::resource('sellerCategory', 'SellerCategoryController');
-             Route::resource('leads', 'LeadController');
-             Route::get('changeEmployeeLead/{id}', 'LeadController@changeEmployeeLead');
-             Route::put('updateEmployeeLead/{id}', 'LeadController@updateEmployeeLead');
-             Route::resource('salesLead', 'SalesLeadController');
-             Route::get('getTenLead/{id}', 'SalesLeadController@getTenLead');
-             Route::resource('leadComment', 'LeadCommentController');
-             Route::resource('targetAchieved', 'TargetAchievedController');
-
-             // problem
-             Route::resource('problemtargetPlan', 'problemTargetPlanController');
-             Route::resource('problemtarget', 'problemTargetController');
-             Route::resource('problemsellerCategory', 'problemSellerCategoryController');
-             Route::resource('problemleads', 'problemLeadController');
-             Route::get('problemchangeEmployeeLead/{id}', 'problemLeadController@changeEmployeeLead');
-             Route::put('problemupdateEmployeeLead/{id}', 'problemLeadController@updateEmployeeLead');
-             Route::resource('problemsalesLead', 'problemSalesLeadController');
-             Route::get('problemgetTenLead/{id}', 'problemSalesLeadController@getTenLead');
-             Route::resource('problemleadComment', 'problemLeadCommentController');
-             Route::resource('problemtargetAchieved', 'problemTargetAchievedController');
-
-             // follow
-             Route::resource('followtargetPlan', 'followTargetPlanController');
-             Route::resource('followtarget', 'followTargetController');
-             Route::resource('followsellerCategory', 'followSellerCategoryController');
-             Route::resource('followleads', 'followLeadController');
-             Route::get('followchangeEmployeeLead/{id}', 'followLeadController@changeEmployeeLead');
-             Route::put('followupdateEmployeeLead/{id}', 'followLeadController@updateEmployeeLead');
-             Route::resource('followsalesLead', 'followSalesLeadController');
-             Route::get('followgetTenLead/{id}', 'followSalesLeadController@getTenLead');
-             Route::resource('followleadComment', 'followLeadCommentController');
-             Route::resource('followtargetAchieved', 'followTargetAchievedController');
-
-             //PeriodicMaintenance
-             Route::resource('periodicMaintenance','PeriodicMaintenanceController');
-             Route::get('activationPeriodicMaintenance/{id}','PeriodicMaintenanceController@activationPeriodic');
-             Route::get('nearPeriodicMaintenance','PeriodicMaintenanceController@nearPeriodic');
-             Route::post('confirmPeriodic/{id}','PeriodicMaintenanceController@confirmPeriodic');
-         });
-=======
     //start Login[company,merchant,client]
     Route::post('login','AuthController@login');
 
@@ -620,7 +568,6 @@ Route::group(['prefix' => 'mobile', 'namespace' => 'MobileApp', 'middleware' => 
         Route::get('me','AuthMobileController@me');
         Route::post('changePassword','AuthMobileController@changePassword');
         Route::put('updateProfile','ProfileController@updateProfile');
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 
         //ads
         Route::get('popupAds','AdsController@popupAds');
