@@ -18,7 +18,10 @@ class SettingSeeder extends Seeder
             'close' => 0,
             'phone' => "01123456789",
             'wats_app' => "01123456789",
-            'facebook' => "https://ar-ar.facebook.com/"
+            'facebook' => "https://ar-ar.facebook.com/",
+            'twitter' => "https://ar-ar.twitter.com/",
+            'instgram' => "https://ar-ar.instgram.com/",
+            'linkedIn' => "https://ar-ar.linkedIn.com/"
         ]);
     }
 }

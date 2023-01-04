@@ -67,7 +67,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
+                                            <!-- <div class="col-md-6 mb-3">
                                                 <label for="validationCustom01">سعر الصيانة</label>
                                                 <input type="number" class="form-control"
                                                     v-model.trim="v$.price.$model"
@@ -79,7 +79,7 @@
                                                 <div class="invalid-feedback">
                                                     <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom01">موعد الصيانة القادم</label>
@@ -133,7 +133,7 @@ export default {
             data:{
                 name : '',
                 quantity: '',
-                price: '',
+                // price: '',
                 next_maintenance: '',
             }
         });
@@ -148,9 +148,9 @@ export default {
                 quantity: {
                     required
                 },
-                price: {
-                    required
-                },
+                // price: {
+                //     required
+                // },
                 next_maintenance: {
                     required
                 }
@@ -197,7 +197,7 @@ export default {
         resetForm(){
             this.data.name = '';
             this.quantity = '';
-            this.price = '';
+            // this.price = '';
             this.next_maintenance = '';
         }
     }

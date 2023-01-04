@@ -49,4 +49,16 @@ class CategoryController extends Controller
         ])->get();
         return $this->sendResponse(['subCategories' => $subCategories], trans('message.messageSuccessfully'));
     }
+
+    /**
+     * get all sub Category
+     */
+    public function allSubCategory()
+    {
+        $allSubCategory = Category::where([
+            ['parent_id','!=',0],
+            ['status', 1]
+        ])->get();
+        return $this->sendResponse(['allSubCategory' => $allSubCategory], trans('message.messageSuccessfully'));
+    }
 }

@@ -925,6 +925,18 @@
                     </li>
                     <!--end companyProfile-->
 
+                    <!--start termsPrivacy-->
+                    <li
+                        :class="[{'active': ['indexTermsPrivacy','createTermsPrivacy','editTermsPrivacy'].includes($route.name)}]"
+                        v-if="permission.includes('termsPrivacy read')"
+                    >
+                        <router-link :to="{name:'indexTermsPrivacy'}" >
+                            <i class="fas fa-cogs"></i>
+                            <span>{{ $t('sidebar.termsPrivacy') }}</span>
+                        </router-link>
+                    </li>
+                    <!--end termsPrivacy-->
+
                     <!--start setting-->
                     <li
                         :class="[{'active': ['editSetting','indexSetting'].includes($route.name)}]"

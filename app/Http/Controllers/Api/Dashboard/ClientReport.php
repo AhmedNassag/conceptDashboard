@@ -16,20 +16,19 @@ class ClientReport extends Controller
 
     public function clientOldNew(Request $request)
     {
-        $clients = User::
-            whereAuthId(2)->whereJsonContains('role_name','client')
-            ->with('client')
-            ->where(function ($q) use ($request) {
-                $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
-                    $q->whereDate('created_at', ">=", $request->from_date)
-                        ->whereDate('created_at', "<=", $request->to_date);
-                });
-            })
-            ->where(function ($q) use ($request) {
-                $q->when($request->password, function ($q) use ($request) {
-                    $q->whereNull('password');
-                });
-            })
+        $clients = User::whereAuthId(2)->whereJsonContains('role_name','client')
+        ->with('client')
+        ->where(function ($q) use ($request) {
+            $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
+                $q->whereDate('created_at', ">=", $request->from_date)
+                ->whereDate('created_at', "<=", $request->to_date);
+            });
+        })
+        ->where(function ($q) use ($request) {
+            $q->when($request->password, function ($q) use ($request) {
+                $q->whereNull('password');
+            });
+        })
             ->paginate(10);
 
         return $this->sendResponse(['clients' => $clients], 'Data exited successfully');
@@ -45,13 +44,13 @@ class ClientReport extends Controller
             join('orders','orders.id','order_details.order_id')
             ->join('users','users.id','orders.user_id')
             ->where('orders.order_status_id',5)
-            ->select(DB::raw('SUM(quantity) as amount,users.id,users.name,users.phone'))
+            ->select(DB::raw('SUM(quantity) as amount,SUM(sub_quantity) as sub_amount, users.id, users.name, users.phone'))
             ->groupBy(['users.id','users.name','users.phone'])
             ->orderBy('amount',$order)
             ->where(function ($q) use ($request) {
                 $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
                     $q->whereDate('created_at', ">=", $request->from_date)
-                        ->whereDate('created_at', "<=", $request->to_date);
+                    ->whereDate('created_at', "<=", $request->to_date);
                 });
             })
             ->take(10)
@@ -76,7 +75,7 @@ class ClientReport extends Controller
             ->where(function ($q) use ($request) {
                 $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
                     $q->whereDate('created_at', ">=", $request->from_date)
-                        ->whereDate('created_at', "<=", $request->to_date);
+                    ->whereDate('created_at', "<=", $request->to_date);
                 });
             })
             ->take(10)

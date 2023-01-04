@@ -23,6 +23,13 @@ class PermissionSeeder extends Seeder
             ['name' => 'companyProfile delete', 'role' => '', 'category' => 'companyProfile'],
             //end companyProfile
 
+            //start termsPrivacy
+            ['name' => 'termsPrivacy read', 'role' => '', 'category' => 'termsPrivacy'],
+            ['name' => 'termsPrivacy create', 'role' => '', 'category' => 'termsPrivacy'],
+            ['name' => 'termsPrivacy edit', 'role' => '', 'category' => 'termsPrivacy'],
+            ['name' => 'termsPrivacy delete', 'role' => '', 'category' => 'termsPrivacy'],
+            //end termsPrivacy
+
             //start supplier
             ['name' => 'supplier read','role' => '','category' => 'supplier'],
             ['name' => 'supplier create','role' => '','category' => 'supplier'],
@@ -260,7 +267,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'secondSliderAds delete','role' => 'ads','category' => 'Ads'],
             // end ads
 
-            // start sitting
+            // start setting
             ['name' => 'setting read','role' => '','category' => 'Setting'],
             ['name' => 'setting edit','role' => '','category' => 'Setting'],
             // end setting

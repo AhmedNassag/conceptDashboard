@@ -72,16 +72,23 @@ class PeriodicMaintenanceController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'quantity' => 'required',
-                'price' => 'required',
+                // 'price' => 'required',
                 'next_maintenance' => 'required',
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $data = $request->only(['name','quantity','price','next_maintenance']);
+            // $data = $request->only(['name','quantity','price','next_maintenance']);
+            // $periodicMaintenance = PeriodicMaintenance::create($data);
 
-            $periodicMaintenance = PeriodicMaintenance::create($data);
+            $price = FilterWax::first();
+            $periodicMaintenance = PeriodicMaintenance::create([
+                'name' => $request->name,
+                'quantity' => $request->quantity,
+                'price' => $price->name,
+                'next_maintenance' => $request->next_maintenance
+            ]);
 
             DB::commit();
 
@@ -133,7 +140,7 @@ class PeriodicMaintenanceController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'quantity' => 'required',
-                'price' => 'required',
+                // 'price' => 'required',
                 'next_maintenance' => 'required',
             ]);
 
@@ -141,7 +148,7 @@ class PeriodicMaintenanceController extends Controller
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
-            $data = $request->only(['name','quantity','price','next_maintenance','note']);
+            $data = $request->only(['name','quantity',/*'price',*/'next_maintenance','note']);
 
             $periodicMaintenance->update($data);
 
@@ -179,6 +186,7 @@ class PeriodicMaintenanceController extends Controller
     }
 
 
+    
     public function nearPeriodic(Request $request)
     {
         $periodicMaintenances = PeriodicMaintenance::where('collector', Null)->where('status',1)

@@ -32,17 +32,15 @@
                                         <form @submit.prevent="getOrder" class="needs-validation">
                                             <div class="form-group row align-items-center">
 
-                                                <div class="col-md-3">
+                                                <!-- <div class="col-md-3">
                                                     <label >{{$t('global.FromDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="fromDate">
+                                                    <input type="date" class="form-control date-input" v-model="fromDate">
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.ToDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="toDate">
-                                                </div>
+                                                    <input type="date" class="form-control date-input" v-model="toDate">
+                                                </div> -->
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.ChooseType')}}</label>
@@ -75,14 +73,16 @@
                                         <th>{{ $t('global.NameEn') }}</th>
                                         <th>{{ $t('global.Phone') }}</th>
                                         <th>{{ $t('global.amountprice') }}</th>
+                                        <th>{{ $t('global.subamountprice') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody v-if="clients.length">
-                                    <tr v-for="(item,index) in clients"  :key="item.id">
+                                    <tr v-for="(item,index) in clients" :key="item.id">
                                         <td>{{ index+1 }}</td>
                                         <td>{{ item.name }}</td>
                                         <td>{{ item.phone }}</td>
                                         <td>{{ item.amount }}</td>
+                                        <td>{{ item.sub_amount }}</td>
                                     </tr>
                                     </tbody>
                                     <tbody v-else>

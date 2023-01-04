@@ -107,6 +107,8 @@ import followLeads from './adminRoute/followLeads';
 import periodicMaintenance from './adminRoute/periodicMaintenance';
 //companyProfile
 import companyProfile from './adminRoute/companyProfile';
+//termsPrivacy
+import termsPrivacy from './adminRoute/termsPrivacy';
 
 const routes = [
     {
@@ -258,6 +260,8 @@ const routes = [
             ...periodicMaintenance,
             //compnayProfile
             ...companyProfile,
+            //termsPrivacy
+            ...termsPrivacy,
         ]
     },
     {

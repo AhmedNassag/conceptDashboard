@@ -41,13 +41,16 @@ class SettingController extends Controller
                 'facebook' => 'required|string|min:1',
                 'phone' => 'required|regex:/(01)[0-9]{9}/',
                 'wats_app' => 'required|regex:/(01)[0-9]{9}/',
+                'twitter' => 'required',
+                'instgram' => 'required',
+                'linkedIn' => 'required',
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
-            $data = $request->only(['close','facebook','phone','wats_app','show_price']);
+            $data = $request->only(['close','facebook','twitter','instgram','linkedIn','phone','wats_app','show_price']);
             $this->settingRepository->updateSetting($id, $data);
 
             DB::commit();

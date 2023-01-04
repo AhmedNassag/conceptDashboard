@@ -75,13 +75,15 @@
                                             <th>#</th>
                                             <th>{{ $t('global.NameEn') }}</th>
                                             <th>{{ $t('global.amountprice') }}</th>
+                                            <th>{{ $t('global.subamountprice') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="products.length">
-                                        <tr v-for="(item,index) in products"  :key="item.id">
+                                        <tr v-for="(item,index) in products" :key="item.id">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ item.product.name }}</td>
                                             <td>{{ item.amount }}</td>
+                                            <td>{{ item.sub_amount }}</td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>

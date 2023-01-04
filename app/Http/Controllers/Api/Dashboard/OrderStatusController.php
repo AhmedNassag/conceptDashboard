@@ -122,22 +122,25 @@ class OrderStatusController extends Controller
                     $filterWax = $order->orderDetails->first()->product->filterWax;
                     $count = $filterWax->count();
 
-                    for($i = 0; $i < $count; $i++)
+                    if($order->orderDetails->first()->product->sub_category_id != Null)
                     {
-                        // add order to periodicMaintenance
-                        $periodic = PeriodicMaintenance::create([
-                            'order_id' => $order->id,
-                            'name' => $order->user->name,
-                            'quantity' => $order->orderDetails[0]->quantity,
-                            // 'price' => ($filterWax[$i]->price) * ($order->orderDetails[0]->quantity),
-                            'price' => $filterWax[$i]->name,
-                            'next_maintenance' => Carbon::now()->addDays($filterWax[$i]->period),
-                            // 'order_id' => 1,
-                            // 'name' => 'name',
-                            // 'quantity' => 1,
-                            // 'price' => 1,
-                            // 'next_maintenance' => date("Y-m-d H:i:s"),
-                        ]);
+                        for($i = 0; $i < $count; $i++)
+                        {
+                            // add order to periodicMaintenance
+                            $periodic = PeriodicMaintenance::create([
+                                'order_id' => $order->id,
+                                'name' => $order->user->name,
+                                'quantity' => $order->orderDetails[0]->quantity,
+                                // 'price' => ($filterWax[$i]->price) * ($order->orderDetails[0]->quantity),
+                                'price' => $filterWax[$i]->name,
+                                'next_maintenance' => Carbon::now()->addDays($filterWax[$i]->period),
+                                // 'order_id' => 1,
+                                // 'name' => 'name',
+                                // 'quantity' => 1,
+                                // 'price' => 1,
+                                // 'next_maintenance' => date("Y-m-d H:i:s"),
+                            ]);
+                        }
                     }
 
                     $this->notification($tokens,$body,$type,$productData);

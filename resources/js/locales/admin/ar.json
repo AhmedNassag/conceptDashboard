@@ -52,7 +52,8 @@
         "leadClient": " عملاء غير محتملين",
         "Maintenance": "جدول الصيانات",
         "nearMaintenance": "الصيانات القريبة",
-        "companyProfile":"ملف الشركة"
+        "companyProfile":"ملف الشركة",
+        "termsPrivacy":"الشروط والخصوصية"
     },
     "global": {
         "Search":"بحث",
@@ -531,7 +532,8 @@
         "Recording of financial transactions": "تسجيل المعاملات المالية",
         "incomeTransfer": "وارد التحويل",
         "expenseTransfer": "منصرف التحويل",
-        "amountprice": "الكميه المباعه",
+        "amountprice": "الكمية من الوحدة الأساسية",
+        "subamountprice": "الكمية من الوحدة الجزئية",
         "ascSale": "الاكثر مبيعا",
         "descSale": "الاقل مبيعا",
         "productReport": "تقرير مبيعات المنتجات",
@@ -547,8 +549,8 @@
         "ShowSuggestionClients": "عرض شكوى ومقترح العميل",
         "Notification": "أشعار",
         "ThereIsANewNotification": "يوجد اشعار جديد",
-        "clientQty": " باكثر العملاء مشتريات  كميه",
-        "clientPrice": " باكثر العملاء مشتريات  سعرا",
+        "clientQty": " أكثر العملاء مشتريات  بالكمية",
+        "clientPrice": " أكثر العملاء مشتريات  بالسعر",
         "storeReport": "تقارير المخازن",
         "suggestionClient": "تقارير شكاوي العملاء",
         "totalPurchaseReport": "تقارير عن اجمالي المشترايات",
@@ -667,7 +669,10 @@
         "companyProfile":"ملف الشركة",
         "taxCard":"البطاقة الضريبية",
         "commercialRecord": "السجل التجارى",
-        "commercialRecordImage": "صورة السجل التجارى"
+        "commercialRecordImage": "صورة السجل التجارى",
+        "termsPrivacy": "الشروط والخصوصية",
+        "Terms": "الشروط والأحكام",
+        "Privacy": "سياسة الخصوصية"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",
@@ -1045,6 +1050,10 @@
         "companyProfile read": "عرض ملف الشركة",
         "companyProfile create": "إضافة ملف الشركة",
         "companyProfile edit": "تعديل ملف الشركة",
-        "companyProfile delete": "حذف ملف الشركة"
+        "companyProfile delete": "حذف ملف الشركة",
+        "termsPrivacy read": "عرض الشروط والخصوصية",
+        "termsPrivacy create": "إضافة الشروط والخصوصية ",
+        "termsPrivacy edit": "تعديل الشروط والخصوصية ",
+        "termsPrivacy delete": "حذف الشروط والخصوصية "
     }
 }
