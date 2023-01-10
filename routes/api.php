@@ -408,6 +408,11 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //termsPrivacy
             Route::resource('termsPrivacy', 'TermsPrivacyController');
+
+            //competition
+            Route::resource('competition', 'CompetitionController');
+            Route::get('activationCompetition/{id}', 'CompetitionController@activationCompetition');
+            Route::get('activeCompetition', 'CompetitionController@activeCompetition');
         });
     });
     /****************************** end dashboard ******************************/
@@ -442,9 +447,10 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         Route::get('area/{area}','RegisterController@area');
 
         //start reset[company,merchant,client]
-        Route::post('forgot-password', 'AuthController@forgotPassword');
-        Route::post('confirmOtp', 'AuthController@confirmOtp');
-        Route::post('reset-password', 'AuthController@reset');
+        Route::post('user-by-phone','AuthController@userByPhone');
+        Route::post('forgot-password','AuthController@forgotPassword');
+        Route::post('confirmOtp','AuthController@confirmOtp');
+        Route::post('reset-password','AuthController@reset');
 
         //start Login[company,merchant,client]
         Route::post('login','AuthController@login');
@@ -453,7 +459,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             Route::get('me','AuthMobileController@me');
             Route::post('changePassword','AuthMobileController@changePassword');
-            Route::put('updateProfile','ProfileController@updateProfile');
+            Route::post('updateProfile','ProfileController@updateProfile');
 
             //ads
             Route::get('popupAds','AdsController@popupAds');
@@ -463,53 +469,68 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('categoryHome','CategoryController@categoryHome');
             Route::get('category','CategoryController@category');
             Route::get('subCategory/{id}','CategoryController@subCategory');
-            Route::get('allSubCategory', 'CategoryController@allSubCategory');
+            Route::get('allSubCategory','CategoryController@allSubCategory');
 
             //company
             Route::get('company/{id}','CompanyController@companyBySubCategoryId');
             Route::get('company','CompanyController@company');
             Route::get('companyHome','CompanyController@companyHome');
 
-            //products
+            //product
             Route::get('productCompany/{id}','ProductController@productCompany');
+            Route::get('getProductByCategory/{category}','ProductController@getProductByCategory');
             Route::get('getProductByBarcode/{barcode}','ProductController@getProductByBarcode');
             Route::get('pestProduct','ProductController@pestProduct');
             Route::get('similarProducts/{id}','ProductController@similarProducts');
-            Route::get('products', 'ProductController@products');
-            Route::get('filters', 'ProductController@filters');
-            Route::get('waxes', 'ProductController@waxes');
-            Route::get('spareParts', 'ProductController@spareParts');
+            Route::get('products','ProductController@products');
+            Route::get('filters','ProductController@filters');
+            Route::get('waxes','ProductController@waxes');
+            Route::get('spareParts','ProductController@spareParts');
+            Route::get('getProductById/{category}/{subCategory?}','ProductController@getProductById');
+            Route::get('getProductByName/{name}','ProductController@getProductByName');
+            Route::get('getProductByGuarantee/{guarantee}','ProductController@getProductByGuarantee');
+            Route::get('getProductByPrice/{price}','ProductController@getProductByPrice');
+            Route::post('getProductBySearch','ProductController@getProductBySearch');
 
             //suggestion
-            Route::get('getSuggestion',  'SuggestionClientController@getSuggestion');
-            Route::post('suggestion',  'SuggestionClientController@suggestion');
+            Route::get('getSuggestion','SuggestionClientController@getSuggestion');
+            Route::post('suggestion','SuggestionClientController@suggestion');
 
-            //get taxes
-            Route::get('getTaxes',  'TaxController@getTaxes');
+            //tax
+            Route::get('getTaxes','TaxController@getTaxes');
 
-            //get shipping price
-            Route::get('shippingPrice',  'ShippingController@shippingPrice');
+            //shippingPrice
+            Route::get('shippingPrice','ShippingController@shippingPrice');
 
-            //check coupon
-            Route::post('checkCoupon',  'CouponController@checkCoupon');
+            //checkCoupon
+            Route::post('checkCoupon','CouponController@checkCoupon');
 
             //order
-            Route::post('order',  'OrderController@order');
-            Route::get('trackingOrder',  'OrderController@trackingOrder');
-            Route::get('pendingOrders',  'OrderController@pendingOrders');
+            Route::post('order','OrderController@order');
+            Route::get('trackingOrder','OrderController@trackingOrder');
+            Route::get('pendingOrders','OrderController@pendingOrders');
+            Route::get('clientsOrder/{id}', 'OrderController@clientsOrder');
 
-            //get client Debts
-            Route::get('clientDebts',  'ClientDebtsController@clientDebts');
+            //clientDebts
+            Route::get('clientDebts','ClientDebtsController@clientDebts');
 
             //periodicMaintenance
-            Route::post('periodicMaintenance', 'PeriodicMaintenanceController@store');
-            Route::post('delayPeriodicMaintenance/{id}', 'PeriodicMaintenanceController@update');
+            Route::post('periodicMaintenance','PeriodicMaintenanceController@store');
+            Route::post('delayPeriodicMaintenance','PeriodicMaintenanceController@update');
+            Route::get('nextMaintenance', 'PeriodicMaintenanceController@nextMaintenance');
 
             //problemLead
-            Route::post('problemLead', 'ProblemLeadController@store');
+            Route::post('problemLead','ProblemLeadController@store');
 
             //termsPrivacy
-            Route::get('termsPrivacy', 'TermsPrivacyController@index');
+            Route::get('termsPrivacy','TermsPrivacyController@index');
+
+            //share
+            Route::get('allCompetition','ShareController@allCompetition');
+            Route::get('getCompetitionByCount/{count}', 'ShareController@getCompetitionByCount');
+            Route::get('getCompetitionByCountAndDays/{count}/{days}', 'ShareController@getCompetitionByCountAndDays');
+            Route::post('share','ShareController@store');
+            Route::get('wallet/{id}', 'ShareController@wallet');
 
             //start logout
             Route::post('logout','AuthController@logout');
@@ -518,7 +539,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
     /****************************** end Api mobile ******************************/
 
     #######################################################################################################################
-    ######################################   Start Mobile Api   ###########################################################
+    ######################################   End Mobile Api   ###########################################################
     #######################################################################################################################
 
 

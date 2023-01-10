@@ -33,7 +33,7 @@ class PeriodicMaintenanceController extends Controller
             ->orWhere('note','like','%'.$request->search.'%')
             ->orWhereRelation('order','id','like','%'.$request->search.'%');
         })
-        ->latest()->paginate(10);
+        ->orderBy('next_maintenance','asc')->latest()->paginate(10);
 
         return $this->sendResponse(['periodicMaintenances' => $periodicMaintenances], 'Data exited successfully');
     }
@@ -186,18 +186,19 @@ class PeriodicMaintenanceController extends Controller
     }
 
 
-    
+
     public function nearPeriodic(Request $request)
     {
         $periodicMaintenances = PeriodicMaintenance::where('collector', Null)->where('status',1)
-            ->where('next_maintenance','<=',Carbon::now()->addDays(1))
-            ->when($request->search, function ($q) use ($request) {
-                return $q->where('quantity', 'like', '%' . $request->search . '%')
-                    ->orWhere('name','like','%'.$request->search.'%')
-                    ->orWhere('price','like','%'.$request->search.'%')
-                    ->orWhere('next_maintenance','like','%'.$request->search.'%');
-            })
-            ->orderBy('name','Asc')->latest()->paginate(10);
+        ->where('next_maintenance', '<', Carbon::now()->addDays(1))
+        ->where('next_maintenance', '>', Carbon::now()->subDays(1))
+        ->when($request->search, function ($q) use ($request) {
+            return $q->where('quantity', 'like', '%' . $request->search . '%')
+            ->orWhere('name', 'like', '%' . $request->search.'%')
+            ->orWhere('price', 'like', '%' . $request->search.'%')
+            ->orWhere('next_maintenance', 'like', '%' . $request->search.'%');
+        })
+        ->orderBy('name','Asc')->latest()->paginate(10);
 
         return $this->sendResponse(['periodicMaintenances' => $periodicMaintenances], 'Data exited successfully');
     }

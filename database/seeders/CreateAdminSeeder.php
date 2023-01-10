@@ -22,6 +22,7 @@ class CreateAdminSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => '12345678',
             'role_name' => ['SuperAdmin'],
+            'type' => 'admin',
             'auth_id' => 1,
             'Status' => true
         ]);

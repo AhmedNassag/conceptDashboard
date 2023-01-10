@@ -77,7 +77,10 @@ class UserCompanyController extends Controller
             "name" => $request->name,
             "email" => $request->email,
             "auth_id" => 2,
-            'role_name' => ['company'],
+            //
+            'role_name' => ['company']/*['client']*/,
+            'type' => 'company',
+            //
             "status" => 0,
             'phone' => $request->phone,
             "code" => '+2'
@@ -101,6 +104,14 @@ class UserCompanyController extends Controller
             'website' => $request->website,
             'whatsapp' => $request->whatsapp
         ]);
+
+        //
+        // start create user
+        // $user->client()->create(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+        // $user->clientAccounts()->create([
+        //     'amount' => $request->amount ? $request->amount : 0
+        // ]);
+        //
 
         return $this->sendResponse([],'Data exited successfully');
 
@@ -190,6 +201,14 @@ class UserCompanyController extends Controller
                 'website' => $request->website,
                 'whatsapp' => $request->whatsapp
             ]);
+
+            //
+            // start create user
+            // $user->client()->update(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+            // $user->clientAccounts()->create([
+            //     'amount' => $request->amount ? $request->amount : 0
+            // ]);
+            //
 
             return $this->sendResponse([],'Data exited successfully');
 

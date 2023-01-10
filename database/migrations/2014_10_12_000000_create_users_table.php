@@ -23,8 +23,10 @@ class CreateUsersTable extends Migration
             $table->string('code')->nullable();
             $table->string('auth_id')->default(2);
             $table->text('role_name')->nullable();
-            $table->boolean('status')->default(true);
+            $table->text('type')->default('client')->nullable();
+            $table->text('share_code')->nullable()->default(Null);
             $table->text('firebase_token')->nullable();
+            $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

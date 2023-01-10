@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\MobileApp;
 
 use App\Http\Controllers\Controller;
 use App\Models\FilterWax;
+use App\Models\Order;
 use App\Models\PeriodicMaintenance;
+use App\Models\Product;
 use App\Traits\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -118,12 +121,13 @@ class PeriodicMaintenanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $user_order = Order::where('user_id', auth()->user()->id)->first();
         DB::beginTransaction();
         try {
 
-            $periodicMaintenance = PeriodicMaintenance::find($id);
+            $periodicMaintenance = PeriodicMaintenance::where('order_id',$user_order->id)->orderBy('next_maintenance','asc')->first();
 
             // Validator request
             $v = Validator::make($request->all(), [
@@ -160,5 +164,23 @@ class PeriodicMaintenanceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+
+    public function nextMaintenance()
+    {
+        $user_order = Order::where('user_id', auth()->user()->id)->first();
+        if($user_order)
+        {
+            $periodicMaintenance = PeriodicMaintenance::where('order_id', $user_order->id)->where('next_maintenance','>',now())->orderBy('next_maintenance', 'asc')->first();
+            return $this->sendResponse(['next_maintenance' => $periodicMaintenance->next_maintenance], trans('message.messageSuccessfully'));
+        }
+        else
+        {
+            return $this->sendResponse(['next_maintenance' => '0'], trans('message.messageSuccessfully'));
+        }
+        // $user_product = Product::where('name',$periodicMaintenance->price)->with('productPrice')->first();
+        // return $this->sendResponse(['user_product' => $user_product], trans('message.messageSuccessfully'));
     }
 }

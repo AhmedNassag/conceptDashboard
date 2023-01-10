@@ -109,6 +109,8 @@ import periodicMaintenance from './adminRoute/periodicMaintenance';
 import companyProfile from './adminRoute/companyProfile';
 //termsPrivacy
 import termsPrivacy from './adminRoute/termsPrivacy';
+//competition
+import competition from './adminRoute/competition';
 
 const routes = [
     {
@@ -262,6 +264,8 @@ const routes = [
             ...companyProfile,
             //termsPrivacy
             ...termsPrivacy,
+            //competition
+            ...competition,
         ]
     },
     {

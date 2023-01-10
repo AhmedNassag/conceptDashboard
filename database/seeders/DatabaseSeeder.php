@@ -36,7 +36,8 @@ class DatabaseSeeder extends Seeder
         $this->call(SellerCategorySeeder::class);
         $this->call(problemSellerCategorySeeder::class);
         $this->call(followSellerCategorySeeder::class);
+        $this->call(CompanyProfileSeeder::class);
 
-        //        $this->call(SupplierTableSeeder::class);
+        //$this->call(SupplierTableSeeder::class);
     }
 }

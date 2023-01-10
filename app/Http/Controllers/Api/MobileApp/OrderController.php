@@ -34,6 +34,8 @@ class OrderController extends Controller
         $this->order_amount = auth()->user()->client->sellingMethod->order_amount;
     }
 
+
+
     public function order(Request $request)
     {
         // Validator request
@@ -88,17 +90,17 @@ class OrderController extends Controller
         if ($request->code){
             $coupon=new CouponController();
             $coupon_data = $coupon->checkCoupon($request);
+
             if ($coupon_data->getData()->success == false){
                 return $coupon_data;
             }
+
             $offer_id = $coupon_data->getData()->data->coupon->id;
             $offer = Discount::find($offer_id);
             $discount += $offer->discount($totalBeforeDiscount);
-
         }
 
         $totalAfterDiscount = $totalBeforeDiscount - $discount;
-
         $tax_app = new TaxController();
         $taxes = $tax_app->getTaxes();
         $taxes_arr = $taxes->getData()->data->taxes;
@@ -109,12 +111,12 @@ class OrderController extends Controller
 
         $totalAfterTax = $totalAfterDiscount + $tax_amount;
         $shipping_price = 0;
+
         if ($request->is_shipping){
             $shipping_price = auth()->user()->client->area->shipping_price;
         }
 
         $totalAfterShipping = $totalAfterTax + $shipping_price;
-
         $order = Order::create([
             'user_id' => auth()->id(),
             'store_id' => $store_id,
@@ -128,6 +130,7 @@ class OrderController extends Controller
         ]);
 
         if (count($taxes_arr) > 0) {
+
             foreach ($taxes_arr as $ta) {
                 $order->orderTax()->create([
                     'tax_id' => $ta->id,
@@ -135,14 +138,17 @@ class OrderController extends Controller
                     'percentage' => $ta->percentage,
                 ]);
             }
+
         }
 
         if ($request->code) {
             $coupon= new CouponController();
             $coupon_data = $coupon->checkCoupon($request);
+
             if ($coupon_data->getData()->success == false){
                 return $coupon_data;
             }
+
             $offer_id = $coupon_data->getData()->data->coupon->id;
             $d = Discount::find($offer_id);
             $d->update([
@@ -157,13 +163,11 @@ class OrderController extends Controller
         }
 
         foreach ($request->products as $product) {
-
             $product_pricing = ProductPricing::where([
                 ['id', $product['product_price_id']],
                 ['product_id', $product['product_id']],
                 ['selling_method_id', $this->selling_method],
             ])->first();
-
             $order_details = OrderDetails::where([
                 ['order_id',$order['id']],
                 ['selling_method_id', $this->selling_method],
@@ -172,6 +176,7 @@ class OrderController extends Controller
             $order_details_id = null;
 
             if ($order_details){
+
                 if ($order_details->main_measurement_unit_id == $product_pricing['measurement_unit_id']){
                     $order_details->update([
                         'quantity' => $product['quantity'],
@@ -185,7 +190,9 @@ class OrderController extends Controller
                     ]);
                     $order_details_id = $order_details->id;
                 }
+
             }else{
+                
                 if ($product_pricing['measurement_unit_id'] == $product_pricing->product->main_measurement_unit_id){
                     $order_details = OrderDetails::create([
                         'order_id' =>$order['id'],
@@ -224,8 +231,10 @@ class OrderController extends Controller
 
     }
 
-    public function storeProductData($store_id,$product_id,$measurement_unit_id,$quantity,$order_details_id){
 
+
+    public function storeProductData($store_id,$product_id,$measurement_unit_id,$quantity,$order_details_id)
+    {
         $store_main_measurement = StoreProduct::where([
             ['store_id',$store_id],
             ['product_id',$product_id],
@@ -301,15 +310,21 @@ class OrderController extends Controller
         }
     }
 
-    public function sendNotification($id,$message,$image){
+
+
+    public function sendNotification($id,$message,$image)
+    {
         User::whereAuthId(1)
-            ->whereRelation('roles.notify','name','Add OnlineOrder')
-            ->each(function ($admin) use($id,$message,$image){
-                $admin->notify(new AddNotification('',$id,'showOrderOnline',$message,$image));
-            });
+        ->whereRelation('roles.notify','name','Add OnlineOrder')
+        ->each(function ($admin) use($id,$message,$image){
+            $admin->notify(new AddNotification('',$id,'showOrderOnline',$message,$image));
+        });
     }
 
-    public function trackingOrder(){
+
+
+    public function trackingOrder()
+    {
         $orders = Order::where([
             ['order_status_id','!=',6],
             ['user_id',auth()->id()],
@@ -328,7 +343,11 @@ class OrderController extends Controller
         }])->latest()->paginate(15);
         return $this->sendResponse(['orders' => $orders], trans('message.messageSuccessfully'));
     }
-    public function pendingOrders(){
+
+
+
+    public function pendingOrders()
+    {
         $orders = Order::where([
             ['order_status_id',8],
             ['user_id',auth()->id()],
@@ -339,6 +358,23 @@ class OrderController extends Controller
                 'product:id,name'
             ]);
         }])->latest()->paginate(15);
+        return $this->sendResponse(['orders' => $orders], trans('message.messageSuccessfully'));
+    }
+
+
+
+    public function clientsOrder($id)
+    {
+        $orders = OrderDetails::with('order')
+        ->where([
+            // ['order.order_status_id', 5],
+            ['product_id', $id],
+        ])
+        // ->orwhere([
+        //     // ['order.order_status_id', 7],
+        //     ['product_id', $id],
+        // ])
+        ->count();
         return $this->sendResponse(['orders' => $orders], trans('message.messageSuccessfully'));
     }
 }

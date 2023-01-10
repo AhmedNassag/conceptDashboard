@@ -64,7 +64,7 @@ class Product extends Model
         return $this->morphMany(Media::class,'mediable');
     }
 
-    public function  selling_method()
+    public function selling_method()
     {
         return $this->belongsToMany(SellingMethod::class,'product_selling_methods','product_id','selling_method_id');
     }

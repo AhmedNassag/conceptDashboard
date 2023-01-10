@@ -78,7 +78,10 @@ class MerchantController extends Controller
             "email" => $request->email,
             "password" => $request->password,
             "auth_id" => 2,
-            'role_name'=> ['merchant'],
+            //
+            'role_name'=> ['merchant']/*['client']*/,
+            'type' => 'merchant',
+            //
             "status" => 0,
             'phone' => $request->phone,
             "code" => '+2'
@@ -97,9 +100,13 @@ class MerchantController extends Controller
             'user_id' => $user->id
         ]);
 
-        $user->clientAccounts()->create()->update([
-            'amount' => $request->amount ? $request->amount : 0
-        ]);
+        //
+        // start create user
+        // $user->client()->create(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+        // $user->clientAccounts()->create([
+        //     'amount' => $request->amount ? $request->amount : 0
+        // ]);
+        //
 
         if ($request->hasFile('delegateCard')) {
 
@@ -246,9 +253,13 @@ class MerchantController extends Controller
                 'user_id' => $user->id
             ]);
 
-            $user->clientAccounts()->first()->update([
-                'amount' => $request->amount ? $request->amount : 0
-            ]);
+            //
+            // start create user
+            // $user->client()->update(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+            // $user->clientAccounts()->create([
+            //     'amount' => $request->amount ? $request->amount : 0
+            // ]);
+            //
 
             return $this->sendResponse([],'Data exited successfully');
 

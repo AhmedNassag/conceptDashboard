@@ -10,7 +10,7 @@ use Log;
 trait NotificationTrait
 {
     public $API_KEY = 'AAAAKxu_LbY:APA91bGs4i139BFR6sMfF15cNKEFIngXmfKkYmfB16AhDJau5FGVtQdKy9GEZ5ILDI79bXVbm4PIRDR1dn2jUssWeSUeCADtC4GINdarxfNX2g2SqJq0RPJ9mnm3TfPO3WhJCO8qKzwx';
-    public $title = 'شهبندر';
+    public $title = 'كونسبت';
 
     public function notification($tokens,$body,$type,$productData){
 

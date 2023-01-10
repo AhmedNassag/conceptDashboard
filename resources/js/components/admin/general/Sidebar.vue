@@ -800,6 +800,33 @@
                     </li>
                     <!--end area-->
 
+                    <!--start shareCompetition-->
+                    <li class="submenu" v-if="permission.includes('areaManagement')">
+                        <a href="#" ><i class="fas fa-city"></i> <span> {{$t('global.shareCompetition')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
+                        <ul>
+
+                            <li
+                                :class="[{'active': ['indexCompetition','createCompetition','editCompetition'].includes($route.name)}]"
+                                v-if="permission.includes('areas read')"
+                            >
+                                <router-link :to="{name:'indexCompetition'}" :class="['sidebar-menu-rtl']">
+                                    {{$t('global.Competition')}}
+                                </router-link>
+                            </li>
+
+                            <!-- <li
+                                :class="[{'active': ['indexShare','createShare','editShare'].includes($route.name)}]"
+                                v-if="permission.includes('areas read')"
+                            >
+                                <router-link :to="{name:'indexProvince'}" :class="['sidebar-menu-rtl']">
+                                    {{$t('global.Share')}}
+                                </router-link>
+                            </li> -->
+
+                        </ul>
+                    </li>
+                    <!--end shareCompetition-->
+
                     <!--start  report-->
                     <li class="submenu">
                         <a href="#" ><i class="fas fa-clipboard-list"></i> <span> {{$t('global.report')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>

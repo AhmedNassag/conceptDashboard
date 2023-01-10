@@ -73,7 +73,9 @@ class RegisterController extends Controller
 
         }
 
-    }// end companyRegister
+    }// end clientRegister
+
+
 
     public function merchantRegister(Request $request)
     {
@@ -109,7 +111,10 @@ class RegisterController extends Controller
                 "email" => $request->email,
                 "password" => $request->password,
                 "auth_id" => 2,
-                'role_name'=> ['merchant'],
+                //
+                'role_name'=> ['merchant']/*['client']*/,
+                'type' => 'merchant',
+                //
                 "status" => 0,
                 'phone' => $request->phone,
                 "code" => '+2'
@@ -127,6 +132,14 @@ class RegisterController extends Controller
                 'address' => $request->address,
                 'user_id' => $user->id
             ]);
+
+            //
+            // start create user
+            // $user->client()->create(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+            // $user->clientAccounts()->create([
+            //     'amount' => $request->amount ? $request->amount : 0
+            // ]);
+            //
 
             if ($request->hasFile('delegateCard')) {
 
@@ -209,7 +222,9 @@ class RegisterController extends Controller
             return $this->sendError('An error occurred in the system');
 
         }
-    }// end designRegister
+    }// end merchantRegister
+
+
 
     public function companyRegister(Request $request)
     {
@@ -217,7 +232,6 @@ class RegisterController extends Controller
         DB::beginTransaction();
 
         try {
-
 
             // Validator request
             $v = Validator::make($request->all(), [
@@ -248,7 +262,10 @@ class RegisterController extends Controller
                 "email" => $request->email,
                 "password" => $request->password,
                 "auth_id" => 2,
-                'role_name' => ['company'],
+                //
+                'role_name' => ['company']/*['client']*/,
+                'type' => 'company',
+                //
                 "status" => 0,
                 'phone' => $request->phone,
                 "code" => $request->code
@@ -273,6 +290,14 @@ class RegisterController extends Controller
                 'whatsapp' => $request->whatsapp
             ]);
 
+            //
+            // start create user
+            // $user->client()->create(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+            // $user->clientAccounts()->create([
+            //     'amount' => $request->amount ? $request->amount : 0
+            // ]);
+            //
+
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
 
@@ -282,7 +307,9 @@ class RegisterController extends Controller
             return $this->sendError('An error occurred in the system');
         }
 
-    }// end advertiserRegister
+    }// end companyRegister
+
+
 
     public function province()
     {
@@ -290,6 +317,8 @@ class RegisterController extends Controller
         return $this->sendResponse(['provinces' => $province],'Data exited successfully');
     }
 
+
+    
     public function area($id)
     {
         $area = Area::select('id','name','province_id')->whereProvinceId($id)->get();
