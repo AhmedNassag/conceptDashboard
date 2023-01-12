@@ -175,7 +175,7 @@ class CompetitionController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
-        // try {
+        try {
 
             $competition = Competition::find($id);
 
@@ -229,12 +229,12 @@ class CompetitionController extends Controller
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
 
-        // }catch (\Exception $e){
+        }catch (\Exception $e){
 
-        //     DB::rollBack();
-        //     return $this->sendError('An error occurred in the system');
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
 
-        // }
+        }
     }
 
     /**

@@ -672,7 +672,10 @@
         "commercialRecordImage": "صورة السجل التجارى",
         "termsPrivacy": "الشروط والخصوصية",
         "Terms": "الشروط والأحكام",
-        "Privacy": "سياسة الخصوصية"
+        "Privacy": "سياسة الخصوصية",
+        "shareCompetition":"مسابقة شير واكسب",
+        "Competition":"المسابقة",
+        "Share":"المشتركين"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",
@@ -1054,6 +1057,11 @@
         "termsPrivacy read": "عرض الشروط والخصوصية",
         "termsPrivacy create": "إضافة الشروط والخصوصية ",
         "termsPrivacy edit": "تعديل الشروط والخصوصية ",
-        "termsPrivacy delete": "حذف الشروط والخصوصية "
+        "termsPrivacy delete": "حذف الشروط والخصوصية ",
+        "competition read": "عرض المسابقة",
+        "competition create": "إضافة المسابقة ",
+        "competition edit": "تعديل المسابقة ",
+        "competition delete": "حذف المسابقة ",
+        "share read": "عرض المشتركين"
     }
 }

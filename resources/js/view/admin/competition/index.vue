@@ -33,10 +33,9 @@
                                         <input type="search" v-model="search" class="custom"/>
                                     </div>
                                     <div class="col-5 row justify-content-end">
-                                        <!--v-if="permission.includes('competition create')"-->
                                         <router-link
-
-                                           :to="{name: 'createCompetition'}"
+                                            v-if="permission.includes('competition create')"
+                                            :to="{name: 'createCompetition'}"
                                             class="btn btn-custom btn-warning">
                                             اضافه
                                         </router-link>
@@ -83,17 +82,15 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <!--v-if="permission.includes('competition edit')"-->
                                                 <router-link
                                                     :to="{name: 'editCompetition',params:{id:item.id}}"
-
+                                                    v-if="permission.includes('competition edit')"
                                                     class="btn btn-sm btn-success me-2"
                                                 >
                                                     <i class="far fa-edit"></i>
                                                 </router-link>
-                                                <!--v-if="permission.includes('competition delete')"-->
                                                 <a href="#" @click="deleteCompetition(item.id,index)"
-
+                                                    v-if="permission.includes('competition delete')"
                                                     data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2"
                                                 >
                                                     <i class="far fa-trash-alt"></i>

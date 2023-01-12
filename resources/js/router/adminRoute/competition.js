@@ -17,7 +17,7 @@ export default [
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
 
-                    if(permission.includes('category read')){
+                    if(permission.includes('competition read')){
                         return next();
                     }else{
                         return next({name:'Page404'});
@@ -31,7 +31,7 @@ export default [
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
 
-                    if(permission.includes('category create')){
+                    if(permission.includes('competition create')){
                         return next();
                     }else{
                         return next({name:'Page404'});
@@ -45,8 +45,8 @@ export default [
                 props: true,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
-
-                    if(permission.includes('category edit')){
+competition
+                    if(permission.includes('competition edit')){
                         return next();
                     }else{
                         return next({name:'Page404'});

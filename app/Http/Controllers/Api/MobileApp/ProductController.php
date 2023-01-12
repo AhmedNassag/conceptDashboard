@@ -328,7 +328,7 @@ class ProductController extends Controller
                 $q->where('selling_method_id', $this->selling_method);
                 $q->with('sellingMethod', 'measurementUnit');
             }])
-            ->get();
+            ->latest("products.created_at")->paginate(15);
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }

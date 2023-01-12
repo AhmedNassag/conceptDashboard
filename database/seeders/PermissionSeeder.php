@@ -234,19 +234,14 @@ class PermissionSeeder extends Seeder
             ['name' => 'periodicMaintenance delete','role' => '','category' => 'employee'],
             //end periodicMaintenance
 
-            //start competition
-            ['name' => 'competition read', 'role' => '', 'category' => 'employee'],
-            ['name' => 'competition create', 'role' => '', 'category' => 'employee'],
-            ['name' => 'competition edit', 'role' => '', 'category' => 'employee'],
-            ['name' => 'competition delete', 'role' => '', 'category' => 'employee'],
-            //end competition
+            //start shareCompetition
+            ['name' => 'competition read', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition create', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition edit', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition delete', 'role' => 'shareCompetition', 'category' => 'employee'],
 
-            //start share
-            ['name' => 'share read', 'role' => '', 'category' => 'employee'],
-            ['name' => 'share create', 'role' => '', 'category' => 'employee'],
-            ['name' => 'share edit', 'role' => '', 'category' => 'employee'],
-            ['name' => 'share delete', 'role' => '', 'category' => 'employee'],
-            //end share
+            ['name' => 'share read', 'role' => 'shareCompetition', 'category' => 'employee'],
+            //end shareCompetition
 
             ['name' => 'CreditCapacity read','role' => '','category' => 'Credit Capacity'],
             ['name' => 'CreditCapacity edit','role' => '','category' => 'Credit Capacity'],

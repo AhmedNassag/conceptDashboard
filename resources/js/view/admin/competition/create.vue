@@ -11,7 +11,7 @@
                     <div class="col">
                         <h3 class="page-title">المسابقات</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><router-link :to="{name: 'indexCompetition'}">الفئات</router-link></li>
+                            <li class="breadcrumb-item"><router-link :to="{name: 'indexCompetition'}">المسابقات</router-link></li>
                             <li class="breadcrumb-item active">اضافه مسابقة</li>
                         </ul>
                     </div>

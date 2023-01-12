@@ -111,6 +111,8 @@ import companyProfile from './adminRoute/companyProfile';
 import termsPrivacy from './adminRoute/termsPrivacy';
 //competition
 import competition from './adminRoute/competition';
+//share
+import share from './adminRoute/share';
 
 const routes = [
     {
@@ -266,6 +268,8 @@ const routes = [
             ...termsPrivacy,
             //competition
             ...competition,
+            //share
+            ...share
         ]
     },
     {

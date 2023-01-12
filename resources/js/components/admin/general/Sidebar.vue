@@ -801,27 +801,27 @@
                     <!--end area-->
 
                     <!--start shareCompetition-->
-                    <li class="submenu" v-if="permission.includes('areaManagement')">
+                    <li class="submenu" v-if="permission.includes('shareCompetition')">
                         <a href="#" ><i class="fas fa-city"></i> <span> {{$t('global.shareCompetition')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
 
                             <li
                                 :class="[{'active': ['indexCompetition','createCompetition','editCompetition'].includes($route.name)}]"
-                                v-if="permission.includes('areas read')"
+                                v-if="permission.includes('competition read')"
                             >
                                 <router-link :to="{name:'indexCompetition'}" :class="['sidebar-menu-rtl']">
                                     {{$t('global.Competition')}}
                                 </router-link>
                             </li>
 
-                            <!-- <li
-                                :class="[{'active': ['indexShare','createShare','editShare'].includes($route.name)}]"
-                                v-if="permission.includes('areas read')"
+                            <li
+                                :class="[{'active': ['indexShare'].includes($route.name)}]"
+                                v-if="permission.includes('share read')"
                             >
-                                <router-link :to="{name:'indexProvince'}" :class="['sidebar-menu-rtl']">
+                                <router-link :to="{name:'indexShare'}" :class="['sidebar-menu-rtl']">
                                     {{$t('global.Share')}}
                                 </router-link>
-                            </li> -->
+                            </li>
 
                         </ul>
                     </li>

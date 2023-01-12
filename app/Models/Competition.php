@@ -35,4 +35,9 @@ class Competition extends Model
     {
         return $this->morphOne(Media::class, 'mediable');
     }
+
+    public function shares()
+    {
+        return $this->hasMany(Share::class);
+    }
 }

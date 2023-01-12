@@ -413,6 +413,9 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::resource('competition', 'CompetitionController');
             Route::get('activationCompetition/{id}', 'CompetitionController@activationCompetition');
             Route::get('activeCompetition', 'CompetitionController@activeCompetition');
+
+            //share
+            Route::resource('share', 'ShareController');
         });
     });
     /****************************** end dashboard ******************************/
