@@ -200,7 +200,11 @@ class OrderController extends Controller
                 }
 
             }else{
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 if ($product_pricing['measurement_unit_id'] == $product_pricing->product->main_measurement_unit_id){
                     $order_details = OrderDetails::create([
                         'order_id' =>$order['id'],
@@ -385,6 +389,7 @@ class OrderController extends Controller
         ->count();
         return $this->sendResponse(['orders' => $orders], trans('message.messageSuccessfully'));
     }
+<<<<<<< HEAD
 
 
 
@@ -582,4 +587,6 @@ class OrderController extends Controller
         return $this->sendResponse(['order'=>$order], trans('message.messageSuccessfully'));
 
     }
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
 }

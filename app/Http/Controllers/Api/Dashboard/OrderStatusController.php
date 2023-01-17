@@ -129,7 +129,10 @@ class OrderStatusController extends Controller
                             // add order to periodicMaintenance
                             $periodic = PeriodicMaintenance::create([
                                 'order_id' => $order->id,
+<<<<<<< HEAD
                                 'user_id' => $order->user_id,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                                 'name' => $order->user->name,
                                 'quantity' => $order->orderDetails[0]->quantity,
                                 // 'price' => ($filterWax[$i]->price) * ($order->orderDetails[0]->quantity),

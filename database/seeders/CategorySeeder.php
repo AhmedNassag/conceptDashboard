@@ -15,7 +15,10 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $category = Category::create([
+<<<<<<< HEAD
             'id'        => 1,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             'name'      => 'فلاتر',
             'parent_id' => 0,
             'status'    => 1
@@ -29,7 +32,10 @@ class CategorySeeder extends Seeder
 
 
         $category2 = Category::create([
+<<<<<<< HEAD
             'id'        => 2,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             'name'      => 'شمع',
             'parent_id' => 0,
             'status'    => 1
@@ -43,7 +49,10 @@ class CategorySeeder extends Seeder
 
 
         $category3 = Category::create([
+<<<<<<< HEAD
             'id'        => 3,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             'name'      => 'قطع غيار',
             'parent_id' => 0,
             'status'    => 1

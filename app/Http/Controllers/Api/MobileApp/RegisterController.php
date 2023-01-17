@@ -72,8 +72,12 @@ class RegisterController extends Controller
             $user->client()->create([
                 'address' => $request->address,
                 'province_id' => $request->province,
+<<<<<<< HEAD
                 'area_id' => $request->area,
                 'firebase_token' => $request->firebase_token,
+=======
+                'area_id' => $request->area
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             ]);
 
             //increase share points if user enter share code
