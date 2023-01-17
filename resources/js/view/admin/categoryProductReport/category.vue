@@ -73,13 +73,15 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>{{ $t('global.NameEn') }}</th>
+                                        <th>{{ $t('global.category') }}</th>
+                                        <th>{{ $t('global.subCategory') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody v-if="categories.length">
-                                    <tr v-for="(item,index) in categories"  :key="item.id">
+                                    <tr v-for="(item,index) in categories" :key="item.id">
                                         <td>{{ index+1 }}</td>
-                                        <td>{{ item.product.sub_category.name }}</td>
+                                        <td>{{ item.product.category.name }}</td>
+                                        <td>{{ item.product.sub_category ? item.product.sub_category.name : '---' }}</td>
                                     </tr>
                                     </tbody>
                                     <tbody v-else>

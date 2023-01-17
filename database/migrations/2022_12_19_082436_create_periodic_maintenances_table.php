@@ -16,15 +16,12 @@ class CreatePeriodicMaintenancesTable extends Migration
         Schema::create('periodic_maintenances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
+//            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('name')->nullable();
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
             $table->string('collector')->nullable();
-<<<<<<< HEAD
-            $table->date('next_maintenance');
-=======
             $table->date('next_maintenance')->default(now())->nullable();
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();

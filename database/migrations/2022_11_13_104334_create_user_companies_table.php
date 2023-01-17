@@ -16,6 +16,9 @@ class CreateUserCompaniesTable extends Migration
         Schema::create('user_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('selling_method_id')->default(1)->constrained('selling_methods')->cascadeOnDelete();
+//            $table->foreignId('province_id')->default(1)->constrained('provinces')->cascadeOnDelete();
+//            $table->foreignId('area_id')->default(1)->constrained('areas')->cascadeOnDelete();
             $table->text('address')->nullable();
             $table->string('phone_second')->nullable();
             $table->text('facebook')->nullable();

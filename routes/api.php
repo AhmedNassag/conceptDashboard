@@ -405,6 +405,17 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //companyProfile
             Route::resource('companyProfile', 'CompanyProfileController');
+
+            //termsPrivacy
+            Route::resource('termsPrivacy', 'TermsPrivacyController');
+
+            //competition
+            Route::resource('competition', 'CompetitionController');
+            Route::get('activationCompetition/{id}', 'CompetitionController@activationCompetition');
+            Route::get('activeCompetition', 'CompetitionController@activeCompetition');
+
+            //share
+            Route::resource('share', 'ShareController');
         });
     });
     /****************************** end dashboard ******************************/
@@ -416,7 +427,8 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
     #######################################################################################################################
 
     /****************************** start Api mobile ******************************/
-    Route::group([ 'prefix' => 'mobile','namespace' => 'MobileApp','middleware' => ['closeApp']],function () {
+    Route::group([ 'prefix' => 'mobile','namespace' => 'MobileApp','middleware' => ['closeApp']],function ()
+    {
 
         //provinces with areas
         Route::get('provinces','ProvinceController@province');
@@ -438,9 +450,10 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         Route::get('area/{area}','RegisterController@area');
 
         //start reset[company,merchant,client]
-        Route::post('forgot-password', 'AuthController@forgotPassword');
-        Route::post('confirmOtp', 'AuthController@confirmOtp');
-        Route::post('reset-password', 'AuthController@reset');
+        Route::post('user-by-phone','AuthController@userByPhone');
+        Route::post('forgot-password','AuthController@forgotPassword');
+        Route::post('confirmOtp','AuthController@confirmOtp');
+        Route::post('reset-password','AuthController@reset');
 
         //start Login[company,merchant,client]
         Route::post('login','AuthController@login');
@@ -449,7 +462,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             Route::get('me','AuthMobileController@me');
             Route::post('changePassword','AuthMobileController@changePassword');
-            Route::put('updateProfile','ProfileController@updateProfile');
+            Route::post('updateProfile','ProfileController@updateProfile');
 
             //ads
             Route::get('popupAds','AdsController@popupAds');
@@ -459,46 +472,75 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('categoryHome','CategoryController@categoryHome');
             Route::get('category','CategoryController@category');
             Route::get('subCategory/{id}','CategoryController@subCategory');
+            Route::get('allSubCategory','CategoryController@allSubCategory');
 
             //company
             Route::get('company/{id}','CompanyController@companyBySubCategoryId');
             Route::get('company','CompanyController@company');
             Route::get('companyHome','CompanyController@companyHome');
 
-            //products
-            Route::get('productCompany/{id}','ProductController@productCompany');
+            //product
+            Route::get('productCompany','ProductController@productCompany');
+            Route::get('getProductByCategory/{category}','ProductController@getProductByCategory');
             Route::get('getProductByBarcode/{barcode}','ProductController@getProductByBarcode');
-            Route::get('products','ProductController@products');
             Route::get('pestProduct','ProductController@pestProduct');
             Route::get('similarProducts/{id}','ProductController@similarProducts');
+            Route::get('products','ProductController@products');
+            Route::get('filters','ProductController@filters');
+            Route::get('waxes','ProductController@waxes');
+            Route::get('spareParts','ProductController@spareParts');
+            Route::get('getProductById/{category}/{subCategory?}','ProductController@getProductById');
+            Route::get('getProductByName/{name}','ProductController@getProductByName');
+            Route::get('getProductByGuarantee/{guarantee}','ProductController@getProductByGuarantee');
+            Route::get('getProductByPrice/{price}','ProductController@getProductByPrice');
+            Route::post('getProductBySearch','ProductController@getProductBySearch');
 
             //suggestion
-            Route::get('getSuggestion',  'SuggestionClientController@getSuggestion');
-            Route::post('suggestion',  'SuggestionClientController@suggestion');
+            Route::get('getSuggestion','SuggestionClientController@getSuggestion');
+            Route::post('suggestion','SuggestionClientController@suggestion');
 
-            //get taxes
-            Route::get('getTaxes',  'TaxController@getTaxes');
+            //tax
+            Route::get('getTaxes','TaxController@getTaxes');
 
-            //get shipping price
-            Route::get('shippingPrice',  'ShippingController@shippingPrice');
+            //shippingPrice
+            Route::get('shippingPrice','ShippingController@shippingPrice');
 
-            //check coupon
-            Route::post('checkCoupon',  'CouponController@checkCoupon');
+            //checkCoupon
+            Route::post('checkCoupon','CouponController@checkCoupon');
 
             //order
-            Route::post('order',  'OrderController@order');
-            Route::get('trackingOrder',  'OrderController@trackingOrder');
-            Route::get('pendingOrders',  'OrderController@pendingOrders');
+            Route::post('companyOrder','CompanyOrderController@order');
+            Route::post('order','OrderController@order');
+            Route::get('trackingOrder','OrderController@trackingOrder');
+            Route::get('pendingOrders','OrderController@pendingOrders');
+            Route::get('clientsOrder/{id}', 'OrderController@clientsOrder');
 
-            //get client Debts
-            Route::get('clientDebts',  'ClientDebtsController@clientDebts');
+            //clientDebts
+            Route::get('clientDebts','ClientDebtsController@clientDebts');
 
             //periodicMaintenance
-            Route::post('periodicMaintenance', 'PeriodicMaintenanceController@store');
-            Route::post('delayPeriodicMaintenance', 'PeriodicMaintenanceController@update');
+            Route::post('periodicMaintenance','PeriodicMaintenanceController@store');
+            Route::post('delayPeriodicMaintenance','PeriodicMaintenanceController@update');
+            Route::get('nextMaintenance', 'PeriodicMaintenanceController@nextMaintenance');
+            Route::get('filterWaxes', 'CompanyPeriodicMaintenanceController@filterWaxes');
+            Route::post('companyPeriodicMaintenance','CompanyPeriodicMaintenanceController@store');
 
             //problemLead
-            Route::post('problemLead', 'ProblemLeadController@store');
+            Route::post('problemLead','ProblemLeadController@store');
+
+            //termsPrivacy
+            Route::get('termsPrivacy','TermsPrivacyController@index');
+
+            //share
+            Route::get('allCompetition','ShareController@allCompetition');
+            Route::get('getCompetitionByCount/{count}', 'ShareController@getCompetitionByCount');
+            Route::get('getCompetitionByCountAndDays/{count}/{days}', 'ShareController@getCompetitionByCountAndDays');
+            Route::post('share','ShareController@store');
+            Route::get('wallet/{id}', 'ShareController@wallet');
+
+            //notification
+            Route::get('getAllNot','NotificationController@getAllNot');
+            Route::get('getNotNotRead','NotificationController@getNotNotRead');
 
             //start logout
             Route::post('logout','AuthController@logout');
@@ -507,7 +549,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
     /****************************** end Api mobile ******************************/
 
     #######################################################################################################################
-    ######################################   Start Mobile Api   ###########################################################
+    ######################################   End Mobile Api   ###########################################################
     #######################################################################################################################
 
 
@@ -530,150 +572,3 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
     });
     //end representative
 });
-
-
-/*******************************************************************************/
-/****************************** start Api mobile ******************************/
-Route::group(['prefix' => 'mobile', 'namespace' => 'MobileApp', 'middleware' => ['closeApp']], function () {
-
-    //provinces with areas
-    Route::get('provinces','ProvinceController@province');
-
-    //selling Method
-    Route::get('sellingMethod','SellingMethodController@sellingMethod');
-
-    //setting
-    Route::get('setting','SettingController@setting');
-
-    //check token
-    Route::get('checkToken','AuthController@authorizeUser');
-
-    //start Register[company,merchant,client]
-    Route::post('company','RegisterController@companyRegister');
-    Route::post('merchant','RegisterController@merchantRegister');
-    Route::post('client','RegisterController@clientRegister');
-    Route::get('province','RegisterController@province');
-    Route::get('area/{area}','RegisterController@area');
-
-    //start reset[company,merchant,client]
-    Route::post('forgot-password','AuthController@forgotPassword');
-    Route::post('confirmOtp','AuthController@confirmOtp');
-    Route::post('reset-password','AuthController@reset');
-
-<<<<<<< HEAD
-             // start lead
-             Route::resource('lead','LeadController');
-             Route::get('leadClient','LeadController@leadClient');
-             Route::post('storeClient','LeadController@storeClient');
-             Route::post('addAction', 'LeadController@addAction');
-             Route::post('changeLeadClient/{id}','LeadController@changeLeadToClient');
-             Route::get('leadClientGet','LeadController@leadClientGet');
-
-             // crm
-             Route::resource('targetPlan', 'TargetPlanController');
-             Route::resource('target', 'TargetController');
-             Route::resource('sellerCategory', 'SellerCategoryController');
-             Route::resource('leads', 'LeadController');
-             Route::get('changeEmployeeLead/{id}', 'LeadController@changeEmployeeLead');
-             Route::put('updateEmployeeLead/{id}', 'LeadController@updateEmployeeLead');
-             Route::resource('salesLead', 'SalesLeadController');
-             Route::get('getTenLead/{id}', 'SalesLeadController@getTenLead');
-             Route::resource('leadComment', 'LeadCommentController');
-             Route::resource('targetAchieved', 'TargetAchievedController');
-
-             // problem
-             Route::resource('problemtargetPlan', 'problemTargetPlanController');
-             Route::resource('problemtarget', 'problemTargetController');
-             Route::resource('problemsellerCategory', 'problemSellerCategoryController');
-             Route::resource('problemleads', 'problemLeadController');
-             Route::get('problemchangeEmployeeLead/{id}', 'problemLeadController@changeEmployeeLead');
-             Route::put('problemupdateEmployeeLead/{id}', 'problemLeadController@updateEmployeeLead');
-             Route::resource('problemsalesLead', 'problemSalesLeadController');
-             Route::get('problemgetTenLead/{id}', 'problemSalesLeadController@getTenLead');
-             Route::resource('problemleadComment', 'problemLeadCommentController');
-             Route::resource('problemtargetAchieved', 'problemTargetAchievedController');
-
-             // follow
-             Route::resource('followtargetPlan', 'followTargetPlanController');
-             Route::resource('followtarget', 'followTargetController');
-             Route::resource('followsellerCategory', 'followSellerCategoryController');
-             Route::resource('followleads', 'followLeadController');
-             Route::get('followchangeEmployeeLead/{id}', 'followLeadController@changeEmployeeLead');
-             Route::put('followupdateEmployeeLead/{id}', 'followLeadController@updateEmployeeLead');
-             Route::resource('followsalesLead', 'followSalesLeadController');
-             Route::get('followgetTenLead/{id}', 'followSalesLeadController@getTenLead');
-             Route::resource('followleadComment', 'followLeadCommentController');
-             Route::resource('followtargetAchieved', 'followTargetAchievedController');
-
-             //PeriodicMaintenance
-             Route::resource('periodicMaintenance','PeriodicMaintenanceController');
-             Route::get('activationPeriodicMaintenance/{id}','PeriodicMaintenanceController@activationPeriodic');
-             Route::get('nearPeriodicMaintenance','PeriodicMaintenanceController@nearPeriodic');
-             Route::post('confirmPeriodic/{id}','PeriodicMaintenanceController@confirmPeriodic');
-         });
-=======
-    //start Login[company,merchant,client]
-    Route::post('login','AuthController@login');
-
-    // Route::middleware(['auth:api'])->group(function () {
-
-        Route::get('me','AuthMobileController@me');
-        Route::post('changePassword','AuthMobileController@changePassword');
-        Route::put('updateProfile','ProfileController@updateProfile');
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
-
-        //ads
-        Route::get('popupAds','AdsController@popupAds');
-        Route::get('slidersAds','AdsController@slidersAds');
-
-        //category
-        Route::get('categoryHome','CategoryController@categoryHome');
-        Route::get('category', 'CategoryController@category');
-        Route::get('subCategory/{id}','CategoryController@subCategory');
-
-        //company
-        Route::get('company/{id}','CompanyController@companyBySubCategoryId');
-        Route::get('company', 'CompanyController@company');
-        Route::get('companyHome','CompanyController@companyHome');
-
-        //products
-        Route::get('productCompany/{id}','ProductController@productCompany');
-        Route::get('getProductByBarcode/{barcode}','ProductController@getProductByBarcode');
-        Route::get('products','ProductController@products');
-        Route::get('pestProduct','ProductController@pestProduct');
-        Route::get('similarProducts/{id}','ProductController@similarProducts');
-
-        //suggestion
-        Route::get('getSuggestion','SuggestionClientController@getSuggestion');
-        Route::post('suggestion','SuggestionClientController@suggestion');
-
-        //get taxes
-        Route::get('getTaxes','TaxController@getTaxes');
-
-        //get shipping price
-        Route::get('shippingPrice','ShippingController@shippingPrice');
-
-        //check coupon
-        Route::post('checkCoupon','CouponController@checkCoupon');
-
-        //order
-        Route::post('order','OrderController@order');
-        Route::get('trackingOrder','OrderController@trackingOrder');
-        Route::get('pendingOrders','OrderController@pendingOrders');
-
-        //get client Debts
-        Route::get('clientDebts','ClientDebtsController@clientDebts');
-
-        //periodicMaintenance
-        Route::post('periodicMaintenance','PeriodicMaintenanceController@store');
-        Route::post('delayPeriodicMaintenance/{id}','PeriodicMaintenanceController@update');
-
-        //problemLead
-        Route::post('problemLead','ProblemLeadController@store');
-
-        //start logout
-        Route::post('logout','AuthController@logout');
-    // });
-});
-/****************************** end Api mobile ******************************/
-/*******************************************************************************/

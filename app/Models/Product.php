@@ -64,7 +64,7 @@ class Product extends Model
         return $this->morphMany(Media::class,'mediable');
     }
 
-    public function  selling_method()
+    public function selling_method()
     {
         return $this->belongsToMany(SellingMethod::class,'product_selling_methods','product_id','selling_method_id');
     }
@@ -85,6 +85,9 @@ class Product extends Model
 
     public function productPrice(){
         return $this->hasMany(ProductPricing::class,'product_id');
+    }
+    public function latestPrice(){
+        return $this->hasOne(ProductPricing::class)->where('selling_method_id',1)->latestOfMany();
     }
 
     public function pricingHistories(){

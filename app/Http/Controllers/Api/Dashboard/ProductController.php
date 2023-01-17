@@ -35,11 +35,11 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = Product::
-        with('company:id,name', 'category:id,name', 'tax:id,name')
+        with('media','company:id,name', 'category:id,name', 'tax:id,name')
             ->when($request->search, function ($q) use ($request) {
-                return $q->where('name', 'like', "%" . $request->search . "%")
-                    ->orWhereRelation('company', 'name', 'like', '%' . $request->search . '%')
-                    ->orWhereRelation('category', 'name', 'like', '%' . $request->search . '%');
+                return $q->where('name', 'like', $request->search . "%")
+                    ->orWhereRelation('company', 'name', 'like', $request->search . '%')
+                    ->orWhereRelation('category', 'name', 'like', $request->search . '%');
             })->paginate(15);
 
         return $this->sendResponse(['products' => $products], 'Data exited successfully');

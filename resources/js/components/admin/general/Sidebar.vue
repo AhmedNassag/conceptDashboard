@@ -81,39 +81,39 @@
                     <!--end userCompany-->
 
                     <!--start merchant-->
-                    <li
-                        :class="[{'active': ['indexMerchant','createMerchant','editMerchant','showMerchant'].includes($route.name)}]"
-                        v-if="permission.includes('CreditCapacity read')"
-                    >
-                        <router-link :to="{name:'indexMerchant'}" >
-                            <i class="fas fa-users"></i>
-                            <span>{{ $t('sidebar.merchant') }}</span>
-                        </router-link>
-                    </li>
+<!--                    <li-->
+<!--                        :class="[{'active': ['indexMerchant','createMerchant','editMerchant','showMerchant'].includes($route.name)}]"-->
+<!--                        v-if="permission.includes('CreditCapacity read')"-->
+<!--                    >-->
+<!--                        <router-link :to="{name:'indexMerchant'}" >-->
+<!--                            <i class="fas fa-users"></i>-->
+<!--                            <span>{{ $t('sidebar.merchant') }}</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <!--end merchant-->
 
                     <!--start leadFollowUps-->
-                    <li
-                        :class="[{'active': ['indexLeadFollowUps','editLeadFollowUps','createLeadFollowUps'].includes($route.name)}]"
-                        v-if="permission.includes('CreditCapacity read')"
-                    >
-                        <router-link :to="{name:'indexLeadFollowUps'}" >
-                            <i class="fas fa-users"></i>
-                            <span>{{ $t('sidebar.LeadFollowUps') }}</span>
-                        </router-link>
-                    </li>
+<!--                    <li-->
+<!--                        :class="[{'active': ['indexLeadFollowUps','editLeadFollowUps','createLeadFollowUps'].includes($route.name)}]"-->
+<!--                        v-if="permission.includes('CreditCapacity read')"-->
+<!--                    >-->
+<!--                        <router-link :to="{name:'indexLeadFollowUps'}" >-->
+<!--                            <i class="fas fa-users"></i>-->
+<!--                            <span>{{ $t('sidebar.LeadFollowUps') }}</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <!--end leadFollowUps-->
 
                     <!--start LeadSourse-->
-                    <li
-                        :class="[{'active': ['indexLeadSourse','createLeadSourse','editLeadSourse'].includes($route.name)}]"
-                        v-if="permission.includes('CreditCapacity read')"
-                    >
-                        <router-link :to="{name:'indexLeadSourse'}" >
-                            <i class="fas fa-users"></i>
-                            <span>{{ $t('sidebar.leadSourse') }}</span>
-                        </router-link>
-                    </li>
+<!--                    <li-->
+<!--                        :class="[{'active': ['indexLeadSourse','createLeadSourse','editLeadSourse'].includes($route.name)}]"-->
+<!--                        v-if="permission.includes('CreditCapacity read')"-->
+<!--                    >-->
+<!--                        <router-link :to="{name:'indexLeadSourse'}" >-->
+<!--                            <i class="fas fa-users"></i>-->
+<!--                            <span>{{ $t('sidebar.leadSourse') }}</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <!--end leadFollowUps-->
 
                     <!--start Lead-->
@@ -204,19 +204,10 @@
                     <!--end buy-->
 
 
-                    <!--start store-->
+                    <!--start product-->
                     <li class="submenu" v-if="permission.includes('productManagement')">
                         <a href="#" ><i class="fab fa-product-hunt"></i> <span> {{ $t('sidebar.ProductManagement') }}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
-
-                            <li
-                                :class="[{'active': ['indexCompany','createCompany','editCompany'].includes($route.name)}]"
-                                v-if="permission.includes('company read')"
-                            >
-                                <router-link :to="{name:'indexCompany'}" :class="['sidebar-menu-rtl']">
-                                    {{ $t('sidebar.company') }}
-                                </router-link>
-                            </li>
 
                             <li
                                 :class="[{'active': ['indexCategory','createCategory','editCategory'].includes($route.name)}]"
@@ -233,6 +224,15 @@
                             >
                                 <router-link :to="{name:'indexSubCategory'}" :class="['sidebar-menu-rtl']">
                                     {{ $t('global.subCategory') }}
+                                </router-link>
+                            </li>
+
+                            <li
+                                :class="[{'active': ['indexCompany','createCompany','editCompany'].includes($route.name)}]"
+                                v-if="permission.includes('company read')"
+                            >
+                                <router-link :to="{name:'indexCompany'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t('sidebar.company') }}
                                 </router-link>
                             </li>
 
@@ -283,7 +283,7 @@
 
                         </ul>
                     </li>
-                    <!--end Store-->
+                    <!--end product-->
 
 
                     <!--start store-->
@@ -800,6 +800,33 @@
                     </li>
                     <!--end area-->
 
+                    <!--start shareCompetition-->
+                    <li class="submenu" v-if="permission.includes('shareCompetition')">
+                        <a href="#" ><i class="fas fa-city"></i> <span> {{$t('global.shareCompetition')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
+                        <ul>
+
+                            <li
+                                :class="[{'active': ['indexCompetition','createCompetition','editCompetition'].includes($route.name)}]"
+                                v-if="permission.includes('competition read')"
+                            >
+                                <router-link :to="{name:'indexCompetition'}" :class="['sidebar-menu-rtl']">
+                                    {{$t('global.Competition')}}
+                                </router-link>
+                            </li>
+
+                            <li
+                                :class="[{'active': ['indexShare'].includes($route.name)}]"
+                                v-if="permission.includes('share read')"
+                            >
+                                <router-link :to="{name:'indexShare'}" :class="['sidebar-menu-rtl']">
+                                    {{$t('global.Share')}}
+                                </router-link>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <!--end shareCompetition-->
+
                     <!--start  report-->
                     <li class="submenu">
                         <a href="#" ><i class="fas fa-clipboard-list"></i> <span> {{$t('global.report')}}</span>  <span :class="['menu-arrow menu-arrow-ar']"></span></a>
@@ -924,6 +951,18 @@
                         </router-link>
                     </li>
                     <!--end companyProfile-->
+
+                    <!--start termsPrivacy-->
+                    <li
+                        :class="[{'active': ['indexTermsPrivacy','createTermsPrivacy','editTermsPrivacy'].includes($route.name)}]"
+                        v-if="permission.includes('termsPrivacy read')"
+                    >
+                        <router-link :to="{name:'indexTermsPrivacy'}" >
+                            <i class="fas fa-cogs"></i>
+                            <span>{{ $t('sidebar.termsPrivacy') }}</span>
+                        </router-link>
+                    </li>
+                    <!--end termsPrivacy-->
 
                     <!--start setting-->
                     <li

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClientIncome;
+use App\Models\FilterWax;
 use App\Models\PeriodicMaintenance;
 use App\Traits\Message;
 use Carbon\Carbon;
@@ -32,7 +33,7 @@ class PeriodicMaintenanceController extends Controller
             ->orWhere('note','like','%'.$request->search.'%')
             ->orWhereRelation('order','id','like','%'.$request->search.'%');
         })
-        ->latest()->paginate(10);
+        ->orderBy('next_maintenance','asc')->latest()->paginate(10);
 
         return $this->sendResponse(['periodicMaintenances' => $periodicMaintenances], 'Data exited successfully');
     }
@@ -71,16 +72,23 @@ class PeriodicMaintenanceController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'quantity' => 'required',
-                'price' => 'required',
+                // 'price' => 'required',
                 'next_maintenance' => 'required',
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-            $data = $request->only(['name','quantity','price','next_maintenance']);
+            // $data = $request->only(['name','quantity','price','next_maintenance']);
+            // $periodicMaintenance = PeriodicMaintenance::create($data);
 
-            $periodicMaintenance = PeriodicMaintenance::create($data);
+            $price = FilterWax::first();
+            $periodicMaintenance = PeriodicMaintenance::create([
+                'name' => $request->name,
+                'quantity' => $request->quantity,
+                'price' => $price->name,
+                'next_maintenance' => $request->next_maintenance
+            ]);
 
             DB::commit();
 
@@ -132,7 +140,7 @@ class PeriodicMaintenanceController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'quantity' => 'required',
-                'price' => 'required',
+                // 'price' => 'required',
                 'next_maintenance' => 'required',
             ]);
 
@@ -140,7 +148,7 @@ class PeriodicMaintenanceController extends Controller
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
-            $data = $request->only(['name','quantity','price','next_maintenance','note']);
+            $data = $request->only(['name','quantity',/*'price',*/'next_maintenance','note']);
 
             $periodicMaintenance->update($data);
 
@@ -178,25 +186,19 @@ class PeriodicMaintenanceController extends Controller
     }
 
 
+
     public function nearPeriodic(Request $request)
     {
-<<<<<<< HEAD
-        $periodicMaintenances = PeriodicMaintenance::where('status',1)
-=======
         $periodicMaintenances = PeriodicMaintenance::where('collector', Null)->where('status',1)
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
-            ->where('next_maintenance','<=',Carbon::now()->addDays(2))
-            ->when($request->search, function ($q) use ($request) {
-                return $q->where('quantity', 'like', '%' . $request->search . '%')
-                    ->orWhere('name','like','%'.$request->search.'%')
-                    ->orWhere('price','like','%'.$request->search.'%')
-                    ->orWhere('next_maintenance','like','%'.$request->search.'%');
-            })
-<<<<<<< HEAD
-            ->latest()->paginate(10);
-=======
-            ->orderBy('name','Asc')->latest()->paginate(10);
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
+        ->where('next_maintenance', '<', Carbon::now()->addDays(1))
+        ->where('next_maintenance', '>', Carbon::now()->subDays(1))
+        ->when($request->search, function ($q) use ($request) {
+            return $q->where('quantity', 'like', '%' . $request->search . '%')
+            ->orWhere('name', 'like', '%' . $request->search.'%')
+            ->orWhere('price', 'like', '%' . $request->search.'%')
+            ->orWhere('next_maintenance', 'like', '%' . $request->search.'%');
+        })
+        ->orderBy('name','Asc')->latest()->paginate(10);
 
         return $this->sendResponse(['periodicMaintenances' => $periodicMaintenances], 'Data exited successfully');
     }
@@ -211,34 +213,38 @@ class PeriodicMaintenanceController extends Controller
 
             // Validator request
             $v = Validator::make($request->all(), [
-                'name' => ['required','string'],
-                'quantity' => 'required',
-                'price' => 'required',
-                'collector' => 'required',
+                // 'name' => ['required','string'],
+                // 'quantity' => 'required',
+                // 'price' => 'required',
+                // 'collector' => 'required',
             ]);
 
             if ($v->fails()) {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
-            $data = $request->only(['name','quantity','price','collector']);
-            $data['next_maintenance'] = now()->addDays($periodicMaintenance->order->orderDetails[0]->product->maintenance->period);
-            $periodicMaintenance->update($data);
+            // $data = $request->only(['name','quantity','price','collector']);
+
+            $period = FilterWax::where('name', $periodicMaintenance->price)->first();
+            $data = now()->addDays($period->period);
+            $periodicMaintenance->update([
+                'next_maintenance' => $data,
+            ]);
 
 
-        //earn the maintenance money to the treasure
-        $supplierAccount = ClientIncome::create([
-            'treasury_id' => 1,
-            'client_id' => $periodicMaintenance->order->user_id,
-            'income_id' => 5,
-            'amount' => $request->collector,
-            'payment_date' => now(),
-            'user_id' => auth()->id(),
-        ]);
-        $supplierAccount->clientAccount()->create([
-            'user_id' => $periodicMaintenance->order->user_id,
-            'amount' => $request->collector,
-        ]);
+            //earn the maintenance money to the treasure
+            // $supplierAccount = ClientIncome::create([
+            //     'treasury_id' => 1,
+            //     'client_id' => $periodicMaintenance->order->user_id,
+            //     'income_id' => 5,
+            //     'amount' => $request->collector,
+            //     'payment_date' => now(),
+            //     'user_id' => auth()->id(),
+            // ]);
+            // $supplierAccount->clientAccount()->create([
+            //     'user_id' => $periodicMaintenance->order->user_id,
+            //     'amount' => $request->collector,
+            // ]);
 
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');

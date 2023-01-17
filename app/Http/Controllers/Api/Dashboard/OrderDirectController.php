@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
-<<<<<<< HEAD
-=======
 use App\Models\CompanyProfile;
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
 use App\Models\followLead;
 use App\Models\OfferDiscount;
 use App\Models\Order;
@@ -218,7 +215,8 @@ class OrderDirectController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
 
             // Validator request
@@ -237,13 +235,15 @@ class OrderDirectController extends Controller
                 'product.*.branchQuantity' => 'required|integer'
             ]);
 
-            if ($v->fails()) {
+            if ($v->fails())
+            {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
 
             $errors = [];
             $totalBefourDiscount = 0;
-            foreach ($request->product as $product){
+            foreach ($request->product as $product)
+            {
                 $product_pricing_main = ProductPricing::where([
                     ['id', $product['mainId']],
                     ['product_id', $product['product_id']],
@@ -256,36 +256,39 @@ class OrderDirectController extends Controller
                     ['selling_method_id', $request->selling_method_id],
                 ])->first();
 
-                if (
-                     $product['mainQuantity'] > $product_pricing_main->available_quantity &&
-                     $product['branchQuantity'] >  $product_pricing_branch->available_quantity
-                   ) {
+                if ($product['mainQuantity'] > $product_pricing_main->available_quantity && $product['branchQuantity'] >  $product_pricing_branch->available_quantity)
+                {
                     $errors['products.' . $product . '.mainQuantity'][] = "لا يوجد كمية متاحة فى المخزن";
                     return $this->sendError(trans('message.messageError'), $errors);
-                   }
+                }
 
-                $totalBefourDiscount +=
-                    (($product['mainPrice'] * $product['mainQuantity'])
-                + ($product['branchPrice'] * $product['branchQuantity'])) ;
+                $totalBefourDiscount += (($product['mainPrice'] * $product['mainQuantity']) + ($product['branchPrice'] * $product['branchQuantity'])) ;
             }
 
             $discount = 0;
-            foreach ($request->discounts as $discountOffer) {
+            foreach ($request->discounts as $discountOffer)
+            {
                 $offer = OfferDiscount::find($discountOffer);
 
-                if($offer->type == 'fixed'){
+                if($offer->type == 'fixed')
+                {
                     $discount += $offer->value;
-                }else{
+                }
+                else
+                {
                     $discount += ($totalBefourDiscount * $offer->value)/ 100;
                 }
             }
+
             $totalAfterDiscount = $totalBefourDiscount - $discount - $request->priceOffer;
 
             $tax = 0;
-            foreach ($request->taxs as $tax_price) {
+            foreach ($request->taxs as $tax_price)
+            {
                 $ta = Tax::find($tax_price);
                 $tax += ($totalAfterDiscount * $ta->percentage)/ 100;
             }
+
             $totalAfterTax = $totalAfterDiscount + $tax;
 
             $order = Order::create([
@@ -301,33 +304,11 @@ class OrderDirectController extends Controller
                 'is_tax' => $request->discounts ? 1 : 0,
             ]);
 
-            //
-<<<<<<< HEAD
-            $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
-            if(!$auth)
+
+            if($request->taxs)
             {
-                TargetAchieved::create([
-                    'count' => $totalAfterTax,
-                    'employee_id' => auth()->user()->id,
-                    'date' => now(),
-                ]);
-            }
-=======
-            // $auth = User::find(auth()->user()->id)->whereJsonContains('role_name','SuperAdmin')->get();
-            // if(!$auth)
-            // {
-            //     TargetAchieved::create([
-            //         'count' => $totalAfterTax,
-            //         'employee_id' => auth()->user()->id,
-            //         'date' => now(),
-            //     ]);
-            // }
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
-            //
-
-
-            if($request->taxs){
-                foreach ($request->taxs as $ta){
+                foreach ($request->taxs as $ta)
+                {
                     $off = Tax::find($ta);
                     $order->orderTax()->create([
                         'tax_id' => $off->id,
@@ -337,8 +318,10 @@ class OrderDirectController extends Controller
                 }
             }
 
-            if($request->discounts){
-                foreach ($request->discounts as $dis){
+            if($request->discounts)
+            {
+                foreach ($request->discounts as $dis)
+                {
                     $d = OfferDiscount::find($dis);
                     $order->orderOffer()->create([
                         'offer_discount_id' => $d->id,
@@ -349,15 +332,16 @@ class OrderDirectController extends Controller
                 }
             }
 
-            if($request->nameOffer != null && $request->priceOffer){
+            if($request->nameOffer != null && $request->priceOffer)
+            {
                 $order->orderOtherOffer()->create([
                     'name' => $request->nameOffer,
                     'offer' => $request->priceOffer
                 ]);
             }
 
-            foreach ($request->product as $product) {
-
+            foreach ($request->product as $product)
+            {
                 $product_pricing = ProductPricing::where([
                     ['id', $product['mainId']],
                     ['product_id', $product['product_id']],
@@ -377,6 +361,7 @@ class OrderDirectController extends Controller
                     'price' => $product['mainPrice'],
                     'sub_price' => $product['branchPrice'],
                 ]);
+
                 $order_details_id = $order_details->id;
                 $main_measurement_unit_id = $order_details->main_measurement_unit_id;
                 $sub_measurement_unit_id = $order_details->sub_measurement_unit_id;
@@ -393,10 +378,11 @@ class OrderDirectController extends Controller
             }
 
             DB::commit();
-
             return $this->sendResponse(['order' =>$order], 'Data exited successfully');
 
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e)
+        {
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
         }

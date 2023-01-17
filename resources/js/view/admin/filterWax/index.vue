@@ -48,7 +48,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>اسم الشمع</th>
-                                        <th>{{ $t('global.price') }}</th>
+                                        <!-- <th>{{ $t('global.price') }}</th> -->
                                         <th>{{ $t('global.model') }}</th>
                                         <th>{{ $t('global.type') }}</th>
                                         <th>{{ $t('global.origin') }}</th>
@@ -61,7 +61,7 @@
                                     <tr v-for="(item,index) in filterWaxes"  :key="item.id">
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.name ? item.name : '---'}}</td>
-                                        <td>{{ item.price ? item.price : '---'}}</td>
+                                        <!-- <td>{{ item.price ? item.price : '---'}}</td> -->
                                         <td>{{ item.model ? item.model : '---'}}</td>
                                         <td>{{ item.type ? item.type : '---'}}</td>
                                         <td>{{ item.origin ? item.origin : '---'}}</td>

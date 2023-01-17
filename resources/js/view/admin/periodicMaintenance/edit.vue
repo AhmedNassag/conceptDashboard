@@ -67,7 +67,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
+                                            <!-- <div class="col-md-6 mb-3">
                                                 <label for="validationCustom01">سعر الصيانة</label>
                                                 <input type="number" class="form-control"
                                                     v-model.trim="v$.price.$model"
@@ -79,7 +79,7 @@
                                                 <div class="invalid-feedback">
                                                     <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom01">موعد الصيانة القادم</label>
@@ -142,7 +142,7 @@ export default {
                 addPeriodicMaintenance.data.order_id  = l.periodicMaintenance.order_id ;
                 addPeriodicMaintenance.data.name = l.periodicMaintenance.name;
                 addPeriodicMaintenance.data.quantity = l.periodicMaintenance.quantity;
-                addPeriodicMaintenance.data.price = l.periodicMaintenance.price;
+                // addPeriodicMaintenance.data.price = l.periodicMaintenance.price;
                 addPeriodicMaintenance.data.collector = l.periodicMaintenance.collector;
                 addPeriodicMaintenance.data.next_maintenance = l.periodicMaintenance.next_maintenance;
                 addPeriodicMaintenance.data.note = l.periodicMaintenance.note;
@@ -165,7 +165,7 @@ export default {
             data:{
                 name : '',
                 quantity : '',
-                price : '',
+                // price : '',
                 collector : '',
                 next_maintenance : '',
                 note : '',
@@ -182,9 +182,9 @@ export default {
                 quantity: {
                     required
                 },
-                price: {
-                    required
-                },
+                // price: {
+                //     required
+                // },
                 next_maintenance: {
                     required
                 },

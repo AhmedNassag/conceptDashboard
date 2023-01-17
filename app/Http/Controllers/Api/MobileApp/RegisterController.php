@@ -6,13 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Merchant;
 use App\Models\Province;
+use App\Models\Share;
 use App\Models\User;
 use App\Models\UserCompany;
 use App\Traits\Message;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use phpDocumentor\Reflection\Types\Null_;
 
 class RegisterController extends Controller
 {
@@ -36,6 +40,7 @@ class RegisterController extends Controller
                 'area'  => 'required|integer|exists:areas,id',
                 'phone' => 'required|string|unique:users',
                 'address' => 'required|string|min:8|max:300',
+                'firebase_token' => 'required|string',
             ]);
 
             if($v->fails()) {
@@ -50,8 +55,11 @@ class RegisterController extends Controller
                 "auth_id" => 2,
                 'role_name'=> ['client'],
                 "status" => 0,
+                "share_code" => $request->share_code ? $request->share_code : Null,
                 'phone' => $request->phone,
-                "code" => '+2'
+                "code" => '+2',
+                'type' => 'client',
+                "firebase_token" => $request->firebase_token,
             ]);
 
             $user->complement()->create([
@@ -61,20 +69,52 @@ class RegisterController extends Controller
                 'device' => ($request->device  == 1 ? 1:0)
             ]);
 
-            $user->client()->create(['address' => $request->address]);
+            $user->client()->create([
+                'address' => $request->address,
+                'province_id' => $request->province,
+                'area_id' => $request->area,
+                'firebase_token' => $request->firebase_token,
+            ]);
+
+            //increase share points if user enter share code
+            if($request->share_code)
+            {
+                $share = Share::where('code', $request->share_code)->first();
+                if($share)
+                {
+                    if ($share->updated_at->addDays($share->days) >= now())
+                    {
+                        $share->update(['points' => strval(intval($share->points) + 1)]);
+                    }
+                }
+            }
 
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
 
         }
         catch (\Exception $e){
-
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
-
         }
 
-    }// end companyRegister
+    }//end companyRegister
+
+
+    /*
+        //
+        'role_name'=> ['merchant']/*['client']*//*,
+        'type' => 'merchant',
+        //
+        //
+        // start create user
+        $user->client()->create(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' => $request->area_id, 'selling_method_id' => 2]);
+        $user->clientAccounts()->create([
+            'amount' => $request->amount ? $request->amount : 0
+        ]);
+        //
+    */
+
 
     public function merchantRegister(Request $request)
     {
@@ -100,8 +140,8 @@ class RegisterController extends Controller
                 'valueAdded' => 'required|file|mimes:png,jpg,jpeg',
             ]);
 
-            if($v->fails()) {
-                return $this->sendError('There is an error in the data',$v->errors());
+            if ($v->fails()) {
+                return $this->sendError('There is an error in the data', $v->errors());
             }
 
             // start create user
@@ -110,10 +150,11 @@ class RegisterController extends Controller
                 "email" => $request->email,
                 "password" => $request->password,
                 "auth_id" => 2,
-                'role_name'=> ['merchant'],
+                'role_name' => ['merchant'],
                 "status" => 0,
                 'phone' => $request->phone,
-                "code" => '+2'
+                "code" => '+2',
+                'type' => 'merchant',
             ]);
 
             $user->complement()->create([
@@ -121,7 +162,7 @@ class RegisterController extends Controller
                 'province_id' => $request->province,
                 'area_id' => $request->area,
                 'selling_method_id' => 2,
-                'device' => ($request->device  == 1 ? 1:0)
+                'device' => ($request->device  == 1 ? 1 : 0)
             ]);
 
             $merchant = Merchant::create([
@@ -144,7 +185,6 @@ class RegisterController extends Controller
                     'file_type' => $file_type,
                     'file_sort' => 1
                 ]);
-
             }
 
             if ($request->hasFile('commercialRegister')) {
@@ -162,7 +202,6 @@ class RegisterController extends Controller
                     'file_type' => $file_type,
                     'file_sort' => 2
                 ]);
-
             }
 
             if ($request->hasFile('taxCard')) {
@@ -180,7 +219,6 @@ class RegisterController extends Controller
                     'file_type' => $file_type,
                     'file_sort' => 3
                 ]);
-
             }
 
             if ($request->hasFile('valueAdded')) {
@@ -198,19 +236,19 @@ class RegisterController extends Controller
                     'file_type' => $file_type,
                     'file_sort' => 4
                 ]);
-
             }
 
             DB::commit();
-            return $this->sendResponse([],'Data exited successfully');
-
-        }catch(\Exception $e){
-
+            return $this->sendResponse([], 'Data exited successfully');
+        }
+        catch (\Exception $e)
+        {
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
-
         }
-    }// end designRegister
+    }//end merchantRegister
+
+
 
     public function companyRegister(Request $request)
     {
@@ -218,7 +256,6 @@ class RegisterController extends Controller
         DB::beginTransaction();
 
         try {
-
 
             // Validator request
             $v = Validator::make($request->all(), [
@@ -236,7 +273,7 @@ class RegisterController extends Controller
                 "facebook" => 'nullable|url',
                 "linkedin" => 'nullable|url',
                 "website" => 'nullable|url',
-                "whatsapp" => 'nullable|url'
+                "whatsapp" => 'nullable|url',
             ]);
 
             if ($v->fails()) {
@@ -252,7 +289,8 @@ class RegisterController extends Controller
                 'role_name' => ['company'],
                 "status" => 0,
                 'phone' => $request->phone,
-                "code" => $request->code
+                "code" => $request->code,
+                "type" => 'company'
             ]);
 
             $user->complement()->create([
@@ -260,7 +298,7 @@ class RegisterController extends Controller
                 'province_id' => $request->province,
                 'area_id' => $request->area,
                 'selling_method_id' => 2,
-                'device' => ($request->device  == 1 ? 1:0)
+                'device' => ($request->device  == 1 ? 1 : 0)
             ]);
 
             UserCompany::create([
@@ -275,26 +313,29 @@ class RegisterController extends Controller
             ]);
 
             DB::commit();
-            return $this->sendResponse([],'Data exited successfully');
-
-        }catch(\Exception $e){
-
+            return $this->sendResponse([], 'Data exited successfully');
+        }
+        catch (\Exception $e)
+        {
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
         }
 
-    }// end advertiserRegister
+    }// end companyRegister
+
+
 
     public function province()
     {
-        $province = Province::select('id','name')->get();
-        return $this->sendResponse(['provinces' => $province],'Data exited successfully');
+        $province = Province::select('id', 'name')->get();
+        return $this->sendResponse(['provinces' => $province], 'Data exited successfully');
     }
+
+
 
     public function area($id)
     {
-        $area = Area::select('id','name','province_id')->whereProvinceId($id)->get();
-        return $this->sendResponse(['areas' => $area],'Data exited successfully');
+        $area = Area::select('id', 'name', 'province_id')->whereProvinceId($id)->get();
+        return $this->sendResponse(['areas' => $area], 'Data exited successfully');
     }
-
 }

@@ -19,8 +19,8 @@ class CreateProductPricingsTable extends Migration
             $table->foreignId('selling_method_id')->constrained('selling_methods')->cascadeOnDelete();
             $table->foreignId('measurement_unit_id')->constrained('measurement_units')->cascadeOnDelete();
             $table->double('price',20,2)->default(0);
-            $table->integer('max_quantity')->default(0);
-            $table->integer('less_quantity')->default(0);
+            $table->integer('max_quantity')->default(1);
+            $table->integer('less_quantity')->default(1);
             $table->boolean('active')->default(1);
             $table->timestamps();
         });

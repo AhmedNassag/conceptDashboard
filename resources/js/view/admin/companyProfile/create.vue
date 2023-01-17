@@ -102,7 +102,7 @@
                                                 <input type="text" class="form-control"
                                                     v-model.trim="v$.tax_card.$model"
                                                     id="validationCustom04"
-                                                    placeholder=">رقم البطاقة الضريبية"
+                                                    placeholder="رقم البطاقة الضريبية"
                                                     :class="{'is-invalid':v$.tax_card.$error,'is-valid':!v$.tax_card.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
@@ -120,7 +120,7 @@
                                                 <input type="text" class="form-control"
                                                     v-model.trim="v$.commercial_record.$model"
                                                     id="validationCustom05"
-                                                    placeholder=">رقم السجل التجارى"
+                                                    placeholder="رقم السجل التجارى"
                                                     :class="{'is-invalid':v$.commercial_record.$error,'is-valid':!v$.commercial_record.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>

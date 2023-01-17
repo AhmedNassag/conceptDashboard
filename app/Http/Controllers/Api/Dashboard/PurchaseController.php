@@ -43,20 +43,26 @@ class PurchaseController extends Controller
                         ->orWhereRelation('supplier','name_supplier','like','%'.$request->search.'%')
                         ->orWhereRelation('user','name','like','%'.$request->search.'%');
                 });
-            })->where(function ($q) use ($request) {
+            })
+            ->where(function ($q) use ($request) {
                 $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
                     $q->whereDate('created_at', ">=", $request->from_date)
                         ->whereDate('created_at', "<=", $request->to_date);
                 });
-            })->where(function ($q) use ($request) {
+            })
+            ->where(function ($q) use ($request) {
                 $q->when($request->purchase_id, function ($q) use ($request) {
                     $q->where('id', $request->purchase_id);
                 });
-            })->latest()->paginate(5);
+            })
+            ->latest()->paginate(5);
         return $this->sendResponse(['purchases' => $purchases], 'Data exited successfully');
     }
 
-    public function create(){
+
+
+    public function create()
+    {
         $products =  Product::where('status', 1)->with('mainMeasurementUnit', 'subMeasurementUnit', 'company')->get();
         $stores = Store::where('status', 1)->get();
         $suppliers = Supplier::where('status', 1)->get();
@@ -64,6 +70,8 @@ class PurchaseController extends Controller
         $treasuries = Treasury::where('active',1)->get();
         return $this->sendResponse(['products' => $products,'stores'=>$stores,'suppliers'=>$suppliers,'clients'=>$clients,'treasuries'=>$treasuries], 'Data exited successfully');
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -73,7 +81,7 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             DB::beginTransaction();
 
             // Validator request
@@ -200,10 +208,10 @@ class PurchaseController extends Controller
 
             return $this->sendResponse([], 'Data exited successfully');
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $this->sendError('An error occurred in the system');
+        // }
 
     }
 

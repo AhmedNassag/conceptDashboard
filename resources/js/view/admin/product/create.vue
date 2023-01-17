@@ -287,11 +287,11 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label>مده الشحن</label>
+                                                <label>مدة الشحن باليوم</label>
                                                 <input
                                                     type="text" class="form-control"
                                                     v-model.trim="v$.shipping.$model"
-                                                    placeholder="مده الشحن"
+                                                    placeholder="مدة الشحن باليوم"
                                                     :class="{'is-invalid':v$.shipping.$error,'is-valid':!v$.shipping.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
@@ -301,11 +301,11 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label>الضمان</label>
+                                                <label>مدة الضمان بالسنة</label>
                                                 <input
                                                     type="text" class="form-control"
                                                     v-model.trim="v$.guarantee.$model"
-                                                    placeholder=" الضمان "
+                                                    placeholder="مدة الضمان بالسنة"
                                                     :class="{'is-invalid':v$.guarantee.$error,'is-valid':!v$.guarantee.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
@@ -381,7 +381,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12 mb-3 mt-5">
+                                            <div class="col-md-12 mb-3 mt-5" style="display: none">
                                                 <div class="sec-body row">
                                                     <div class="col-md-12 mb-12 sec-head">
                                                         <h3>
@@ -448,7 +448,6 @@
 
                                                     <div class="col-md-3 mb-3">
                                                         <label>{{ $t('global.ChooseStore') }}</label>
-
                                                         <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
                                                             <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                         </select>

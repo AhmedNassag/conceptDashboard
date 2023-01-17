@@ -24,8 +24,8 @@ class CreateProductsTable extends Migration
             $table->string('shipping')->nullable();
             $table->string('guarantee')->nullable();
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
-            $table->foreignId('sub_category_id')->constrained('categories')->cascadeOnDelete();
-            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->foreignId('sub_category_id')->default(Null)->nullable()->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('company_id')->default(Null)->nullable()->constrained('companies')->cascadeOnDelete();
             $table->foreignId('main_measurement_unit_id')->constrained('measurement_units')->cascadeOnDelete();
             $table->foreignId('sub_measurement_unit_id')->constrained('measurement_units')->cascadeOnDelete();
             $table->integer('count_unit')->default(0);

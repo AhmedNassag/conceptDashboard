@@ -16,7 +16,6 @@
                             <li class="breadcrumb-item active">{{ $t('global.clientOldNew') }}</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
             <!-- /Page Header -->
@@ -34,19 +33,17 @@
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.FromDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="fromDate">
+                                                    <input type="date" class="form-control date-input" v-model="fromDate">
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.ToDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="toDate">
+                                                    <input type="date" class="form-control date-input" v-model="toDate">
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.ChooseType')}}</label>
-                                                    <select v-model="order"  class="form-control">
+                                                    <select v-model="order" class="form-control">
                                                         <option value="desc">{{$t('global.mobileClient')}}</option>
                                                         <option value="">{{$t('global.directClient')}}</option>
                                                     </select>
@@ -78,7 +75,7 @@
                                         </tr>
                                     </thead>
                                     <tbody v-if="clients.length">
-                                        <tr v-for="(item,index) in clients"  :key="item.id">
+                                        <tr v-for="(item,index) in clients" :key="item.id">
                                             <td>{{ index+1 }}</td>
                                             <td>{{ item.name }}</td>
                                             <td>{{item.code + item.phone }}</td>
@@ -136,17 +133,17 @@ export default {
             loading.value = true;
 
             adminApi.get(`/v1/dashboard/clientOldNew?from_date=${fromDate.value}&to_date=${toDate.value}&password=${order.value}`)
-                .then((res) => {
-                    let l = res.data.data;
-                    paginateClients.value = l.clients;
-                    clients.value = l.clients.data;
-                })
-                .catch((err) => {
-                    console.log(err.response.data);
-                })
-                .finally(() => {
-                    loading.value = false;
-                });
+            .then((res) => {
+                let l = res.data.data;
+                paginateClients.value = l.clients;
+                clients.value = l.clients.data;
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                loading.value = false;
+            });
 
         }
 

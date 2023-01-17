@@ -41,10 +41,14 @@ class problemLeadController extends Controller
     {
         $lead = problemLead::find($id);
 
+//        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
+//        ->whereHas('job',function ($q){
+//            $q->where('Allow_adding_to_sales_team',1);
+//        })->whereRelation('problemsellerCategories','seller_categories.id',$lead->seller_category_id)->get();
         $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
-        ->whereHas('job'/*,function ($q){
-            $q->where('Allow_adding_to_sales_team',1);
-        }*/)->whereRelation('problemsellerCategories','seller_categories.id',$lead->seller_category_id)->get();
+            ->whereHas('job',function ($q){
+                $q->where('Allow_adding_to_sales_team',1);
+            })->whereHas('problemsellerCategories')->get();
 
         return $this->sendResponse(['employees' => $employees,'lead'=>$lead], 'Data exited successfully');
     }
@@ -111,11 +115,7 @@ class problemLeadController extends Controller
                 'name' => 'required|string|min:3',
                 'address' => 'nullable|string|min:3',
                 'description' => 'nullable|string|min:3',
-<<<<<<< HEAD
-                'phone' => 'required|string|unique:problem_leads,phone',
-=======
                 'phone' => 'required|string',
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
                 'seller_category_id' => 'required|integer|exists:problem_seller_categories,id',
             ]);
 
@@ -172,11 +172,7 @@ class problemLeadController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-<<<<<<< HEAD
-    public function update(Request $request, Lead $lead)
-=======
     public function update(Request $request, $id)
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
     {
         try {
 
@@ -186,13 +182,8 @@ class problemLeadController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => 'required|string|min:3',
                 'address' => 'nullable|string|min:3',
-<<<<<<< HEAD
-                'description' => 'nullable|string|min:3' . ($lead->id ? ",$lead->id" : ''),
-                'phone' => 'required|string|unique:problem_leads,phone' . ($lead->id ? ",$lead->id" : ''),
-=======
                 'description' => 'nullable|string|min:3',
                 'phone' => 'required|string',
->>>>>>> 417c5a33e15b99f534eca336330fc5dcb5a6da41
                 'seller_category_id' => 'required|integer|exists:problem_seller_categories,id',
             ]);
 

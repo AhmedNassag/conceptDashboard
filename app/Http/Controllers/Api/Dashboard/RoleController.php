@@ -42,7 +42,6 @@ class RoleController extends Controller
 
         }catch (\Exception $e){
             return $this->sendError('An error occurred in the system');
-
         }
 
     }// ******* end create
@@ -89,8 +88,8 @@ class RoleController extends Controller
 
             $role = Role::find($id);
 
-            if($role){
-                $permission = Permission::get();
+            if($role) {
+                $permission = Permission::select('id', 'name')->orderBy('category', 'asc')->get();
                 $notifies = Notify::select('id','name')->get();
                 $rolePermissions = DB::table("role_has_permissions")
                     ->where("role_has_permissions.role_id",$id)->

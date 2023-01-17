@@ -214,7 +214,7 @@ export default {
                         .then((res) => {
                             Swal.fire({
                                 icon: 'success',
-                                title: `${active ? 'تم التفعيل بنجاح' :'تم ايقاف التفعيل بنجاح'}`,
+                                title: `${active ? 'تم ايقاف التفعيل بنجاح' : 'تم التفعيل بنجاح'}`,
                                 showConfirmButton: false,
                                 timer: 1500
                             });

@@ -48,7 +48,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>اسم المنتج</th>
-                                        <th>الفئه</th>
+                                        <th>الفئة</th>
                                         <th>البراند</th>
                                         <th>الصورة</th>
                                         <th>الحاله</th>
@@ -56,11 +56,11 @@
                                     </tr>
                                     </thead>
                                     <tbody v-if="products.length">
-                                    <tr v-for="(item,index) in products"  :key="item.id">
-                                        <td>{{ item.id }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.category.name }}</td>
-                                        <td>{{ item.company.name }}</td>
+                                    <tr v-for="(item,index) in products" :key="item.id">
+                                        <td>{{ item.id ? item.id : '---' }}</td>
+                                        <td>{{ item.name ? item.name : '---' }}</td>
+                                        <td>{{ item.category ? item.category.name : '---' }}</td>
+                                        <td>{{ item.company ? item.company.name : '---' }}</td>
                                         <td>
                                             <img
                                                 :src="'/upload/product/' + item.image"

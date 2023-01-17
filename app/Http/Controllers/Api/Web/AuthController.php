@@ -54,7 +54,6 @@ class AuthController extends Controller
             }
 
             //start access token
-
             if ($token = Auth::guard('api')->attempt($credentials)) {
 
                 $user = Auth::guard('api')->user();
@@ -203,11 +202,11 @@ class AuthController extends Controller
         $user = auth()->guard('api')->user();
         $complement = Complement::whereUserId($user->id)->first();
 
-        if($user->role_name[0] == 'company'){
+        if($user->role_name/*type*/[0] == 'company'){
             $partner = new CompanyResource(UserCompany::whereUserId($user->id)->first());
-        }elseif ($user->role_name[0] == 'client'){
+        }elseif ($user->role_name/*type*/[0] == 'client'){
             $partner = new ClientResource(Client::whereUserId($user->id)->first());
-        }elseif ($user->role_name[0] == 'merchant'){
+        }elseif ($user->role_name/*type*/[0] == 'merchant'){
             $partner = new MerchantResource(Merchant::whereUserId($user->id)->first());
         }
 

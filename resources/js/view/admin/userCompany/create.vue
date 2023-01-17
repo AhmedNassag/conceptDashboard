@@ -239,14 +239,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3 mt-5">
+                                            <div class="col-md-6 mb-3 mt-5" style="display: none">
                                                 <div class="sec-body">
                                                     <div class="col-md-12 mb-12 sec-head">
                                                         <h3>
                                                             {{ $t('global.TheBalanceOfTheFirstDuration') }}
                                                         </h3>
                                                     </div>
-
                                                 </div>
 
                                             </div>

@@ -56,7 +56,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
+                                            <!-- <div class="col-md-6 mb-3">
                                                 <label for="validationCustom02">{{ $t('global.price') }}</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.price.$model"
@@ -68,7 +68,7 @@
                                                 <div class="invalid-feedback">
                                                     <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom03">{{ $t('global.Description') }}</label>
@@ -161,7 +161,7 @@ export default {
                     numeric
                 },
                 name: {
-                    minLength: minLength(3),
+                    minLength: minLength(1),
                     maxLength:maxLength(70),
                     required
                 },

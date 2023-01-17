@@ -195,4 +195,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Order::class,'representative_id');
     }
 
+    public function code()
+    {
+        return $this->hasOne(Share::class,'user_id');
+    }
+
 }

@@ -32,17 +32,15 @@
                                         <form @submit.prevent="getOrder" class="needs-validation">
                                             <div class="form-group row align-items-center">
 
-                                                <div class="col-md-3">
+                                                <!-- <div class="col-md-3">
                                                     <label >{{$t('global.FromDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="fromDate">
+                                                    <input type="date" class="form-control date-input" v-model="fromDate">
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.ToDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="toDate">
-                                                </div>
+                                                    <input type="date" class="form-control date-input" v-model="toDate">
+                                                </div> -->
 
                                                 <div class="col-md-3">
                                                     <label >{{$t('global.ChooseType')}}</label>

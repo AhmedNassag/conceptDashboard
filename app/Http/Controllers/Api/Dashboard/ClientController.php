@@ -44,14 +44,14 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         // get user
-        $users = User::whereAuthId(2)->whereJsonContains('role_name','client')
-            ->with(['client','complement.sellingMethod'])->where(function ($q) use($request) {
-                $q->when($request->search, function ($q) use ($request) {
-                    return $q->OrWhere('name', 'like', '%' . $request->search . '%')
-                        ->orWhere('phone', 'like', '%' . $request->search . '%')
-                        ->orWhere('email', 'like', '%' . $request->search . '%');
-                });
-            })->latest('id','ASC')->paginate(15);
+        $users = User::whereAuthId(2)->whereJsonContains('role_name','client')->where('type','client')
+        ->with(['client','complement.sellingMethod'])->where(function ($q) use($request) {
+            $q->when($request->search, function ($q) use ($request) {
+                return $q->OrWhere('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('phone', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        })->latest('id','ASC')->paginate(15);
 
         return $this->sendResponse(['users' => $users],'Data exited successfully');
 
@@ -99,7 +99,7 @@ class ClientController extends Controller
                 'device' => 2
             ]);
 
-            $user->client()->create(['address' => $request->address]);
+            $user->client()->create(['address' => $request->address, 'province_id' => $request->province_id, 'area_id' =>$request->area_id]);
 
             $user->clientAccounts()->create([
                 'amount' => $request->amount ? $request->amount : 0

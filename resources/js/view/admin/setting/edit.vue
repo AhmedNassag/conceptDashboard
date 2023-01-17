@@ -98,14 +98,69 @@
                                                 >
                                                 <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                 <div class="invalid-feedback">
-                                                    <span
-                                                        v-if="v$.facebook.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
-                                                    <span
-                                                        v-if="v$.facebook.minLength.$invalid">{{ $t('global.IsMustHaveAtLeast') }} {{
-                                                            v$.facebook.minLength.$params.min
-                                                        }} {{ $t('global.Letters') }} <br/></span>
+                                                    <span v-if="v$.facebook.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
+                                                    <span v-if="v$.facebook.minLength.$invalid">
+                                                        {{ $t('global.IsMustHaveAtLeast') }} {{ v$.facebook.minLength.$params.min }} {{ $t('global.Letters') }} <br/>
+                                                    </span>
                                                 </div>
                                             </div>
+
+                                            <!--start twitter-->
+                                            <div class="col-md-4 mb-3">
+                                                <label>{{ $t('global.twitter') }}</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       v-model.trim="v$.twitter.$model"
+                                                       :class="{'is-invalid':v$.twitter.$error,'is-valid':!v$.twitter.$invalid}"
+                                                       :placeholder="$t('global.twitter')"
+                                                >
+                                                <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.twitter.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
+                                                    <span v-if="v$.twitter.minLength.$invalid">
+                                                        {{ $t('global.IsMustHaveAtLeast') }} {{ v$.twitter.minLength.$params.min }} {{ $t('global.Letters') }} <br/>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!--end twitter-->
+
+                                            <!--start instgram-->
+                                            <div class="col-md-4 mb-3">
+                                                <label>{{ $t('global.instgram') }}</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       v-model.trim="v$.instgram.$model"
+                                                       :class="{'is-invalid':v$.instgram.$error,'is-valid':!v$.instgram.$invalid}"
+                                                       :placeholder="$t('global.instgram')"
+                                                >
+                                                <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.instgram.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
+                                                    <span v-if="v$.instgram.minLength.$invalid">
+                                                        {{ $t('global.IsMustHaveAtLeast') }} {{ v$.instgram.minLength.$params.min }} {{ $t('global.Letters') }} <br/>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!--end instgram-->
+
+                                            <!--start linkedIn-->
+                                            <div class="col-md-4 mb-3">
+                                                <label>{{ $t('global.linkedIn') }}</label>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       v-model.trim="v$.linkedIn.$model"
+                                                       :class="{'is-invalid':v$.linkedIn.$error,'is-valid':!v$.linkedIn.$invalid}"
+                                                       :placeholder="$t('global.linkedIn')"
+                                                >
+                                                <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.linkedIn.required.$invalid">{{ $t('global.IsRequired') }} <br/></span>
+                                                    <span v-if="v$.linkedIn.minLength.$invalid">
+                                                        {{ $t('global.IsMustHaveAtLeast') }} {{ v$.linkedIn.minLength.$params.min }} {{ $t('global.Letters') }} <br/>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!--end linkedIn-->
 
                                             <div class="col-md-4 mb-3">
                                                 <label for="validationCustom02">{{$t('global.closeApp')}}</label>
@@ -166,6 +221,9 @@ export default {
                     addJob.data.phone = l.setting.phone;
                     addJob.data.wats_app = l.setting.wats_app;
                     addJob.data.facebook = l.setting.facebook;
+                    addJob.data.twitter = l.setting.twitter;
+                    addJob.data.instgram = l.setting.instgram;
+                    addJob.data.linkedIn = l.setting.linkedIn;
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -186,6 +244,9 @@ export default {
                 phone: '',
                 wats_app: '',
                 facebook: '',
+                twitter: '',
+                instgram: '',
+                linkedIn: '',
             }
         });
 
@@ -202,6 +263,18 @@ export default {
                     maxLength: maxLength(20)
                 },
                 facebook: {
+                    required,
+                    minLength: minLength(1),
+                },
+                twitter: {
+                    required,
+                    minLength: minLength(1),
+                },
+                instgram: {
+                    required,
+                    minLength: minLength(1),
+                },
+                linkedIn: {
                     required,
                     minLength: minLength(1),
                 },

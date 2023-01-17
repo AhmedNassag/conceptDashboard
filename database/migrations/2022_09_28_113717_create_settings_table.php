@@ -19,6 +19,9 @@ class CreateSettingsTable extends Migration
             $table->string('phone');
             $table->string('wats_app');
             $table->text('facebook');
+            $table->text('twitter');
+            $table->text('instgram');
+            $table->text('linkedIn');
             $table->boolean('show_price')->default(true);
             $table->timestamps();
         });

@@ -58,9 +58,9 @@
                                         <tr v-for="(item) in products" :key="item.id">
                                             <td class="text-center"> <span v-if="item.error || item.quantity < item.Re_order_limit" class="fas fa-exclamation-circle red-text" aria-hidden="true"></span> {{ item.id}}</td>                                        <td>{{ item.barcode }}</td>
                                             <td class="text-center">{{ item.name }}</td>
-                                            <td class="text-center">{{ item.company.name }}</td>
-                                            <td class="text-center">{{ item.category.name }}</td>
-                                            <td class="text-center">{{ item.sub_category.name }}</td>
+                                            <td class="text-center">{{ item.company ? item.company.name : '---' }}</td>
+                                            <td class="text-center">{{ item.category ? item.category.name : '---' }}</td>
+                                            <td class="text-center">{{ item.sub_category ? item.sub_category.name : '---' }}</td>
                                             <td class="text-center danger" v-if="item.error"> {{$t('global.Expired')}} </td>
                                             <td class="text-center wrong" v-else-if="item.quantity < item.Re_order_limit"> {{$t('global.QuantityIsLow')}} </td>
                                             <td class="text-center great" v-else-if="item.quantity > item.maximum_product"> {{$t('global.QuantityIsBig')}} </td>

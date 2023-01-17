@@ -88,7 +88,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
+                                            <div class="col-md-6 mb-3" v-if="v$.sub_category_id.$model != Null">
                                                 <label >الفئه الفرعية</label>
                                                 <select
                                                     name="type"
@@ -103,7 +103,7 @@
                                                 </select>
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.sub_category_id.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+<!--                                                    <span v-if="v$.sub_category_id.required.$invalid"> هذا الحقل مطلوب<br /> </span>-->
                                                 </div>
                                             </div>
 
@@ -384,7 +384,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12 mb-3 mt-5">
+                                            <div class="col-md-12 mb-3 mt-5" style="display: none">
                                                 <div class="sec-body row">
                                                     <div class="col-md-12 mb-12 sec-head">
                                                         <h3>
@@ -724,8 +724,8 @@ export default {
                     integer
                 },
                 sub_category_id: {
-                    required,
-                    integer
+                    // required,
+                    // integer
                 },
                 company_id: {
                     required,

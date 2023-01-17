@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $categories = Category::where('parent_id',0)
         ->with('media:file_name,mediable_id')
-            ->when($request->search, function ($q) use ($request) {
+        ->when($request->search, function ($q) use ($request) {
             return $q->where('name', 'like', '%' . $request->search . '%');
         })->latest()->paginate(10);
 

@@ -16,10 +16,10 @@
                             <li class="breadcrumb-item active">فئات</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
             <!-- /Page Header -->
+
             <!-- Table -->
             <div class="row">
                 <div class="col-lg-12">
@@ -45,47 +45,48 @@
                             <div class="table-responsive">
                                 <table class="table mb-0">
                                     <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>اسم الفئه</th>
-                                        <th>الصوره</th>
-                                        <th>الحاله</th>
-                                        <th>الاجراءات</th>
-                                    </tr>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>اسم الفئه</th>
+                                            <th>الصوره</th>
+                                            <th>الحاله</th>
+                                            <th>الاجراءات</th>
+                                        </tr>
                                     </thead>
                                     <tbody v-if="categories.length">
-                                    <tr v-for="(item,index) in categories"  :key="item.id">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>
-                                            <img
-                                                :src="'/upload/category/' + item.media.file_name"
-                                                :alt="item.name"
-                                                class="custom-img"
-                                            />
-                                        </td>
-                                        <td>
-                                            <a href="#" @click="activationCategory(item.id,item.status,index)">
-                                                <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">{{
-                                                        parseInt(item.status) ? 'تفعيل' : 'ايقاف تفعيل' }}</span>
-                                            </a>
-                                        </td>
-                                        <td>
-
-                                            <router-link
-                                                :to="{name: 'editCategory',params:{id:item.id}}"
-                                               v-if="permission.includes('category edit')"
-                                               class="btn btn-sm btn-success me-2">
-                                                <i class="far fa-edit"></i>
-                                            </router-link>
-                                            <a href="#" @click="deleteCategory(item.id,index)"
-                                                v-if="permission.includes('category delete')"
-                                               data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-
-                                    </tr>
+                                        <tr v-for="(item,index) in categories" :key="item.id">
+                                            <td>{{ index + 1 }}</td>
+                                            <td>{{ item.name }}</td>
+                                            <td>
+                                                <img
+                                                    :src="'/upload/category/' + item.media.file_name"
+                                                    :alt="item.name"
+                                                    class="custom-img"
+                                                />
+                                            </td>
+                                            <td>
+                                                <a href="#" @click="activationCategory(item.id,item.status,index)">
+                                                    <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">
+                                                        {{ parseInt(item.status) ? 'تفعيل' : 'ايقاف تفعيل' }}
+                                                    </span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <router-link
+                                                    :to="{name: 'editCategory',params:{id:item.id}}"
+                                                    v-if="permission.includes('category edit')"
+                                                    class="btn btn-sm btn-success me-2"
+                                                >
+                                                    <i class="far fa-edit"></i>
+                                                </router-link>
+                                                <a href="#" @click="deleteCategory(item.id,index)"
+                                                    v-if="permission.includes('category delete')"
+                                                    data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2"
+                                                >
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                     <tbody v-else>
                                         <tr>
@@ -99,6 +100,7 @@
                 </div>
             </div>
             <!-- /Table -->
+
             <!-- start Pagination -->
             <Pagination :limit="2" :data="categoriesPaginate" @pagination-change-page="getCategory">
                 <template #prev-nav>
@@ -109,6 +111,7 @@
                 </template>
             </Pagination>
             <!-- end Pagination -->
+
         </div>
         <!-- /Page Wrapper -->
     </div>
@@ -136,17 +139,17 @@ export default {
             loading.value = true;
 
             adminApi.get(`/v1/dashboard/category?page=${page}&search=${search.value}`)
-                .then((res) => {
-                    let l = res.data.data;
-                    categoriesPaginate.value = l.categories;
-                    categories.value = l.categories.data;
-                })
-                .catch((err) => {
-                    console.log(err.response.data);
-                })
-                .finally(() => {
-                    loading.value = false;
-                });
+            .then((res) => {
+                let l = res.data.data;
+                categoriesPaginate.value = l.categories;
+                categories.value = l.categories.data;
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                loading.value = false;
+            });
         }
 
         onMounted(() => {
@@ -172,25 +175,24 @@ export default {
                 confirmButtonText: 'Yes'
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     adminApi.delete(`/v1/dashboard/category/${id}`)
-                        .then((res) => {
-                            categories.value.splice(index, 1);
+                    .then((res) => {
+                        categories.value.splice(index, 1);
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: `تم الحذف بنجاح`,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        })
-                        .catch((err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: `يوجد خطا`,
-                                text: `يوجد خطا في النظام!`,
-                            });
+                        Swal.fire({
+                            icon: 'success',
+                            title: `تم الحذف بنجاح`,
+                            showConfirmButton: false,
+                            timer: 1500
                         });
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `يوجد خطا`,
+                            text: `يوجد خطا في النظام!`,
+                        });
+                    });
                 }
             });
         }
@@ -206,24 +208,23 @@ export default {
                 confirmButtonText: 'Yes'
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     adminApi.get(`/v1/dashboard/activationCategory/${id}`)
-                        .then((res) => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: `${active ? 'تم التفعيل بنجاح' :'تم ايقاف التفعيل بنجاح'}`,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            categories.value[index]['status'] =  active ? 0:1
-                        })
-                        .catch((err) => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: `يوجد خطا`,
-                                text: `يوجد خطا في النظام!`,
-                            });
+                    .then((res) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: `${active ? 'تم التفعيل بنجاح' :'تم ايقاف التفعيل بنجاح'}`,
+                            showConfirmButton: false,
+                            timer: 1500
                         });
+                        categories.value[index]['status'] =  active ? 0:1
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: `يوجد خطا`,
+                            text: `يوجد خطا في النظام!`,
+                        });
+                    });
                 }
             });
         }

@@ -23,6 +23,13 @@ class PermissionSeeder extends Seeder
             ['name' => 'companyProfile delete', 'role' => '', 'category' => 'companyProfile'],
             //end companyProfile
 
+            //start termsPrivacy
+            ['name' => 'termsPrivacy read', 'role' => '', 'category' => 'termsPrivacy'],
+            ['name' => 'termsPrivacy create', 'role' => '', 'category' => 'termsPrivacy'],
+            ['name' => 'termsPrivacy edit', 'role' => '', 'category' => 'termsPrivacy'],
+            ['name' => 'termsPrivacy delete', 'role' => '', 'category' => 'termsPrivacy'],
+            //end termsPrivacy
+
             //start supplier
             ['name' => 'supplier read','role' => '','category' => 'supplier'],
             ['name' => 'supplier create','role' => '','category' => 'supplier'],
@@ -227,6 +234,15 @@ class PermissionSeeder extends Seeder
             ['name' => 'periodicMaintenance delete','role' => '','category' => 'employee'],
             //end periodicMaintenance
 
+            //start shareCompetition
+            ['name' => 'competition read', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition create', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition edit', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition delete', 'role' => 'shareCompetition', 'category' => 'employee'],
+
+            ['name' => 'share read', 'role' => 'shareCompetition', 'category' => 'employee'],
+            //end shareCompetition
+
             ['name' => 'CreditCapacity read','role' => '','category' => 'Credit Capacity'],
             ['name' => 'CreditCapacity edit','role' => '','category' => 'Credit Capacity'],
 
@@ -260,7 +276,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'secondSliderAds delete','role' => 'ads','category' => 'Ads'],
             // end ads
 
-            // start sitting
+            // start setting
             ['name' => 'setting read','role' => '','category' => 'Setting'],
             ['name' => 'setting edit','role' => '','category' => 'Setting'],
             // end setting

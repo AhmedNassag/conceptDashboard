@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api\MobileApp;
 
 use App\Http\Controllers\Controller;
+use App\Models\FilterWax;
+use App\Models\Order;
 use App\Models\PeriodicMaintenance;
+use App\Models\Product;
 use App\Traits\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,7 +59,7 @@ class PeriodicMaintenanceController extends Controller
             $v = Validator::make($request->all(), [
                 'name' => ['required', 'string'],
                 'quantity' => 'required',
-                'price' => 'required',
+                // 'price' => 'required',
                 'next_maintenance' => 'required',
             ]);
 
@@ -63,9 +67,18 @@ class PeriodicMaintenanceController extends Controller
             {
                 return $this->sendError('There is an error in the data', $v->errors(), 401);
             }
-            $data = $request->only(['name', 'quantity', 'price', 'next_maintenance']);
 
-            $periodicMaintenance = PeriodicMaintenance::create($data);
+            // $data = $request->only(['name', 'quantity', 'price', 'next_maintenance']);
+            // $periodicMaintenance = PeriodicMaintenance::create($data);
+
+            $price = FilterWax::where('id',$request->wax_id)->first();
+            $periodicMaintenance = PeriodicMaintenance::create([
+                'user_id' =>auth()->user()->id,
+                'name' => $request->name,
+                'quantity' => $request->quantity,
+                'price' => $price->name,
+                'next_maintenance' => $request->next_maintenance
+            ]);
 
             DB::commit();
 
@@ -109,12 +122,11 @@ class PeriodicMaintenanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         DB::beginTransaction();
         try {
-
-            $periodicMaintenance = PeriodicMaintenance::find($id);
+            $periodicMaintenance = PeriodicMaintenance::where('user_id',auth()->user()->id)->orderBy('next_maintenance','asc')->first();
 
             // Validator request
             $v = Validator::make($request->all(), [
@@ -136,7 +148,6 @@ class PeriodicMaintenanceController extends Controller
             DB::commit();
             return $this->sendResponse([], 'Data exited successfully');
         } catch (\Exception $e) {
-
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
         }
@@ -151,5 +162,40 @@ class PeriodicMaintenanceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+
+    public function nextMaintenance()
+    {
+        $periodicMaintenance = PeriodicMaintenance::where('user_id', auth()->user()->id)->where('next_maintenance','>',now())->orderBy('next_maintenance', 'asc')->first();
+        if($periodicMaintenance)
+        {
+            $price = Product::where('name', $periodicMaintenance->price)->with('latestPrice')->first();
+            if($price)
+            {
+                return $this->sendResponse(['next_maintenance' => $periodicMaintenance->next_maintenance, 'price' => $price->latestPrice->price], trans('message.messageSuccessfully'));
+            }
+            else
+            {
+                return $this->sendResponse(['next_maintenance' => '0', 'price' =>'0'], trans('message.messageSuccessfully'));
+            }
+        }
+        else
+        {
+            return $this->sendResponse(['next_maintenance' => '0', 'price' =>'0'], trans('message.messageSuccessfully'));
+        }
+    }
+
+
+
+    public function filterWaxes()
+    {
+        try {
+            $filterWaxes = FilterWax::get();
+            return $this->sendResponse(['filterWaxes' => $filterWaxes], 'Data exited successfully');
+        } catch (\Exception $e) {
+            return $this->sendError('An error occurred in the system');
+        }
     }
 }
