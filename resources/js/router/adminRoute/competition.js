@@ -45,7 +45,11 @@ export default [
                 props: true,
                 beforeEnter: (to, from,next) => {
                     let permission = store.state.authAdmin.permission;
+<<<<<<< HEAD
+
+=======
 competition
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                     if(permission.includes('competition edit')){
                         return next();
                     }else{

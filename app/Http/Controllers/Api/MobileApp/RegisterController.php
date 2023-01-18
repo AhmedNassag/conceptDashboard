@@ -40,6 +40,7 @@ class RegisterController extends Controller
                 'area'  => 'required|integer|exists:areas,id',
                 'phone' => 'required|string|unique:users',
                 'address' => 'required|string|min:8|max:300',
+                'firebase_token' => 'required|string',
             ]);
 
             if($v->fails()) {
@@ -56,7 +57,9 @@ class RegisterController extends Controller
                 "status" => 0,
                 "share_code" => $request->share_code ? $request->share_code : Null,
                 'phone' => $request->phone,
-                "code" => '+2'
+                "code" => '+2',
+                'type' => 'client',
+                "firebase_token" => $request->firebase_token,
             ]);
 
             $user->complement()->create([
@@ -69,7 +72,12 @@ class RegisterController extends Controller
             $user->client()->create([
                 'address' => $request->address,
                 'province_id' => $request->province,
+<<<<<<< HEAD
+                'area_id' => $request->area,
+                'firebase_token' => $request->firebase_token,
+=======
                 'area_id' => $request->area
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             ]);
 
             //increase share points if user enter share code
@@ -149,7 +157,8 @@ class RegisterController extends Controller
                 'role_name' => ['merchant'],
                 "status" => 0,
                 'phone' => $request->phone,
-                "code" => '+2'
+                "code" => '+2',
+                'type' => 'merchant',
             ]);
 
             $user->complement()->create([
@@ -268,7 +277,7 @@ class RegisterController extends Controller
                 "facebook" => 'nullable|url',
                 "linkedin" => 'nullable|url',
                 "website" => 'nullable|url',
-                "whatsapp" => 'nullable|url'
+                "whatsapp" => 'nullable|url',
             ]);
 
             if ($v->fails()) {
@@ -284,7 +293,8 @@ class RegisterController extends Controller
                 'role_name' => ['company'],
                 "status" => 0,
                 'phone' => $request->phone,
-                "code" => $request->code
+                "code" => $request->code,
+                "type" => 'company'
             ]);
 
             $user->complement()->create([

@@ -41,10 +41,14 @@ class problemLeadController extends Controller
     {
         $lead = problemLead::find($id);
 
+//        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
+//        ->whereHas('job',function ($q){
+//            $q->where('Allow_adding_to_sales_team',1);
+//        })->whereRelation('problemsellerCategories','seller_categories.id',$lead->seller_category_id)->get();
         $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
-        ->whereHas('job'/*,function ($q){
-            $q->where('Allow_adding_to_sales_team',1);
-        }*/)->whereRelation('problemsellerCategories','seller_categories.id',$lead->seller_category_id)->get();
+            ->whereHas('job',function ($q){
+                $q->where('Allow_adding_to_sales_team',1);
+            })->whereHas('problemsellerCategories')->get();
 
         return $this->sendResponse(['employees' => $employees,'lead'=>$lead], 'Data exited successfully');
     }

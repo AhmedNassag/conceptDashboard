@@ -48,11 +48,14 @@ class followLeadController extends Controller
     {
         $lead = followLead::find($id);
 
+//        $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
+//        ->whereHas('job',function ($q){
+//            $q->where('Allow_adding_to_sales_team',1);
+//        })->whereRelation('followsellerCategories','seller_categories.id',$lead->seller_category_id)->get();
         $employees = Employee::with('user:id,name')->whereRelation('user','status',1)
-        ->whereHas('job',function ($q){
-            $q->where('Allow_adding_to_sales_team',1);
-        })->whereRelation('followsellerCategories','seller_categories.id',$lead->seller_category_id)->get();
-
+            ->whereHas('job',function ($q){
+                $q->where('Allow_adding_to_sales_team',1);
+            })->whereHas('followsellerCategories')->get();
         return $this->sendResponse(['employees' => $employees,'lead'=>$lead], 'Data exited successfully');
     }
 

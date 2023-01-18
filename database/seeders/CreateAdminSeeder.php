@@ -26,7 +26,6 @@ class CreateAdminSeeder extends Seeder
             'auth_id' => 1,
             'Status' => true
         ]);
-
         $role = Role::create(['name' => 'SuperAdmin']);
         $permissions = Permission::pluck('id','id')->all();
         $notify = Notify::pluck('id');

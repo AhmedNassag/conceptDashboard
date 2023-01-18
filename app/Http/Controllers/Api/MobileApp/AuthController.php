@@ -33,6 +33,7 @@ class AuthController extends Controller
             $v = Validator::make($request->all(),[
                 'email' => 'required|string',
                 'password' => 'required|string',
+                'firebase_token' => 'required',
             ]);
             if($v->fails()) {
                 return $this->sendError(trans('general.forget'),$v->errors(),401);
@@ -52,6 +53,12 @@ class AuthController extends Controller
                 $user = Auth::guard('api')->user();
                 if( $user->auth_id == 2){
                     if($user->status  == 1){
+                        $user->update([
+                            'firebase_token' => $request->firebase_token,
+                        ]);
+                        $user->client()->update([
+                            'firebase_token' => $request->firebase_token,
+                        ]);
                         return  $this->sendResponse($this->respondWithToken($token),'Data exited successfully');
                     }else {
                         return $this->sendError(trans('general.approved'));

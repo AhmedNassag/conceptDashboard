@@ -20,38 +20,66 @@ class ProductController extends Controller
 
     public function __construct()
     {
+<<<<<<< HEAD
+        if(auth()->user()->type == 'client')
+        {
+            $this->selling_method = auth()->user()->client->selling_method_id;
+        }
+        else
+        {
+            $this->selling_method = 2;
+        }
+
+=======
         $this->selling_method = auth()->user()->client->selling_method_id;
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
     }
 
 
 
+<<<<<<< HEAD
+    public function productCompany(Request $request)
+    {
+=======
     public function productCompany($id){
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
         $store_id = $this->store();
         $products = Product::where([
-            ['status',1],
-            ['company_id',$id],
-            ['sell_app',1],
+            ['status', 1],
+            ['sell_app', 1],
         ])
-        ->whereHas('selling_method',function ($q) use($store_id){
-            $q->where('status',1);
-            $q->where('selling_methods.id',$this->selling_method);
-        })
-        ->whereHas('productPrice',function ($q){
-            $q->where('active',1);
-            $q->where('selling_method_id',$this->selling_method);
-        })
-        ->whereHas('storeProducts',function ($q) use ($store_id){
-            $q->where('store_id',$store_id);
-            $q->where('sub_quantity_order','>=',1);
-        })
-        ->with(['media','productPrice'=>function($q){
-            $q->where('active',1);
-            $q->where('selling_method_id',$this->selling_method);
-            $q->with('sellingMethod','measurementUnit');
-        }])
-        ->latest()->paginate(15);
-
-        return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
+            ->whereHas('selling_method', function ($q) use ($store_id) {
+                $q->where('status', 1);
+                $q->where('selling_methods.id', 2);
+            })
+            ->whereHas('productPrice', function ($q) {
+                $q->where('active', 1);
+                $q->where('selling_method_id', 2);
+            })
+            ->whereHas('storeProducts', function ($q) use ($store_id) {
+                $q->where('store_id', $store_id);
+                $q->where('sub_quantity_order', '>=', 1);
+            })
+            ->with(['media','orderDetails', 'productPrice' => function ($q) {
+                $q->where('active', 1);
+                $q->where('selling_method_id', 2);
+                $q->with('sellingMethod', 'measurementUnit');
+            }])
+            ->where(function ($q) use ($request) {
+                $q->when($request->search, function ($q) use ($request) {
+                    return $q->where('name', 'like', "%" . $request->search . "%")
+                        ->orWhere('barcode', 'like', "%" . $request->search . "%");
+                });
+            })
+            ->latest("products.created_at")->get();
+        if($products)
+        {
+            return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
+        }
+        else
+        {
+            return $this->sendResponse(['products' => []], trans('message.messageSuccessfully'));
+        }
     }
 
 
@@ -76,7 +104,7 @@ class ProductController extends Controller
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
         })
-        ->with(['media','productPrice'=>function($q){
+        ->with(['media','orderDetails','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
@@ -114,7 +142,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -125,6 +157,54 @@ class ProductController extends Controller
                 ->orWhere('barcode', 'like', "%" . $request->search . "%");
             });
         })
+<<<<<<< HEAD
+        ->latest("products.created_at")->get();
+        if($products)
+        {
+            return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
+        }
+        else
+        {
+            return $this->sendResponse(['products' => []], trans('message.messageSuccessfully'));
+        }
+
+    }
+
+
+
+    public function waxes(Request $request)
+    {
+        $store_id = $this->store();
+        $products = Product::where([
+            ['status', 1],
+            ['sell_app', 1],
+            ['category_id', 2]
+        ])
+        ->whereHas('selling_method', function ($q) use ($store_id) {
+            $q->where('status', 1);
+            $q->where('selling_methods.id', $this->selling_method);
+        })
+        ->whereHas('productPrice', function ($q) {
+            $q->where('active', 1);
+            $q->where('selling_method_id', $this->selling_method);
+        })
+        ->whereHas('storeProducts', function ($q) use ($store_id) {
+            $q->where('store_id', $store_id);
+            $q->where('sub_quantity_order', '>=', 1);
+        })
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+            $q->where('active', 1);
+            $q->where('selling_method_id', $this->selling_method);
+            $q->with('sellingMethod', 'measurementUnit');
+        }])
+        ->where(function ($q) use ($request) {
+            $q->when($request->search, function ($q) use ($request) {
+                return $q->where('name', 'like', "%" . $request->search . "%")
+                    ->orWhere('barcode', 'like', "%" . $request->search . "%");
+            });
+        })
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
         ->latest("products.created_at")->paginate(15);
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
@@ -132,6 +212,8 @@ class ProductController extends Controller
 
 
 
+<<<<<<< HEAD
+=======
     public function waxes(Request $request)
     {
         $store_id = $this->store();
@@ -170,6 +252,7 @@ class ProductController extends Controller
 
 
 
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
     public function spareParts(Request $request)
     {
         $store_id = $this->store();
@@ -190,7 +273,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -227,7 +314,7 @@ class ProductController extends Controller
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
         })
-        ->with(['media','productPrice'=>function($q){
+        ->with(['media','orderDetails','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
@@ -259,7 +346,7 @@ class ProductController extends Controller
             $q->where('store_id',$store_id);
             $q->where('sub_quantity_order','>=',1);
         })
-        ->with(['media','productPrice'=>function($q){
+        ->with(['media','orderDetails','productPrice'=>function($q){
             $q->where('active',1);
             $q->where('selling_method_id',$this->selling_method);
             $q->with('sellingMethod','measurementUnit');
@@ -291,7 +378,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -323,7 +414,11 @@ class ProductController extends Controller
                 $q->where('store_id', $store_id);
                 $q->where('sub_quantity_order', '>=', 1);
             })
+<<<<<<< HEAD
+            ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
             ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 $q->where('active', 1);
                 $q->where('selling_method_id', $this->selling_method);
                 $q->with('sellingMethod', 'measurementUnit');
@@ -355,7 +450,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -387,7 +486,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -419,7 +522,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -450,7 +557,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');
@@ -482,7 +593,11 @@ class ProductController extends Controller
             $q->where('store_id', $store_id);
             $q->where('sub_quantity_order', '>=', 1);
         })
+<<<<<<< HEAD
+        ->with(['media','orderDetails', 'productPrice' => function ($q) {
+=======
         ->with(['media', 'productPrice' => function ($q) {
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             $q->where('active', 1);
             $q->where('selling_method_id', $this->selling_method);
             $q->with('sellingMethod', 'measurementUnit');

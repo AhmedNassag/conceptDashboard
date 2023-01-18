@@ -21,4 +21,9 @@ class Share extends Model
     {
         return $this->belongsTo(Competition::class, 'competition_id');
     }
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
 }

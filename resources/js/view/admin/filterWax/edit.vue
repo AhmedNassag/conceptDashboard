@@ -88,10 +88,10 @@
 
                                             <!--start type-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.type') }}</label>
+                                                <label for="validationCustom04">{{ $t('global.type') }}</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.type.$model"
-                                                       id="validationCustom03"
+                                                       id="validationCustom04"
                                                        :placeholder="$t('global.type')"
                                                        :class="{'is-invalid':v$.type.$error,'is-valid':!v$.type.$invalid}"
                                                 >
@@ -106,10 +106,10 @@
 
                                             <!--start origin-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.origin') }}</label>
+                                                <label for="validationCustom05">{{ $t('global.origin') }}</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.origin.$model"
-                                                       id="validationCustom03"
+                                                       id="validationCustom05"
                                                        :placeholder="$t('global.origin')"
                                                        :class="{'is-invalid':v$.origin.$error,'is-valid':!v$.origin.$invalid}"
                                                 >
@@ -124,10 +124,10 @@
 
                                             <!--start period-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom02">{{ $t('global.period') }}</label>
+                                                <label for="validationCustom06">مدة تغيير الشمع بالأيام</label>
                                                 <input type="number" class="form-control"
                                                        v-model.trim="v$.period.$model"
-                                                       id="validationCustom02"
+                                                       id="validationCustom06"
                                                        :placeholder="$t('global.period')"
                                                        :class="{'is-invalid':v$.period.$error,'is-valid':!v$.period.$invalid}"
                                                 >

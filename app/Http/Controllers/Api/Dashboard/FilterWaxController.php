@@ -60,6 +60,10 @@ class FilterWaxController extends Controller
                 'count_unit' => 'required|numeric',
                 'maximum_product' => 'required|numeric',
                 'Re_order_limit' => 'required|numeric',
+<<<<<<< HEAD
+                'company_id' => 'required|integer|exists:companies,id',
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 'main_measurement_unit_id' => 'required|integer|exists:measurement_units,id',
                 'sub_measurement_unit_id' => 'required|integer|exists:measurement_units,id',
                 'sell_app' => 'required',
@@ -94,6 +98,10 @@ class FilterWaxController extends Controller
                 'maximum_product' => $request->maximum_product,
                 'image' => $image,
                 'category_id' => 2,
+<<<<<<< HEAD
+                'company_id' => $request->company_id,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 'main_measurement_unit_id' => $request->main_measurement_unit_id,
                 'sub_measurement_unit_id' => $request->sub_measurement_unit_id,
                 'count_unit' => $request->count_unit,

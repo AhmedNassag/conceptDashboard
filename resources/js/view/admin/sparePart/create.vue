@@ -462,7 +462,7 @@ export default {
                     numeric
                 },
                 name: {
-                    minLength: minLength(3),
+                    minLength: minLength(1),
                     maxLength:maxLength(70),
                     required
                 },

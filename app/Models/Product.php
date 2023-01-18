@@ -86,6 +86,9 @@ class Product extends Model
     public function productPrice(){
         return $this->hasMany(ProductPricing::class,'product_id');
     }
+    public function latestPrice(){
+        return $this->hasOne(ProductPricing::class)->where('selling_method_id',1)->latestOfMany();
+    }
 
     public function pricingHistories(){
         return $this->hasMany(PricingHistory::class);

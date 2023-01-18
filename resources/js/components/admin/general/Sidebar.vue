@@ -81,39 +81,39 @@
                     <!--end userCompany-->
 
                     <!--start merchant-->
-                    <li
-                        :class="[{'active': ['indexMerchant','createMerchant','editMerchant','showMerchant'].includes($route.name)}]"
-                        v-if="permission.includes('CreditCapacity read')"
-                    >
-                        <router-link :to="{name:'indexMerchant'}" >
-                            <i class="fas fa-users"></i>
-                            <span>{{ $t('sidebar.merchant') }}</span>
-                        </router-link>
-                    </li>
+<!--                    <li-->
+<!--                        :class="[{'active': ['indexMerchant','createMerchant','editMerchant','showMerchant'].includes($route.name)}]"-->
+<!--                        v-if="permission.includes('CreditCapacity read')"-->
+<!--                    >-->
+<!--                        <router-link :to="{name:'indexMerchant'}" >-->
+<!--                            <i class="fas fa-users"></i>-->
+<!--                            <span>{{ $t('sidebar.merchant') }}</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <!--end merchant-->
 
                     <!--start leadFollowUps-->
-                    <li
-                        :class="[{'active': ['indexLeadFollowUps','editLeadFollowUps','createLeadFollowUps'].includes($route.name)}]"
-                        v-if="permission.includes('CreditCapacity read')"
-                    >
-                        <router-link :to="{name:'indexLeadFollowUps'}" >
-                            <i class="fas fa-users"></i>
-                            <span>{{ $t('sidebar.LeadFollowUps') }}</span>
-                        </router-link>
-                    </li>
+<!--                    <li-->
+<!--                        :class="[{'active': ['indexLeadFollowUps','editLeadFollowUps','createLeadFollowUps'].includes($route.name)}]"-->
+<!--                        v-if="permission.includes('CreditCapacity read')"-->
+<!--                    >-->
+<!--                        <router-link :to="{name:'indexLeadFollowUps'}" >-->
+<!--                            <i class="fas fa-users"></i>-->
+<!--                            <span>{{ $t('sidebar.LeadFollowUps') }}</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <!--end leadFollowUps-->
 
                     <!--start LeadSourse-->
-                    <li
-                        :class="[{'active': ['indexLeadSourse','createLeadSourse','editLeadSourse'].includes($route.name)}]"
-                        v-if="permission.includes('CreditCapacity read')"
-                    >
-                        <router-link :to="{name:'indexLeadSourse'}" >
-                            <i class="fas fa-users"></i>
-                            <span>{{ $t('sidebar.leadSourse') }}</span>
-                        </router-link>
-                    </li>
+<!--                    <li-->
+<!--                        :class="[{'active': ['indexLeadSourse','createLeadSourse','editLeadSourse'].includes($route.name)}]"-->
+<!--                        v-if="permission.includes('CreditCapacity read')"-->
+<!--                    >-->
+<!--                        <router-link :to="{name:'indexLeadSourse'}" >-->
+<!--                            <i class="fas fa-users"></i>-->
+<!--                            <span>{{ $t('sidebar.leadSourse') }}</span>-->
+<!--                        </router-link>-->
+<!--                    </li>-->
                     <!--end leadFollowUps-->
 
                     <!--start Lead-->

@@ -130,7 +130,7 @@
 
                                             <!--start period-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom02">{{ $t('global.period') }}</label>
+                                                <label for="validationCustom02">مدة تغيير الشمع بالأيام</label>
                                                 <input type="number" class="form-control"
                                                        v-model.trim="v$.period.$model"
                                                        id="validationCustom02"
@@ -165,6 +165,30 @@
                                             </div>
                                             <!--end barcode-->
 
+<<<<<<< HEAD
+                                            <!--start company_id-->
+                                            <div class="col-md-6 mb-3">
+                                                <label>البراندات</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.company_id.$model"
+                                                    :class="{'is-invalid':v$.company_id.$error,'is-valid':!v$.company_id.$invalid}"
+                                                >
+                                                    <option value="">---</option>
+                                                    <option v-for="company in companies" :key="company.id" :value="company.id" >
+                                                        {{ company.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.company_id.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end company_id-->
+
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                                             <!--start main_measurement_unit_id-->
                                             <div class="col-md-6 mb-3">
                                                 <label >وحدة القياس الرئيسية</label>
@@ -438,6 +462,10 @@ export default {
         let loading = ref(false);
 
         //
+<<<<<<< HEAD
+        let companies = ref([]);
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
         let measures = ref([]);
         let sellingMethods = ref([]);
         //
@@ -460,6 +488,10 @@ export default {
                 files: [],
                 maximum_product: null,
                 Re_order_limit: null,
+<<<<<<< HEAD
+                company_id: null,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 main_measurement_unit_id: null,
                 sub_measurement_unit_id: null,
                 shipping: '',
@@ -479,6 +511,10 @@ export default {
             adminApi.get(`/v1/dashboard/product/create`)
             .then((res) => {
                 let l = res.data.data;
+<<<<<<< HEAD
+                companies.value = l.companies;
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 measures.value = l.measures;
                 sellingMethods.value = l.sellingMethods;
             })
@@ -552,6 +588,12 @@ export default {
                     required
                 },
                 filterWaxes: {},
+<<<<<<< HEAD
+                company_id: {
+                    required,
+                },
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 main_measurement_unit_id: {
                     required,
                     integer
@@ -603,6 +645,7 @@ export default {
             reader.readAsDataURL(addSellingMethod.data.image);
 
         };
+<<<<<<< HEAD
 
         let preview2 = (e) => {
 
@@ -644,6 +687,49 @@ export default {
         });
         //
 
+=======
+
+        let preview2 = (e) => {
+
+            let containerImages = document.querySelector('#container-images1');
+            if(numberOfImage.value){
+                containerImages.innerHTML = '';
+            }
+            addSellingMethod.data.files = [];
+
+            numberOfImage1.value = e.target.files.length;
+
+            for(let file of e.target.files){
+
+                addSellingMethod.data.files.push(file);
+                let reader = new FileReader();
+                let figure = document.createElement('figure');
+                let figcap = document.createElement('figcaption');
+
+                figcap.innerText = file.name;
+                figure.appendChild(figcap);
+
+                reader.onload = () => {
+                    let img = document.createElement('img');
+                    img.setAttribute('src',reader.result);
+                    figure.insertBefore(img,figcap);
+                }
+
+                containerImages.appendChild(figure);
+                reader.readAsDataURL(file);
+            }
+
+        };
+
+        const numberOfImage = ref(0);
+        const numberOfImage1 = ref(0);
+
+        onMounted(() => {
+            getProduct();
+        });
+        //
+
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
         return {
             loading,
             ...toRefs(addSellingMethod),
@@ -653,6 +739,10 @@ export default {
             preview2,
             numberOfImage,
             numberOfImage1,
+<<<<<<< HEAD
+            companies,
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             measures,
             sellingMethods,
             //
@@ -680,6 +770,10 @@ export default {
                 formData.append('count_unit',this.data.count_unit);
                 formData.append('maximum_product',this.data.maximum_product);
                 formData.append('Re_order_limit',this.data.Re_order_limit);
+<<<<<<< HEAD
+                formData.append('company_id',this.data.company_id);
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 formData.append('main_measurement_unit_id',this.data.main_measurement_unit_id);
                 formData.append('sub_measurement_unit_id',this.data.sub_measurement_unit_id);
                 formData.append('sell_app',this.data.sell_app);
@@ -736,6 +830,10 @@ export default {
             this.data.description = '';
             this.data.image= {};
             this.data.files = [];
+<<<<<<< HEAD
+            this.data.company_id = null;
+=======
+>>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             this.data.main_measurement_unit_id = null;
             this.data.sub_measurement_unit_id = null;
             this.data.selling_method = [];
