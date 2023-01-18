@@ -11,6 +11,7 @@ use App\Models\OrderDiscount;
 use App\Models\OrderStoreProduct;
 use App\Models\Product;
 use App\Models\ProductPricing;
+use App\Models\SellingMethod;
 use App\Models\Setting;
 use App\Models\StoreProduct;
 use App\Models\Tax;
@@ -192,7 +193,7 @@ class OrderController extends Controller
                 }
 
             }else{
-                
+
                 if ($product_pricing['measurement_unit_id'] == $product_pricing->product->main_measurement_unit_id){
                     $order_details = OrderDetails::create([
                         'order_id' =>$order['id'],

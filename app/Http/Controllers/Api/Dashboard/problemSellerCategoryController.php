@@ -28,7 +28,6 @@ class problemSellerCategoryController extends Controller
                     ->orWhereRelation('problemsellerCategories', 'name', 'like', '%' . $request->search . '%');
                 });
             })->latest()->paginate(5);
-//        return $employees;
 
         return $this->sendResponse(['employees' => $employees], 'Data exited successfully');
     }
