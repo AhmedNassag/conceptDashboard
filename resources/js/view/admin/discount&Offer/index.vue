@@ -50,7 +50,7 @@
                                         <th>{{ $t('global.Name') }}</th>
                                         <th>{{ $t('global.type') }}</th>
                                         <th>{{ $t('global.value') }}</th>
-                                        <th> {{ $t('global.Startandenddate') }}</th>
+                                        <th>{{ $t('global.Startandenddate') }}</th>
                                         <th>{{ $t('global.Status') }}</th>
                                         <th>{{ $t('global.Action') }}</th>
                                     </tr>

@@ -34,8 +34,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::
-        with('media','company:id,name', 'category:id,name', 'tax:id,name')
+        $products = Product::with('media','company:id,name', 'category:id,name', 'tax:id,name')
+            ->where('sub_category_id','!=',Null)
             ->when($request->search, function ($q) use ($request) {
                 return $q->where('name', 'like', $request->search . "%")
                     ->orWhereRelation('company', 'name', 'like', $request->search . '%')
@@ -109,7 +109,7 @@ class ProductController extends Controller
         try {
 
             $companies = Company::select('id', 'name')->get();
-            $categories = Category::where('parent_id', 0)->select('id', 'name')->get();
+            $categories = Category::where('id','!=',2)->where('id','!=',3)->where('parent_id', 0)->select('id', 'name')->get();
             $measures = MeasurementUnit::select('id', 'name')->get();
             $sellingMethods = SellingMethod::select('id', 'name')->get();
             $stores = Store::where('status',1 )->get();
@@ -164,6 +164,7 @@ class ProductController extends Controller
                 'selling_method' => 'required',
                 'shipping' => 'required',
                 'guarantee' => 'required',
+                'guarantee_type' => 'required',
                 'sell_app' => 'required',
                 'selling_method.*' => 'required|exists:selling_methods,id',
                 'quantity' => 'required|numeric',
@@ -203,6 +204,8 @@ class ProductController extends Controller
                 'sell_app' => $request->sell_app,
                 'shipping' => $request->shipping,
                 'guarantee' => $request->guarantee,
+                'guarantee_type' => $request->guarantee_type,
+                'points' => $request->points ? $request->points : 0,
             ]);
 
             $imageProduct = explode(',', $request->selling_method);
@@ -305,11 +308,9 @@ class ProductController extends Controller
     {
         try {
 
-            $product = Product::
-            with(['media:mediable_id,file_name,id','sparePart','filterWax','maintenance'])
-                ->find($id);
+            $product = Product::with(['media:mediable_id,file_name,id','sparePart','filterWax','maintenance'])->find($id);
             $companies = Company::select('id', 'name')->get();
-            $categories = Category::where('parent_id', 0)->select('id', 'name')->get();
+            $categories = Category::where('id','!=',2)->where('id','!=',3)->where('parent_id', 0)->select('id', 'name')->get();
             $measures = MeasurementUnit::select('id', 'name')->get();
             $sellingMethods = SellingMethod::select('id', 'name')->get();
             $filterWaxes = FilterWax::get();
@@ -329,8 +330,8 @@ class ProductController extends Controller
                 'stores' => $stores,
                 'storeProduct' => $storeProduct,
                 'purchaseProducts' => $purchaseProducts,
-                "filterWaxes" => $filterWaxes,
-                "spareParts" => $spareParts
+                'filterWaxes' => $filterWaxes,
+                'spareParts' => $spareParts
             ], 'Data exited successfully');
 
         } catch (\Exception $e) {
@@ -414,7 +415,10 @@ class ProductController extends Controller
             $data['sell_app'] = $request->sell_app;
             $data['shipping'] = $request->shipping;
             $data['guarantee'] = $request->guarantee;
-
+            $data['guarantee_type'] = $request->guarantee_type;
+            if ($request->points) {
+                $data['points'] = $request->points;
+            }
 
             $product->update($data);
 

@@ -83,7 +83,7 @@ class CompetitionController extends Controller
                 'days'  => ['required'],
                 'type'  => ['required'],
                 'money' => ['nullable'],
-                'file'  => 'required_if:type:,==,prize' . ($request->hasFile('file') ? '|file|mimes:jpeg,jpg,png' : ''),
+                'file'  => 'required_if:type:,==,prize' . ($request->hasFile('file') ? '|file|mimes:png,jpg,jpeg' : ''),
             ]);
 
             if ($v->fails()) {

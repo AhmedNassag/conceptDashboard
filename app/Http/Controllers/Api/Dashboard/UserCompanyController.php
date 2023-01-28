@@ -65,7 +65,11 @@ class UserCompanyController extends Controller
             "facebook" => 'nullable|url',
             "linkedin" => 'nullable|url',
             "website" => 'nullable|url',
-            "whatsapp" => 'nullable|url'
+            "whatsapp" => 'nullable|url',
+            'commercial_record' => ['nullable', 'string'],
+            'tax_card' => ['nullable', 'string'],
+            'commercialRegister' => 'required|file|mimes:png,jpg,jpeg',
+            'taxCard' => 'required|file|mimes:png,jpg,jpeg',
         ]);
 
         if($v->fails()) {
@@ -94,7 +98,7 @@ class UserCompanyController extends Controller
             'device' => 2
         ]);
 
-        UserCompany::create([
+        $user = UserCompany::create([
             'user_id' => $user->id,
             'job' => $request->job,
             'address' => $request->address,
@@ -102,7 +106,9 @@ class UserCompanyController extends Controller
             'facebook' => $request->facebook,
             'linkedin' => $request->linkedin,
             'website' => $request->website,
-            'whatsapp' => $request->whatsapp
+            'whatsapp' => $request->whatsapp,
+            'commercial_record' => $request->commercial_record,
+            'tax_card' => $request->tax_card,
         ]);
 
         //
@@ -112,6 +118,40 @@ class UserCompanyController extends Controller
         //     'amount' => $request->amount ? $request->amount : 0
         // ]);
         //
+
+        if ($request->hasFile('commercialRegister')) {
+
+            $file_size = $request->commercialRegister->getSize();
+            $file_type = $request->commercialRegister->getMimeType();
+            $image = time() . 2 . '.' . $request->commercialRegister->getClientOriginalName();
+
+            // picture move
+            $request->commercialRegister->storeAs('userCompany', $image, 'general');
+
+            $user->media()->create([
+                'file_name' => asset('upload/userCompany/' . $image),
+                'file_size' => $file_size,
+                'file_type' => $file_type,
+                'file_sort' => 2
+            ]);
+        }
+
+        if ($request->hasFile('taxCard')) {
+
+            $file_size = $request->taxCard->getSize();
+            $file_type = $request->taxCard->getMimeType();
+            $image = time() . 3 . '.' . $request->taxCard->getClientOriginalName();
+
+            // picture move
+            $request->taxCard->storeAs('userCompany', $image, 'general');
+
+            $user->media()->create([
+                'file_name' => asset('upload/userCompany/' . $image),
+                'file_size' => $file_size,
+                'file_type' => $file_type,
+                'file_sort' => 3
+            ]);
+        }
 
         return $this->sendResponse([],'Data exited successfully');
 

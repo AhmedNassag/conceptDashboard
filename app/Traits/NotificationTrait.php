@@ -9,11 +9,7 @@ use Log;
  */
 trait NotificationTrait
 {
-<<<<<<< HEAD
     public $API_KEY = 'AAAAAvz8c9c:APA91bGGGk_blX4fTJFp1W0aPiwM6JR854gsCeIm7tyRHRwwkz3ueKw3pqszd7r5mJ3N8EUSuwyYFE7EoMAdrZtvKqY0lgHoOmhDv0hAOGvmIDTjmZnlA0dISbr5sZ9UsBJ69o8MN4TU';
-=======
-    public $API_KEY = 'AAAAKxu_LbY:APA91bGs4i139BFR6sMfF15cNKEFIngXmfKkYmfB16AhDJau5FGVtQdKy9GEZ5ILDI79bXVbm4PIRDR1dn2jUssWeSUeCADtC4GINdarxfNX2g2SqJq0RPJ9mnm3TfPO3WhJCO8qKzwx';
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
     public $title = 'كونسبت';
 
     public function notification($tokens,$body,$type,$productData){

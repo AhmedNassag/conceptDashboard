@@ -53,7 +53,7 @@
                                         <th>{{ $t('global.type') }}</th>
                                         <th>{{ $t('global.origin') }}</th>
                                         <th>{{ $t('global.period') }}</th>
-                                        <th>تم الانشاء</th>
+                                        <th>تاريخ الانشاء</th>
                                         <th>الاجراءات</th>
                                     </tr>
                                     </thead>

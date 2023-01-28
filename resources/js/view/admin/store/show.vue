@@ -38,6 +38,13 @@
                                         <input type="search" v-model="search" class="custom"/>
                                     </div>
 
+                                    <router-link
+                                        :to="{name: 'indexStore'}"
+                                        class="btn btn-custom btn-dark col-md-2"
+                                    >
+                                        {{ $t('global.back') }}
+                                    </router-link>
+
                                 </div>
                             </div>
                             <div class="table-responsive">

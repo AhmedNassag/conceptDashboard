@@ -39,7 +39,8 @@ class OrderController extends Controller
         else
         {
             $this->selling_method = 2;
-            $this->order_amount = $this->selling_method->order_amount;
+            $sell = SellingMethod::find(2);
+            $this->order_amount = $sell->order_amount;
         }
     }
 
@@ -201,15 +202,7 @@ class OrderController extends Controller
                 }
 
             }else{
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-
-=======
-                
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
->>>>>>> 876dce138c7df43d7f1f95619b893d1497838dd7
                 if ($product_pricing['measurement_unit_id'] == $product_pricing->product->main_measurement_unit_id){
                     $order_details = OrderDetails::create([
                         'order_id' =>$order['id'],
@@ -394,7 +387,6 @@ class OrderController extends Controller
         ->count();
         return $this->sendResponse(['orders' => $orders], trans('message.messageSuccessfully'));
     }
-<<<<<<< HEAD
 
 
 
@@ -592,6 +584,4 @@ class OrderController extends Controller
         return $this->sendResponse(['order'=>$order], trans('message.messageSuccessfully'));
 
     }
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
 }

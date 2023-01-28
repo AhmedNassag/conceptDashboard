@@ -29,7 +29,7 @@ class ClientReport extends Controller
                 $q->whereNull('password');
             });
         })
-            ->paginate(10);
+        ->paginate(10);
 
         return $this->sendResponse(['clients' => $clients], 'Data exited successfully');
 

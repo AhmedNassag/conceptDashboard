@@ -69,7 +69,7 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        try {
             DB::beginTransaction();
 
             // Validator request
@@ -135,10 +135,10 @@ class SupplierController extends Controller
             }
             return $this->sendResponse([], 'Data exited successfully');
 
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return $this->sendError('An error occurred in the system');
-        // }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
     }
 
 

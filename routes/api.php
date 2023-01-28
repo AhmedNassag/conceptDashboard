@@ -313,6 +313,11 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('suggestionClient','SuggestionClientController@index');
             Route::get('suggestionClient/{id}','SuggestionClientController@show');
 
+            //complaint
+            Route::resource('complaint','ComplaintController')->except('show');
+            Route::get('complaintClient','ComplaintClientController@index');
+            Route::get('complaintClient/{id}','ComplaintClientController@show');
+
             //supplier Expense
             Route::resource('supplierExpense','SupplierExpensesController')->except('show');
 
@@ -339,6 +344,9 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //order Spare Part
             Route::resource('sparePart','SparePartController');
+
+            //order Spare Accessor
+            Route::resource('spareAccessor','SpareAccessorController');
 
             //userCompany && merchant
             Route::resource('userCompany','UserCompanyController');
@@ -416,6 +424,17 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //share
             Route::resource('share', 'ShareController');
+
+            //pointPrice
+            Route::resource('pointPrice', 'PointPriceController')->except(['show']);
+            Route::get('activationPointPrice/{id}', 'PointPriceController@activationPointPrice');
+
+            //pointPrice
+            Route::resource('pointWelcome', 'PointWelcomeController')->except(['show']);
+            Route::get('activationPointWelcome/{id}', 'PointWelcomeController@activationPointWelcome');
+
+            //wallet
+            Route::resource('wallet', 'WalletController');
         });
     });
     /****************************** end dashboard ******************************/
@@ -450,7 +469,8 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         Route::get('area/{area}','RegisterController@area');
 
         //start reset[company,merchant,client]
-        Route::post('user-by-phone','AuthController@userByPhone');
+        Route::post('userByPhone','AuthController@userByPhone');
+        Route::post('userByCode','AuthController@userByCode');
         Route::post('forgot-password','AuthController@forgotPassword');
         Route::post('confirmOtp','AuthController@confirmOtp');
         Route::post('reset-password','AuthController@reset');
@@ -480,11 +500,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('companyHome','CompanyController@companyHome');
 
             //product
-<<<<<<< HEAD
             Route::get('productCompany','ProductController@productCompany');
-=======
-            Route::get('productCompany/{id}','ProductController@productCompany');
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             Route::get('getProductByCategory/{category}','ProductController@getProductByCategory');
             Route::get('getProductByBarcode/{barcode}','ProductController@getProductByBarcode');
             Route::get('pestProduct','ProductController@pestProduct');
@@ -493,6 +509,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('filters','ProductController@filters');
             Route::get('waxes','ProductController@waxes');
             Route::get('spareParts','ProductController@spareParts');
+            Route::get('spareAccessors','ProductController@spareAccessors');
             Route::get('getProductById/{category}/{subCategory?}','ProductController@getProductById');
             Route::get('getProductByName/{name}','ProductController@getProductByName');
             Route::get('getProductByGuarantee/{guarantee}','ProductController@getProductByGuarantee');
@@ -502,6 +519,10 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             //suggestion
             Route::get('getSuggestion','SuggestionClientController@getSuggestion');
             Route::post('suggestion','SuggestionClientController@suggestion');
+
+            //complaint
+            Route::get('getComplaint','ComplaintClientController@getComplaint');
+            Route::post('complaint','ComplaintClientController@complaint');
 
             //tax
             Route::get('getTaxes','TaxController@getTaxes');
@@ -513,10 +534,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::post('checkCoupon','CouponController@checkCoupon');
 
             //order
-<<<<<<< HEAD
             Route::post('companyOrder','CompanyOrderController@order');
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             Route::post('order','OrderController@order');
             Route::get('trackingOrder','OrderController@trackingOrder');
             Route::get('pendingOrders','OrderController@pendingOrders');
@@ -526,14 +544,12 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('clientDebts','ClientDebtsController@clientDebts');
 
             //periodicMaintenance
+            Route::get('periodicMaintenanceCreate','PeriodicMaintenanceController@create');
             Route::post('periodicMaintenance','PeriodicMaintenanceController@store');
             Route::post('delayPeriodicMaintenance','PeriodicMaintenanceController@update');
             Route::get('nextMaintenance', 'PeriodicMaintenanceController@nextMaintenance');
-<<<<<<< HEAD
             Route::get('filterWaxes', 'CompanyPeriodicMaintenanceController@filterWaxes');
             Route::post('companyPeriodicMaintenance','CompanyPeriodicMaintenanceController@store');
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
 
             //problemLead
             Route::post('problemLead','ProblemLeadController@store');
@@ -543,17 +559,20 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //share
             Route::get('allCompetition','ShareController@allCompetition');
-            Route::get('getCompetitionByCount/{count}', 'ShareController@getCompetitionByCount');
+            Route::get('getCompetitionByCount/{count}','ShareController@getCompetitionByCount');
             Route::get('getCompetitionByCountAndDays/{count}/{days}', 'ShareController@getCompetitionByCountAndDays');
             Route::post('share','ShareController@store');
             Route::get('wallet/{id}', 'ShareController@wallet');
-<<<<<<< HEAD
+
+            //wallet
+            Route::get('wallet','WalletController@wallet');
+            Route::get('welcomePoints','WalletController@welcomePoints');
+            Route::get('productPoints','WalletController@productPoints');
+            Route::get('pointDetails','WalletController@pointDetails');
 
             //notification
             Route::get('getAllNot','NotificationController@getAllNot');
             Route::get('getNotNotRead','NotificationController@getNotNotRead');
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
 
             //start logout
             Route::post('logout','AuthController@logout');

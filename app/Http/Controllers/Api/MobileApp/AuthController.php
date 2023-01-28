@@ -44,7 +44,7 @@ class AuthController extends Controller
                 $credentials = $request->only("email", "password");
             }else{
                 $phone = User::wherePhone($request->email)->first();
-                if($phone){
+                if ($phone) {
                     $credentials = ["email" => $phone->email, "password" => $request->password];
                 }
             }
@@ -104,7 +104,30 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return $this->sendError('An error occurred in the system');
         }
-    }//**********end userByPhone************/
+    } //**********end userByPhone************/
+
+
+
+    //start userByCode
+    public function userByCode(Request $request)
+    {
+        try {
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'code' => 'required',
+            ]);
+            if ($v->fails()) {
+                return $this->sendError('There is an error in the data', $v->errors());
+            }
+            $user = User::where('user_code', $request->code)->first();
+            if ($user == null) {
+                return $this->sendError(trans('message.messageError'));
+            }
+            return $this->sendResponse(['user' => $user], trans('message.messageSuccessfully'));
+        } catch (\Exception $e) {
+            return $this->sendError('An error occurred in the system');
+        }
+    }//**********end userByCode************/
 
 
 

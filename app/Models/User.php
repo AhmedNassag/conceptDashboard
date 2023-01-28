@@ -200,4 +200,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Share::class,'user_id');
     }
 
+    public function periodicMaintenances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PeriodicMaintenance::class,'user_id');
+    }
+
 }

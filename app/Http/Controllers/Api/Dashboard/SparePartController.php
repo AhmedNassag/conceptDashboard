@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\MeasurementUnit;
 use App\Models\Product;
 use App\Models\ProductPricing;
+use App\Models\SellingMethod;
 use App\Models\SparePart;
 use App\Traits\Message;
 use Illuminate\Http\Request;
@@ -28,7 +31,6 @@ class SparePartController extends Controller
             return $q->where('name', 'like', '%' . $request->search . '%');
         })
         ->latest()->paginate(10);
-
         return $this->sendResponse(['spareParts' => $sparePart], 'Data exited successfully');
     }
 
@@ -41,15 +43,14 @@ class SparePartController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        try
+        {
             DB::beginTransaction();
-
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
                 'description' => ['required','string'],
                 'price' => ['required'],
-
                 //
                 'barcode' => 'nullable|numeric|unique:products,barcode',
                 'count_unit' => 'required|numeric',
@@ -60,31 +61,28 @@ class SparePartController extends Controller
                 'sell_app' => 'required',
                 'selling_method' => 'required',
                 'selling_method.*' => 'required|exists:selling_methods,id',
-                'shipping' => 'required',
-                'guarantee' => 'required',
+//                'shipping' => 'required',
+//                'guarantee' => 'required',
                 'description' => 'nullable',
                 'image' => 'required|file|mimes:png,jpg,jpeg',
                 'files' => 'required|array',
                 'files.*' => 'required|file|mimes:png,jpg,jpeg',
                 //
             ]);
-
-            if ($v->fails()) {
+            if ($v->fails())
+            {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
             $data = $request->only(['name','description','price']);
             $sparePart = SparePart::create($data);
-
-
             //
             $image = time() . '.' . $request->image->getClientOriginalName();
-
             // picture move
             $request->image->storeAs('product', $image, 'general');
             $product = Product::create([
                 'name' => $request->name,
                 'barcode' => $request->barcode,
-                'description' => $request->description,
+                'description' => $request->description ? $request->description : '',
                 'Re_order_limit' => $request->Re_order_limit,
                 'maximum_product' => $request->maximum_product,
                 'image' => $image,
@@ -93,10 +91,10 @@ class SparePartController extends Controller
                 'sub_measurement_unit_id' => $request->sub_measurement_unit_id,
                 'count_unit' => $request->count_unit,
                 'sell_app' => $request->sell_app,
-                'shipping' => $request->shipping,
+//                'shipping' => $request->shipping,
                 'guarantee' => $request->guarantee,
+                'part_id' =>  $sparePart->id,
             ]);
-
             $imageProduct = explode(',', $request->selling_method);
             $product->selling_method()->attach($imageProduct);
             foreach ($imageProduct as $item) {
@@ -105,7 +103,6 @@ class SparePartController extends Controller
                     'selling_method_id' => $item,
                     'measurement_unit_id' => $request->main_measurement_unit_id
                 ]);
-
                 if ($request['count_unit'] > 1) {
                     ProductPricing::create([
                         'product_id' => $product->id,
@@ -114,14 +111,13 @@ class SparePartController extends Controller
                     ]);
                 }
             }
-
             $i = 0;
-            if ($request->hasFile('files')) {
+            if ($request->hasFile('files'))
+            {
                 foreach ($request->file('files') as $index => $file) {
                     $file_size = $file->getSize();
                     $file_type = $file->getMimeType();
                     $image = time() . $i . '.' . $file->getClientOriginalName();
-
                     // picture move
                     $file->storeAs('product', $image, 'general');
                     $product->media()->create([
@@ -134,12 +130,11 @@ class SparePartController extends Controller
                 }
             }
             //
-
             DB::commit();
-
             return $this->sendResponse([], 'Data exited successfully');
-
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e)
+        {
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
         }
@@ -154,16 +149,24 @@ class SparePartController extends Controller
      */
     public function edit($id)
     {
-        try {
-
-            $sparePart = SparePart::with('media:file_name,mediable_id')->find($id);
-
-            return $this->sendResponse(['sparePart' => $sparePart], 'Data exited successfully');
-
-        } catch (\Exception $e) {
-
+        try
+        {
+            $sparePart = SparePart::find($id);
+            $product = Product::with(['media:mediable_id,file_name,id'])->where('part_id',$id)->first();
+            $measures = MeasurementUnit::select('id', 'name')->get();
+            $sellingMethods = SellingMethod::select('id', 'name')->get();
+            $sellingMethodChange = $product->selling_method;
+            return $this->sendResponse([
+                'sparePart' => $sparePart,
+                'product' => $product,
+                'measures' => $measures,
+                'sellingMethods' => $sellingMethods,
+                'sellingMethodChange' => $sellingMethodChange,
+            ], 'Data exited successfully');
+        }
+        catch (\Exception $e)
+        {
             return $this->sendError('An error occurred in the system');
-
         }
     }
 
@@ -177,9 +180,10 @@ class SparePartController extends Controller
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
-        try {
+//        try
+//        {
             $sparePart = SparePart::find($id);
-
+            $product = Product::with(['media:mediable_id,file_name,id'])->where('part_id',$id)->first();
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => ['required','string'],
@@ -187,43 +191,83 @@ class SparePartController extends Controller
                 'price' => ['required'],
                 // 'file' => 'nullable' . ($request->hasFile('file') ? '|file|mimes:jpeg,jpg,png' : ''),
             ]);
-
-            if ($v->fails()) {
+            if ($v->fails())
+            {
                 return $this->sendError('There is an error in the data', $v->errors());
             }
-
             $data = $request->only(['name','description','price']);
-
             $sparePart->update($data);
+            $product->update([
+                'name' => $request->name,
+                'Re_order_limit' => $request->Re_order_limit,
+                'maximum_product' => $request->maximum_product,
+                'description' => $request->description,
+                'main_measurement_unit_id' => $request->main_measurement_unit_id,
+                'sub_measurement_unit_id' => $request->sub_measurement_unit_id,
+                'count_unit' => $request->count_unit,
+                'sell_app' => $request->sell_app,
+            ]);
 
-            // if ($request->hasFile('file')) {
-
-            //     if (File::exists('upload/sparePart/' . $sparePart->media->file_name)) {
-            //         unlink('upload/sparePart/' . $sparePart->media->file_name);
-            //     }
-            //     $sparePart->media->delete();
-
-            //     $file_size = $request->file->getSize();
-            //     $file_type = $request->file->getMimeType();
-            //     $image = time() . '.' . $request->file->getClientOriginalName();
-
-            //     // picture move
-            //     $request->file->storeAs('sparePart', $image, 'general');
-
-            //     $sparePart->media()->create([
-            //         'file_name' => $image,
-            //         'file_size' => $file_size,
-            //         'file_type' => $file_type,
-            //         'file_sort' => 1
-            //     ]);
-            // }
+            $product->selling_method()->sync( $request->selling_method);
+            foreach ($request->selling_method as $item)
+            {
+                $ProductPricing = ProductPricing::where([
+                    ['product_id', $product->id],
+                    ['selling_method_id', $item],
+                ])->get();
+                if (count($ProductPricing) == 0)
+                {
+                    ProductPricing::create([
+                        'product_id' => $product->id,
+                        'selling_method_id' => $item,
+                        'measurement_unit_id' => $request->main_measurement_unit_id
+                    ]);
+                    if ($request['count_unit'] > 1)
+                    {
+                        ProductPricing::create([
+                            'product_id' => $product->id,
+                            'selling_method_id' => $item,
+                            'measurement_unit_id' => $request->sub_measurement_unit_id
+                        ]);
+                    }
+                }
+                else
+                {
+                    foreach ($ProductPricing as $index=>$value)
+                    {
+                        if ($index == 0)
+                        {
+                            $value->update([
+                                'measurement_unit_id' => $request->main_measurement_unit_id
+                            ]);
+                        }
+                        else
+                        {
+                            if ($request['count_unit'] > 1)
+                            {
+                                $value->update([
+                                    'measurement_unit_id' => $request->sub_measurement_unit_id,
+                                ]);
+                            }
+                            else
+                            {
+                                $value->update([
+                                    'measurement_unit_id' => $request->sub_measurement_unit_id,
+                                    'active' => 0,
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
-        }catch (\Exception $e){
-
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+//        }
+//        catch (\Exception $e)
+//        {
+//            DB::rollBack();
+//            return $this->sendError('An error occurred in the system');
+//        }
     }
 
     /**
@@ -234,17 +278,23 @@ class SparePartController extends Controller
      */
     public function destroy($id)
     {
-        try {
+        try
+        {
             $sparePart = SparePart::find($id);
-            if ($sparePart) {
-
+            $product = Product::with(['media:mediable_id,file_name,id'])->where('part_id',$id)->first();
+            if ($sparePart && $product)
+            {
                 $sparePart->delete();
+                $product->delete();
                 return $this->sendResponse([], 'Deleted successfully');
-            } else {
+            }
+            else
+            {
                 return $this->sendError('ID is not exist');
             }
-
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e)
+        {
             return $this->sendError('An error occurred in the system');
         }
     }

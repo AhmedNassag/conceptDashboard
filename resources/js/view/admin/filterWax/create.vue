@@ -42,10 +42,9 @@
 
                                             <!--start name-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">اسم الشمعه </label>
+                                                <label>اسم الشمعة</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.name.$model"
-                                                       id="validationCustom01"
                                                        placeholder="اسم الشمعه"
                                                        :class="{'is-invalid':v$.name.$error,'is-valid':!v$.name.$invalid}"
                                                 >
@@ -58,28 +57,11 @@
                                             </div>
                                             <!--end name-->
 
-                                            <!--start price-->
-                                            <!-- <div class="col-md-6 mb-3">
-                                                <label for="validationCustom02">{{ $t('global.price') }}</label>
-                                                <input type="number" class="form-control"
-                                                       v-model.trim="v$.price.$model"
-                                                       id="validationCustom02"
-                                                       :placeholder="$t('global.price')"
-                                                       :class="{'is-invalid':v$.price.$error,'is-valid':!v$.price.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                </div>
-                                            </div> -->
-                                            <!--end price-->
-
                                             <!--start model-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.model') }}</label>
+                                                <label>{{ $t('global.model') }}</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.model.$model"
-                                                       id="validationCustom03"
                                                        :placeholder="$t('global.model')"
                                                        :class="{'is-invalid':v$.model.$error,'is-valid':!v$.model.$invalid}"
                                                 >
@@ -94,10 +76,9 @@
 
                                             <!--start type-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.type') }}</label>
+                                                <label>{{ $t('global.type') }}</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.type.$model"
-                                                       id="validationCustom03"
                                                        :placeholder="$t('global.type')"
                                                        :class="{'is-invalid':v$.type.$error,'is-valid':!v$.type.$invalid}"
                                                 >
@@ -112,10 +93,9 @@
 
                                             <!--start origin-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.origin') }}</label>
+                                                <label>{{ $t('global.origin') }}</label>
                                                 <input type="text" class="form-control"
                                                        v-model.trim="v$.origin.$model"
-                                                       id="validationCustom03"
                                                        :placeholder="$t('global.origin')"
                                                        :class="{'is-invalid':v$.origin.$error,'is-valid':!v$.origin.$invalid}"
                                                 >
@@ -130,10 +110,9 @@
 
                                             <!--start period-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom02">مدة تغيير الشمع بالأيام</label>
+                                                <label>مدة تغيير الشمع بالأيام</label>
                                                 <input type="number" class="form-control"
                                                        v-model.trim="v$.period.$model"
-                                                       id="validationCustom02"
                                                        :placeholder="$t('global.period')"
                                                        :class="{'is-invalid':v$.period.$error,'is-valid':!v$.period.$invalid}"
                                                 >
@@ -150,11 +129,10 @@
                                             <!-----start product data----->
                                             <!--start barcode-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom01">الباركود </label>
+                                                <label>الباركود </label>
                                                 <input
                                                     type="number" class="form-control"
                                                     v-model.trim="v$.barcode.$model"
-                                                    id="validationCustom056"
                                                     placeholder="الباركود"
                                                     :class="{'is-invalid':v$.barcode.$error,'is-valid':!v$.barcode.$invalid}"
                                                 >
@@ -165,7 +143,6 @@
                                             </div>
                                             <!--end barcode-->
 
-<<<<<<< HEAD
                                             <!--start company_id-->
                                             <div class="col-md-6 mb-3">
                                                 <label>البراندات</label>
@@ -187,11 +164,9 @@
                                             </div>
                                             <!--end company_id-->
 
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                                             <!--start main_measurement_unit_id-->
                                             <div class="col-md-6 mb-3">
-                                                <label >وحدة القياس الرئيسية</label>
+                                                <label>وحدة القياس الرئيسية</label>
                                                 <select
                                                     name="type"
                                                     class="form-control"
@@ -212,7 +187,7 @@
 
                                             <!---start count_unit-->
                                             <div class="col-md-6 mb-3">
-                                                <label >عدد الوحدات داخل الفئة الفرعية </label>
+                                                <label>عدد الوحدات داخل الفئة الفرعية</label>
                                                 <input
                                                     type="number" class="form-control"
                                                     v-model="v$.count_unit.$model"
@@ -272,11 +247,10 @@
 
                                             <!--start Re_order_limit-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom055">حد اعادة الطلب</label>
+                                                <label>حد اعادة الطلب</label>
                                                 <input
                                                     type="number" class="form-control"
                                                     v-model.trim="v$.Re_order_limit.$model"
-                                                    id="validationCustom055"
                                                     placeholder="حد اعادة الطلب"
                                                     :class="{'is-invalid':v$.Re_order_limit.$error,'is-valid':!v$.Re_order_limit.$invalid}"
                                                 >
@@ -326,10 +300,10 @@
                                             <!--end sell_app-->
 
                                             <!--start shipping-->
-                                            <div class="col-md-6 mb-3">
+                                            <div class="col-md-6 mb-3" style="display: none">
                                                 <label>مده الشحن</label>
                                                 <input
-                                                    type="text" class="form-control"
+                                                    type="number" class="form-control"
                                                     v-model.trim="v$.shipping.$model"
                                                     placeholder="مده الشحن"
                                                     :class="{'is-invalid':v$.shipping.$error,'is-valid':!v$.shipping.$invalid}"
@@ -341,28 +315,11 @@
                                             </div>
                                             <!--end shipping-->
 
-                                            <!--start guarantee-->
-                                            <div class="col-md-6 mb-3">
-                                                <label>الضمان</label>
-                                                <input
-                                                    type="text" class="form-control"
-                                                    v-model.trim="v$.guarantee.$model"
-                                                    placeholder=" الضمان "
-                                                    :class="{'is-invalid':v$.guarantee.$error,'is-valid':!v$.guarantee.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.guarantee.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                </div>
-                                            </div>
-                                            <!--end guarantee-->
-
                                             <!--start description-->
                                             <div class="col-md-12 mb-3">
-                                                <label for="validationCustom034">الوصف</label>
+                                                <label>الوصف</label>
                                                 <textarea type="text" class="form-control custom-textarea"
                                                     v-model.trim="v$.description.$model"
-                                                    id="validationCustom034"
                                                     placeholder="الوصف"
                                                     :class="{'is-invalid':v$.description.$error,'is-valid':!v$.description.$invalid}"
                                                 ></textarea>
@@ -462,10 +419,7 @@ export default {
         let loading = ref(false);
 
         //
-<<<<<<< HEAD
         let companies = ref([]);
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
         let measures = ref([]);
         let sellingMethods = ref([]);
         //
@@ -488,14 +442,11 @@ export default {
                 files: [],
                 maximum_product: null,
                 Re_order_limit: null,
-<<<<<<< HEAD
                 company_id: null,
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 main_measurement_unit_id: null,
                 sub_measurement_unit_id: null,
-                shipping: '',
-                guarantee: '',
+                shipping: 0,
+                guarantee: 0,
                 selling_method: [],
                 sell_app: 1,
                 mainUnitMeasurement: '',
@@ -511,10 +462,7 @@ export default {
             adminApi.get(`/v1/dashboard/product/create`)
             .then((res) => {
                 let l = res.data.data;
-<<<<<<< HEAD
                 companies.value = l.companies;
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 measures.value = l.measures;
                 sellingMethods.value = l.sellingMethods;
             })
@@ -588,12 +536,9 @@ export default {
                     required
                 },
                 filterWaxes: {},
-<<<<<<< HEAD
                 company_id: {
                     required,
                 },
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 main_measurement_unit_id: {
                     required,
                     integer
@@ -645,7 +590,6 @@ export default {
             reader.readAsDataURL(addSellingMethod.data.image);
 
         };
-<<<<<<< HEAD
 
         let preview2 = (e) => {
 
@@ -687,49 +631,6 @@ export default {
         });
         //
 
-=======
-
-        let preview2 = (e) => {
-
-            let containerImages = document.querySelector('#container-images1');
-            if(numberOfImage.value){
-                containerImages.innerHTML = '';
-            }
-            addSellingMethod.data.files = [];
-
-            numberOfImage1.value = e.target.files.length;
-
-            for(let file of e.target.files){
-
-                addSellingMethod.data.files.push(file);
-                let reader = new FileReader();
-                let figure = document.createElement('figure');
-                let figcap = document.createElement('figcaption');
-
-                figcap.innerText = file.name;
-                figure.appendChild(figcap);
-
-                reader.onload = () => {
-                    let img = document.createElement('img');
-                    img.setAttribute('src',reader.result);
-                    figure.insertBefore(img,figcap);
-                }
-
-                containerImages.appendChild(figure);
-                reader.readAsDataURL(file);
-            }
-
-        };
-
-        const numberOfImage = ref(0);
-        const numberOfImage1 = ref(0);
-
-        onMounted(() => {
-            getProduct();
-        });
-        //
-
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
         return {
             loading,
             ...toRefs(addSellingMethod),
@@ -739,10 +640,7 @@ export default {
             preview2,
             numberOfImage,
             numberOfImage1,
-<<<<<<< HEAD
             companies,
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             measures,
             sellingMethods,
             //
@@ -770,10 +668,7 @@ export default {
                 formData.append('count_unit',this.data.count_unit);
                 formData.append('maximum_product',this.data.maximum_product);
                 formData.append('Re_order_limit',this.data.Re_order_limit);
-<<<<<<< HEAD
                 formData.append('company_id',this.data.company_id);
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 formData.append('main_measurement_unit_id',this.data.main_measurement_unit_id);
                 formData.append('sub_measurement_unit_id',this.data.sub_measurement_unit_id);
                 formData.append('sell_app',this.data.sell_app);
@@ -830,10 +725,7 @@ export default {
             this.data.description = '';
             this.data.image= {};
             this.data.files = [];
-<<<<<<< HEAD
             this.data.company_id = null;
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             this.data.main_measurement_unit_id = null;
             this.data.sub_measurement_unit_id = null;
             this.data.selling_method = [];
@@ -842,8 +734,8 @@ export default {
             this.data.sub_quantity = 0;
             this.data.mainUnitMeasurement = '';
             this.data.subUnitMeasurement = '';
-            this.data.guarantee = '';
-            this.data.shipping = '';
+            this.data.guarantee = 0;
+            this.data.shipping = 0;
             //
         }
     }

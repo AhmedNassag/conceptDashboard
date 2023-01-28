@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\MobileApp;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Merchant;
+use App\Models\PointWelcome;
 use App\Models\Province;
 use App\Models\Share;
 use App\Models\User;
 use App\Models\UserCompany;
+use App\Models\Wallet;
 use App\Traits\Message;
 use Carbon\Carbon;
 use DateTime;
@@ -28,7 +30,7 @@ class RegisterController extends Controller
 
         DB::beginTransaction();
 
-        try {
+        // try {
 
             // Validator request
             $v = Validator::make($request->all(), [
@@ -54,7 +56,7 @@ class RegisterController extends Controller
                 "password" => $request->password,
                 "auth_id" => 2,
                 'role_name'=> ['client'],
-                "status" => 0,
+                "status" => 1,
                 "share_code" => $request->share_code ? $request->share_code : Null,
                 'phone' => $request->phone,
                 "code" => '+2',
@@ -72,12 +74,8 @@ class RegisterController extends Controller
             $user->client()->create([
                 'address' => $request->address,
                 'province_id' => $request->province,
-<<<<<<< HEAD
                 'area_id' => $request->area,
                 'firebase_token' => $request->firebase_token,
-=======
-                'area_id' => $request->area
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
             ]);
 
             //increase share points if user enter share code
@@ -93,14 +91,23 @@ class RegisterController extends Controller
                 }
             }
 
+            $pointWelcome = PointWelcome::where('start_date', '<=', now())->where('expire_date', '>', now())->first();
+            if($pointWelcome)
+            {
+                Wallet::create([
+                    'welcome_points' => $pointWelcome->points,
+                    'user_id' => $user->id,
+                ]);
+            }
+
             DB::commit();
             return $this->sendResponse([],'Data exited successfully');
 
-        }
-        catch (\Exception $e){
-            DB::rollBack();
-            return $this->sendError('An error occurred in the system');
-        }
+        // }
+        // catch (\Exception $e){
+        //     DB::rollBack();
+        //     return $this->sendError('An error occurred in the system');
+        // }
 
     }//end companyRegister
 

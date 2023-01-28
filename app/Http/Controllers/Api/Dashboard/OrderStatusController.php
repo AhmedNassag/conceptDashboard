@@ -14,6 +14,7 @@ use App\Models\OrderStoreProduct;
 use App\Models\PeriodicMaintenance;
 use App\Models\StoreProduct;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Notifications\Admin\AddNotification;
 use App\Traits\Message;
 use App\Traits\NotificationTrait;
@@ -121,7 +122,6 @@ class OrderStatusController extends Controller
 
                     $filterWax = $order->orderDetails->first()->product->filterWax;
                     $count = $filterWax->count();
-
                     if($order->orderDetails->first()->product->sub_category_id != Null)
                     {
                         for($i = 0; $i < $count; $i++)
@@ -129,10 +129,7 @@ class OrderStatusController extends Controller
                             // add order to periodicMaintenance
                             $periodic = PeriodicMaintenance::create([
                                 'order_id' => $order->id,
-<<<<<<< HEAD
                                 'user_id' => $order->user_id,
-=======
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                                 'name' => $order->user->name,
                                 'quantity' => $order->orderDetails[0]->quantity,
                                 // 'price' => ($filterWax[$i]->price) * ($order->orderDetails[0]->quantity),
@@ -146,6 +143,20 @@ class OrderStatusController extends Controller
                             ]);
                         }
                     }
+
+                    //add order points to wallet
+                    $points = $order->orderDetails->first()->product->points;
+                    $quantity = $order-> orderDetails->first()->quantity;
+                    $result = floatval($points) * floatval($quantity);
+                    if($points)
+                    {
+                        Wallet::create([
+                            'product_points' => $result,
+                            'user_id' => $order->user_id,
+                             'order_id' => $order->id,
+                        ]);
+                    }
+
 
                     $this->notification($tokens,$body,$type,$productData);
                     break;

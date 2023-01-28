@@ -68,20 +68,12 @@ class PeriodicMaintenanceController extends Controller
                 return $this->sendError('There is an error in the data', $v->errors(), 401);
             }
 
-            // $data = $request->only(['name', 'quantity', 'price', 'next_maintenance']);
-            // $periodicMaintenance = PeriodicMaintenance::create($data);
-
-<<<<<<< HEAD
             $price = FilterWax::where('id',$request->wax_id)->first();
             $periodicMaintenance = PeriodicMaintenance::create([
                 'user_id' =>auth()->user()->id,
-=======
-            $price = FilterWax::first();
-            $periodicMaintenance = PeriodicMaintenance::create([
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
                 'name' => $request->name,
                 'quantity' => $request->quantity,
-                'price' => $price->name,
+//                'price' => $price->name,
                 'next_maintenance' => $request->next_maintenance
             ]);
 
@@ -129,15 +121,9 @@ class PeriodicMaintenanceController extends Controller
      */
     public function update(Request $request)
     {
-        $user_order = Order::where('user_id', auth()->user()->id)->first();
         DB::beginTransaction();
         try {
-<<<<<<< HEAD
             $periodicMaintenance = PeriodicMaintenance::where('user_id',auth()->user()->id)->orderBy('next_maintenance','asc')->first();
-=======
-
-            $periodicMaintenance = PeriodicMaintenance::where('order_id',$user_order->id)->orderBy('next_maintenance','asc')->first();
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
 
             // Validator request
             $v = Validator::make($request->all(), [
@@ -179,14 +165,13 @@ class PeriodicMaintenanceController extends Controller
 
     public function nextMaintenance()
     {
-<<<<<<< HEAD
-        $periodicMaintenance = PeriodicMaintenance::where('user_id', auth()->user()->id)->where('next_maintenance','>',now())->orderBy('next_maintenance', 'asc')->first();
+        $periodicMaintenance = PeriodicMaintenance::where('user_id', auth()->user()->id)->where('status',0)->where('next_maintenance','>',now())->orderBy('next_maintenance', 'asc')->first();
         if($periodicMaintenance)
         {
-            $price = Product::where('name', $periodicMaintenance->price)->with('latestPrice')->first();
+            $price = Product::where('name', $periodicMaintenance->price)/*->with('latestPrice')*/->first();
             if($price)
             {
-                return $this->sendResponse(['next_maintenance' => $periodicMaintenance->next_maintenance, 'price' => $price->latestPrice->price], trans('message.messageSuccessfully'));
+                return $this->sendResponse(['next_maintenance' => $periodicMaintenance->next_maintenance, 'price' => $price/*->latestPrice*/->price ? $price/*->latestPrice*/->price : '0'], trans('message.messageSuccessfully'));
             }
             else
             {
@@ -209,19 +194,5 @@ class PeriodicMaintenanceController extends Controller
         } catch (\Exception $e) {
             return $this->sendError('An error occurred in the system');
         }
-=======
-        $user_order = Order::where('user_id', auth()->user()->id)->first();
-        if($user_order)
-        {
-            $periodicMaintenance = PeriodicMaintenance::where('order_id', $user_order->id)->where('next_maintenance','>',now())->orderBy('next_maintenance', 'asc')->first();
-            return $this->sendResponse(['next_maintenance' => $periodicMaintenance->next_maintenance], trans('message.messageSuccessfully'));
-        }
-        else
-        {
-            return $this->sendResponse(['next_maintenance' => '0'], trans('message.messageSuccessfully'));
-        }
-        // $user_product = Product::where('name',$periodicMaintenance->price)->with('productPrice')->first();
-        // return $this->sendResponse(['user_product' => $user_product], trans('message.messageSuccessfully'));
->>>>>>> aab1b434d94deb2ebdee65b98df25f3a738f40b8
     }
 }

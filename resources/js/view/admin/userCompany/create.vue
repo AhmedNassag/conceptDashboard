@@ -247,8 +247,91 @@
                                                         </h3>
                                                     </div>
                                                 </div>
-
                                             </div>
+
+                                            <!---->
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom04">رقم السجل التجاري</label>
+                                                <input type="text" class="form-control"
+                                                    v-model.trim="v$.commercial_record.$model"
+                                                    id="validationCustom04"
+                                                    placeholder="رقم السجل التجاري"
+                                                    :class="{'is-invalid':v$.commercial_record.$error,'is-valid':!v$.commercial_record.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.commercial_record.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.commercial_record.maxLength.$params.min }} حرف  <br /></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="validationCustom06">رقم البطاقة الضريبية</label>
+                                                <input type="text" class="form-control"
+                                                    v-model.trim="v$.tax_card.$model"
+                                                    id="validationCustom06"
+                                                    placeholder="رقم البطاقة الضريبية"
+                                                    :class="{'is-invalid':v$.tax_card.$error,'is-valid':!v$.tax_card.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.tax_card.maxLength.$invalid"> يجب ان يكون علي الاقل {{ v$.tax_card.maxLength.$params.min }} حرف  <br /></span>
+                                                </div>
+                                            </div>
+
+                                            <!--start images-->
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview1"
+                                                        id="mediaPackage1"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صورة السجل التجاري</span>
+                                                <p class="num-of-files">{{numberOfImage1 ? numberOfImage1 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images1" v-show="data.commercialRegister && numberOfImage1"></div>
+                                                <div class="container-images" v-show="!numberOfImage1">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 row flex-fill">
+                                                <div class="btn btn-outline-primary waves-effect">
+                                                    <span>
+                                                        Choose files
+                                                        <i class="fas fa-cloud-upload-alt ml-3" aria-hidden="true"></i>
+                                                    </span>
+                                                    <input
+                                                        name="mediaPackage"
+                                                        type="file"
+                                                        @change="preview2"
+                                                        id="mediaPackage2"
+                                                        accept="image/png,jepg,jpg"
+                                                    >
+                                                </div>
+                                                <span class="text-danger text-center">صوره البطاقه الضربيه</span>
+                                                <p class="num-of-files">{{numberOfImage2 ? numberOfImage2 + ' Files Selected' : 'No Files Chosen' }}</p>
+                                                <div class="container-images" id="container-images2" v-show="data.taxCard && numberOfImage2"></div>
+                                                <div class="container-images" v-show="!numberOfImage2">
+                                                    <figure>
+                                                        <figcaption>
+                                                            <img :src="`/admin/img/company/img-1.png`">
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <!--end images-->
+                                            <!---->
 
                                         </div>
 
@@ -282,6 +365,8 @@ export default {
     },
     setup(){
         let loading = ref(false);
+        let numberOfImage1 = ref(0);
+        let numberOfImage2 = ref(0);
         let areas = ref([]);
         let selling_methods = ref([]);
         let provinces = ref([]);
@@ -302,6 +387,10 @@ export default {
                 address : '',
                 province_id : null,
                 area_id : null,
+                commercial_record : '',
+                tax_card : '',
+                commercialRegister: {},
+                taxCard: {},
             }
         });
 
@@ -330,16 +419,36 @@ export default {
                     required,
                     integer
                 },
-                facebook:{url},
-                linkedin:{url},
-                website:{url},
-                whatsapp:{url},
+                facebook:{
+                    url
+                },
+                linkedin:{
+                    url
+                },
+                website:{
+                    url
+                },
+                whatsapp:{
+                    url
+                },
                 phone_second:{},
                 address: {
                     required
                 },
-                province_id:{required,integer},
-                area_id:{required,integer},
+                province_id: {
+                    required,
+                    integer
+                },
+                area_id: {
+                    required,
+                    integer
+                },
+                commercial_record: {
+                    maxLength:maxLength(100),
+                },
+                tax_card: {
+                    maxLength:maxLength(100),
+                },
             }
         });
 
@@ -396,9 +505,69 @@ export default {
                 })
         };
 
+        let preview1 = (e) => {
+
+            let containerImages = document.querySelector('#container-images1');
+            if(numberOfImage1.value){
+                containerImages.innerHTML = '';
+            }
+            addClient.data.commercialRegister = {};
+
+            numberOfImage1.value = e.target.files.length;
+
+            addClient.data.commercialRegister = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addClient.data.commercialRegister.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addClient.data.commercialRegister);
+
+        };
+
+        let preview2 = (e) => {
+
+            let containerImages = document.querySelector('#container-images2');
+            if(numberOfImage2.value){
+                containerImages.innerHTML = '';
+            }
+            addClient.data.taxCard = {};
+
+            numberOfImage2.value = e.target.files.length;
+
+            addClient.data.taxCard = e.target.files[0];
+
+            let reader = new FileReader();
+            let figure = document.createElement('figure');
+            let figcap = document.createElement('figcaption');
+
+            figcap.innerText = addClient.data.taxCard.name;
+            figure.appendChild(figcap);
+
+            reader.onload = () => {
+                let img = document.createElement('img');
+                img.setAttribute('src',reader.result);
+                figure.insertBefore(img,figcap);
+            }
+
+            containerImages.appendChild(figure);
+            reader.readAsDataURL(addClient.data.taxCard);
+
+        };
+
         const v$ = useVuelidate(rules,addClient.data);
 
-        return {loading,...toRefs(addClient),areas,selling_methods,provinces,getAreas,v$};
+        return {loading,...toRefs(addClient),areas,selling_methods,provinces,getAreas,v$,preview1,preview2,numberOfImage1,numberOfImage2};
     },
     methods: {
         storeClient(){
@@ -409,7 +578,26 @@ export default {
                 this.loading = true;
                 this.errors = {};
 
-                adminApi.post(`/v1/dashboard/userCompany`,this.data)
+                let formData = new FormData();
+                formData.append('name',this.data.name);
+                formData.append('nameCompany',this.data.nameCompany);
+                formData.append('job',this.data.job);
+                formData.append('email',this.data.email);
+                formData.append('phone',this.data.phone);
+                formData.append('facebook',this.data.facebook);
+                formData.append('linkedin',this.data.linkedin);
+                formData.append('website',this.data.website);
+                formData.append('whatsapp',this.data.whatsapp);
+                formData.append('phone_second',this.data.phone_second);
+                formData.append('address',this.data.address);
+                formData.append('province_id',this.data.province_id);
+                formData.append('area_id',this.data.area_id);
+                formData.append('commercial_record',this.data.commercial_record);
+                formData.append('tax_card',this.data.tax_card);
+                formData.append('commercialRegister',this.data.commercialRegister);
+                formData.append('taxCard',this.data.taxCard);
+
+                adminApi.post(`/v1/dashboard/userCompany`,formData)
                     .then((res) => {
 
                         notify({
@@ -432,14 +620,27 @@ export default {
 
             }
         },
-        resetForm(){
+        resetForm()
+        {
             this.data.name = '';
             this.data.email = '';
             this.data.phone = '';
-            this.data.address = '';
-            this.data.province_id = null;
+            this.data.nameCompany = '';
+            this.data.job= '';
+            this.data.facebook='';
+            this.data.linkedin='';
+            this.data.website='';
+            this.data.whatsapp='';
+            this.data.commercial_record = '';
             this.data.area_id = null;
-            this.data.amount = 0;
+            this.data.province_id = null;
+            this.data.address = '';
+            this.data.phone_second='';
+            this.data.tax_card = '';
+            document.querySelector('#mediaPackage1').value = '';
+            document.querySelector('#mediaPackage2').value = '';
+            document.querySelector('#container-images1').innerHTML = '';
+            document.querySelector('#container-images2').innerHTML = '';
         }
     }
 }

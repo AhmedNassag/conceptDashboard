@@ -47,13 +47,13 @@
                                                     <input type="number" class="form-control date-input" v-model="order_id">
                                                 </div>
 
-                                                <div class="col-md-2 mr-5" style="margin:5px;">
-                                                    <label>{{$t('global.orderType')}}</label>
-                                                    <select class="form-select" v-model="orderType">
-                                                        <option value="0">غير ضريبية</option>
-                                                        <option value="1">ضريبية</option>
-                                                    </select>
-                                                </div>
+<!--                                                <div class="col-md-2 mr-5" style="margin:5px;">-->
+<!--                                                    <label>{{$t('global.orderType')}}</label>-->
+<!--                                                    <select class="form-select" v-model="orderType">-->
+<!--                                                        <option value="0">غير ضريبية</option>-->
+<!--                                                        <option value="1">ضريبية</option>-->
+<!--                                                    </select>-->
+<!--                                                </div>-->
 
                                                 <div class="col-md-2 mt-4" style="margin:5px;">
                                                     <button class="btn btn-primary" type="submit">{{$t('global.Search')}}</button>

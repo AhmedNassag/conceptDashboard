@@ -228,23 +228,39 @@ class PermissionSeeder extends Seeder
             //end follow
 
             //start periodicMaintenance
-            ['name' => 'periodicMaintenance read','role' => '','category' => 'employee'],
-            ['name' => 'periodicMaintenance create','role' => '','category' => 'employee'],
-            ['name' => 'periodicMaintenance edit','role' => '','category' => 'employee'],
-            ['name' => 'periodicMaintenance delete','role' => '','category' => 'employee'],
+            ['name' => 'periodicMaintenance read','role' => '','category' => 'periodicMaintenance'],
+            ['name' => 'periodicMaintenance create','role' => '','category' => 'periodicMaintenance'],
+            ['name' => 'periodicMaintenance edit','role' => '','category' => 'periodicMaintenance'],
+            ['name' => 'periodicMaintenance delete','role' => '','category' => 'periodicMaintenance'],
             //end periodicMaintenance
 
             //start shareCompetition
-            ['name' => 'competition read', 'role' => 'shareCompetition', 'category' => 'employee'],
-            ['name' => 'competition create', 'role' => 'shareCompetition', 'category' => 'employee'],
-            ['name' => 'competition edit', 'role' => 'shareCompetition', 'category' => 'employee'],
-            ['name' => 'competition delete', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'competition read', 'role' => 'shareCompetition', 'category' => 'shareCompetition'],
+            ['name' => 'competition create', 'role' => 'shareCompetition', 'category' => 'shareCompetition'],
+            ['name' => 'competition edit', 'role' => 'shareCompetition', 'category' => 'shareCompetition'],
+            ['name' => 'competition delete', 'role' => 'shareCompetition', 'category' => 'shareCompetition'],
 
-            ['name' => 'share read', 'role' => 'shareCompetition', 'category' => 'employee'],
+            ['name' => 'share read', 'role' => 'shareCompetition', 'category' => 'shareCompetition'],
             //end shareCompetition
 
+            //start walletPoint
+            ['name' => 'pointPrice read', 'role' => 'wallet', 'category' => 'wallet'],
+            ['name' => 'pointPrice create', 'role' => 'wallet', 'category' => 'wallet'],
+            ['name' => 'pointPrice edit', 'role' => 'wallet', 'category' => 'wallet'],
+            ['name' => 'pointPrice delete', 'role' => 'wallet', 'category' => 'wallet'],
+
+            ['name' => 'pointWelcome read', 'role' => 'wallet', 'category' => 'wallet'],
+            ['name' => 'pointWelcome create', 'role' => 'wallet', 'category' => 'wallet'],
+            ['name' => 'pointWelcome edit', 'role' => 'wallet', 'category' => 'wallet'],
+            ['name' => 'pointWelcome delete', 'role' => 'wallet', 'category' => 'wallet'],
+
+            ['name' => 'wallet read', 'role' => 'wallet', 'category' => 'wallet'],
+            //end walletPoint
+
+            //start CreditCapacity
             ['name' => 'CreditCapacity read','role' => '','category' => 'Credit Capacity'],
             ['name' => 'CreditCapacity edit','role' => '','category' => 'Credit Capacity'],
+            //end CreditCapacity
 
             // start financial Accounts
             ['name' => 'AccountsTree read','role' => 'financial Accounts','category' => 'financial Accounts'],
@@ -354,6 +370,18 @@ class PermissionSeeder extends Seeder
             ['name' => 'CapitalOwnerAccount delete','role' => 'platform Accounts','category' => 'platform Accounts'],
             // end platform Accounts
 
+            // start Complaint
+            ['name' => 'Complaints read','role' => 'Complaints','category' => 'Complaints'],
+            ['name' => 'Complaints create','role' => 'Complaints','category' => 'Complaints'],
+            ['name' => 'Complaints edit','role' => 'Complaints','category' => 'Complaints'],
+            ['name' => 'Complaints delete','role' => 'Complaints','category' => 'Complaints'],
+            ['name' => 'ComplaintClients read','role' => 'Complaints','category' => 'Complaints'],
+            // end Complaint
+
+            // start Complaint NotificationApp
+            ['name' => 'addNotificationApp create','role' => 'Complaints','category' => 'Complaints'],
+            // end Complaint NotificationApp
+
             // start Suggestion
             ['name' => 'Suggestions read','role' => 'Suggestions','category' => 'Suggestions'],
             ['name' => 'Suggestions create','role' => 'Suggestions','category' => 'Suggestions'],
@@ -363,13 +391,14 @@ class PermissionSeeder extends Seeder
             // end Suggestion
 
             // start Suggestion
-            ['name' => 'addNotificationApp create','role' => 'Suggestions','category' => 'Suggestions'],
+//            ['name' => 'addNotificationApp create','role' => 'Suggestions','category' => 'Suggestions'],
             // end Suggestion
 
         ];
 
 
         $notifies = [
+            'Add Complaint',
             'Add Suggestion',
             'Add Client',
             'Add OnlineOrder',

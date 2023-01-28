@@ -286,10 +286,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 mb-3">
+                                            <div class="col-md-6 mb-3" style="display: none">
                                                 <label>مدة الشحن باليوم</label>
                                                 <input
-                                                    type="text" class="form-control"
+                                                    type="number" class="form-control"
                                                     v-model.trim="v$.shipping.$model"
                                                     placeholder="مدة الشحن باليوم"
                                                     :class="{'is-invalid':v$.shipping.$error,'is-valid':!v$.shipping.$invalid}"
@@ -301,11 +301,28 @@
                                             </div>
 
                                             <div class="col-md-6 mb-3">
-                                                <label>مدة الضمان بالسنة</label>
+                                                <label>اختر نوع مدة الضمان</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.guarantee_type.$model"
+                                                    :class="{'is-invalid':v$.guarantee_type.$error,'is-valid':!v$.guarantee_type.$invalid}"
+                                                >
+                                                    <option value="year">بالسنة</option>
+                                                    <option value="month">بالشهر</option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.guarantee_type.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>ادخل مدة الضمان</label>
                                                 <input
-                                                    type="text" class="form-control"
+                                                    type="number" class="form-control"
                                                     v-model.trim="v$.guarantee.$model"
-                                                    placeholder="مدة الضمان بالسنة"
+                                                    placeholder="مدة الضمان"
                                                     :class="{'is-invalid':v$.guarantee.$error,'is-valid':!v$.guarantee.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
@@ -314,13 +331,27 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-6 mb-3">
+                                                <label>النقاط المكتسبة للمحفظة عند الشراء</label>
+                                                <input
+                                                    type="number" class="form-control"
+                                                    v-model.trim="v$.points.$model"
+                                                    placeholder="النقاط المكتسبة للمحفظة عند الشراء"
+                                                    :class="{'is-invalid':v$.points.$error,'is-valid':!v$.points.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.points.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-12 mb-3">
                                                 <label for="validationCustom034">الوصف</label>
                                                 <textarea type="text" class="form-control custom-textarea"
-                                                          v-model.trim="v$.description.$model"
-                                                          id="validationCustom034"
-                                                          placeholder="الوصف"
-                                                          :class="{'is-invalid':v$.description.$error,'is-valid':!v$.description.$invalid}"
+                                                    v-model.trim="v$.description.$model"
+                                                    id="validationCustom034"
+                                                    placeholder="الوصف"
+                                                    :class="{'is-invalid':v$.description.$error,'is-valid':!v$.description.$invalid}"
                                                 ></textarea>
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
@@ -574,8 +605,9 @@ export default {
                 company_id: null,
                 main_measurement_unit_id: null,
                 sub_measurement_unit_id: null,
-                shipping: '',
+                shipping: 0,
                 guarantee: '',
+                guarantee_type: 'year',
                 selling_method: [],
                 filterWaxes: [],
                 sell_app:1,
@@ -589,7 +621,8 @@ export default {
                 store_id:1,
                 price_maintenance: 0,
                 period_maintenance: 0,
-                type_maintenance: 0
+                type_maintenance: 0,
+                points:0,
             }
         });
 
@@ -655,11 +688,16 @@ export default {
                 guarantee: {
                     required
                 },
+                guarantee_type: {
+                    required,
+                },
                 maximum_product: {
                     required,
                     integer
                 },
-                description: {required},
+                description: {
+                    required
+                },
                 image: {
                     required
                 },
@@ -726,6 +764,9 @@ export default {
                 type_maintenance: {
                     required,
                     integer
+                },
+                points: {
+                    required
                 }
             }
         });
@@ -874,7 +915,9 @@ export default {
                 formData.append('period_maintenance',this.data.period_maintenance);
                 formData.append('type_maintenance',this.data.type_maintenance);
                 formData.append('guarantee',this.data.guarantee);
+                formData.append('guarantee_type',this.data.guarantee_type);
                 formData.append('shipping',this.data.shipping);
+                formData.append('points',this.data.points);
                 for( var i = 0; i < this.numberOfImage1; i++ ){
                     let file = this.data.files[i];
                     formData.append('files[' + i + ']', file);
@@ -939,7 +982,9 @@ export default {
             this.data.period_maintenance = 0;
             this.data.price_maintenance = 0;
             this.data.guarantee = '';
+            this.data.guarantee_type = 'year',
             this.data.shipping = '';
+            this.data.points = 0;
         }
     }
 }

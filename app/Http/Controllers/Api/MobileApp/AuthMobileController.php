@@ -54,7 +54,7 @@ class AuthMobileController extends Controller
         $request_data['code'] = "+02";
         $request_data['auth_id'] = 2;
         $request_data['role_name'] = ["client"];
-        $request_data['status'] = 0;
+        $request_data['status'] = 1;
 
         $user = User::create($request_data);
         $user->client()->create($request_data);
@@ -116,7 +116,7 @@ class AuthMobileController extends Controller
         $request_data['code'] = "+02";
         $request_data['auth_id'] = 2;
         $request_data['role_name'] = ["client"];
-        $request_data['status'] = 0;
+        $request_data['status'] = 1;
 
         $user_offline->update($request_data);
         $user_offline->client()->update([
@@ -255,7 +255,7 @@ class AuthMobileController extends Controller
     }
 
 
-    
+
     /**
      * check Phone User
      */

@@ -270,38 +270,6 @@
                                             </div>
                                             <!--end sell_app-->
 
-                                            <!--start shipping-->
-                                            <div class="col-md-6 mb-3">
-                                                <label>مده الشحن</label>
-                                                <input
-                                                    type="text" class="form-control"
-                                                    v-model.trim="v$.shipping.$model"
-                                                    placeholder="مده الشحن"
-                                                    :class="{'is-invalid':v$.shipping.$error,'is-valid':!v$.shipping.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.shipping.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                </div>
-                                            </div>
-                                            <!--end shipping-->
-
-                                            <!--start guarantee-->
-                                            <div class="col-md-6 mb-3">
-                                                <label>الضمان</label>
-                                                <input
-                                                    type="text" class="form-control"
-                                                    v-model.trim="v$.guarantee.$model"
-                                                    placeholder=" الضمان "
-                                                    :class="{'is-invalid':v$.guarantee.$error,'is-valid':!v$.guarantee.$invalid}"
-                                                >
-                                                <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.guarantee.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                </div>
-                                            </div>
-                                            <!--end guarantee-->
-
                                             <!--start description-->
                                             <div class="col-md-12 mb-3">
                                                 <label for="validationCustom034">الوصف</label>
@@ -426,8 +394,8 @@ export default {
                 Re_order_limit: null,
                 main_measurement_unit_id: null,
                 sub_measurement_unit_id: null,
-                shipping: '',
-                guarantee: '',
+                shipping: 0,
+                guarantee: 0,
                 selling_method: [],
                 sell_app: 1,
                 mainUnitMeasurement: '',

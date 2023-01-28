@@ -33,12 +33,7 @@
                                         <input type="search" v-model="search" class="custom"/>
                                     </div>
                                     <div class="col-5 row justify-content-end">
-<!--                                        <router-link-->
-<!--                                            v-if="permission.includes('periodicMaintenance create')"-->
-<!--                                            :to="{name: 'createPeriodicMaintenance'}"-->
-<!--                                            class="btn btn-custom btn-warning">-->
-<!--                                            إضافة-->
-<!--                                        </router-link>-->
+
                                     </div>
                                 </div>
                             </div>
@@ -48,10 +43,13 @@
                                     <tr>
                                         <th class="text-center">#</th>
                                         <th class="text-center">اسم العميل</th>
+                                        <th class="text-center">تليفون العميل</th>
+                                        <th class="text-center">المنطقة</th>
                                         <th class="text-center">عدد الأجهزة</th>
                                         <th class="text-center">اسم الشمعة</th>
                                         <th class="text-center">موعد الصيانة القادم</th>
                                         <th class="text-center">تاريخ التركيب</th>
+                                        <th class="text-center">حالة الصيانة</th>
                                         <th class="text-center">الاجراءات</th>
                                     </tr>
                                     </thead>
@@ -59,10 +57,17 @@
                                         <tr v-for="(item,index) in periodicMaintenances" :key="item.id">
                                             <td class="text-center">{{ index + 1 }}</td>
                                             <td class="text-center">{{ item.name ? item.name : '---' }}</td>
+                                            <td class="text-center">{{ item.user.phone ? item.user.phone : '---' }}</td>
+                                            <td class="text-center">{{ item.user.client.area.name ? item.user.client.area.name : '---' }}</td>
                                             <td class="text-center">{{ item.quantity ? item.quantity : '---' }}</td>
                                             <td class="text-center">{{ item.price ? item.price : '---' }}</td>
                                             <td class="text-center">{{ item.next_maintenance ? item.next_maintenance : '---' }}</td>
                                             <td class="text-center">{{ dateFormat(item.created_at) }}</td>
+                                            <td class="text-center">
+                                                <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">
+                                                    {{ parseInt(item.status) ? 'تمت بالفعل' : 'لم تتم بعد' }}
+                                                </span>
+                                            </td>
                                             <td class="text-center">
                                                 <router-link
                                                    :to="{name: 'delayPeriodicMaintenance',params:{id:item.id}}"
@@ -70,12 +75,6 @@
                                                    class="btn btn-sm btn-info me-2">
                                                    <i class="far fa-edit"> تأجيل ميعاد الصيانة </i>
                                                 </router-link>
-                                                <!-- <router-link
-                                                    :to="{name: 'confirmPeriodicMaintenance',params:{id:item.id}}"
-                                                    v-if="permission.includes('periodicMaintenance edit')"
-                                                    class="btn btn-sm btn-success me-2">
-                                                    <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
-                                                </router-link> -->
                                                 <a href="#" @click="confirmPeriodic(item.id)">
                                                 <span class="btn btn-sm btn-success me-2">
                                                     <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
@@ -137,6 +136,7 @@ export default {
                     let l = res.data.data;
                     periodicMaintenancesPaginate.value = l.periodicMaintenances;
                     periodicMaintenances.value = l.periodicMaintenances.data;
+                    areas.value = l.areas;
                 })
                 .catch((err) => {
                     // console.log(err.response.data);
@@ -200,7 +200,16 @@ export default {
         }
 
 
-        return {dateFormat,periodicMaintenances, loading,permission, getPeriodicMaintenance, search, periodicMaintenancesPaginate, confirmPeriodic};
+        return {
+            dateFormat,
+            periodicMaintenances,
+            loading,
+            permission,
+            getPeriodicMaintenance,
+            search,
+            periodicMaintenancesPaginate,
+            confirmPeriodic,
+        };
 
     },
     data() {

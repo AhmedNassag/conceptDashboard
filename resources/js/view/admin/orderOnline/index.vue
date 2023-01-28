@@ -34,14 +34,12 @@
 
                                                 <div class="col-md-2 p-0">
                                                     <label >{{$t('global.FromDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="fromDate">
+                                                    <input type="date" class="form-control date-input" v-model="fromDate">
                                                 </div>
 
                                                 <div class="col-md-2 p-0">
                                                     <label >{{$t('global.ToDate')}}</label>
-                                                    <input type="date" class="form-control date-input"
-                                                           v-model="toDate">
+                                                    <input type="date" class="form-control date-input" v-model="toDate">
                                                 </div>
 
                                                 <div class="col-md-2 p-0">
@@ -58,8 +56,7 @@
 
                                                 <div class="col-md-2 p-0">
                                                     <label >{{$t('global.sellInvoiceNumber')}}</label>
-                                                    <input type="number" class="form-control date-input"
-                                                           v-model="order_id">
+                                                    <input type="number" class="form-control date-input" v-model="order_id">
 
                                                 </div>
 
@@ -563,16 +560,16 @@ export default {
             loading.value = true;
 
             adminApi.get(`/v1/dashboard/orderStatus`)
-                .then((res) => {
-                    let l = res.data.data;
-                    orderStatus.value = l.orderStatus;
-                })
-                .catch((err) => {
-                    console.log(err.response.data);
-                })
-                .finally(() => {
-                    loading.value = false;
-                });
+            .then((res) => {
+                let l = res.data.data;
+                orderStatus.value = l.orderStatus;
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            })
+            .finally(() => {
+                loading.value = false;
+            });
         }
 
         let getRepresentatives = () => {
@@ -857,7 +854,36 @@ export default {
 
         const v$ = useVuelidate(rules,changeStatus.data);
 
-        return {...toRefs(changeStatus),v$,t,representatives,treasuries,treasury_amount,changeQuantity,changeReturnQuantity,changeSubQuantity,changeReturnSubQuantity,dataChangeOrder,dataOrderReturn,ordersPaginate,search,status,orderStatus,deleteOrder,printDataSmall,permission,order_id,fromDate,toDate,orders, loading,dateFormat,printData, getOrder,close};
+        return {
+            ...toRefs(changeStatus),
+            v$,
+            t,
+            representatives,
+            treasuries,
+            treasury_amount,
+            changeQuantity,
+            changeReturnQuantity,
+            changeSubQuantity,
+            changeReturnSubQuantity,
+            dataChangeOrder,
+            dataOrderReturn,
+            ordersPaginate,
+            search,
+            status,
+            orderStatus,
+            deleteOrder,
+            printDataSmall,
+            permission,
+            order_id,
+            fromDate,
+            toDate,
+            orders,
+            loading,
+            dateFormat,
+            printData,
+            getOrder,
+            close
+        };
 
     },
     methods: {

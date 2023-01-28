@@ -40,6 +40,7 @@
                                     <form @submit.prevent="editSellingMethod" class="needs-validation">
                                         <div class="form-row row">
 
+                                            <!--start name-->
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom01">اسم قطعه الغيار </label>
                                                 <input type="text" class="form-control"
@@ -55,34 +56,159 @@
                                                     <span v-if="v$.name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.name.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
+                                            <!--end name-->
 
-                                            <!-- <div class="col-md-6 mb-3">
-                                                <label for="validationCustom02">{{ $t('global.price') }}</label>
-                                                <input type="text" class="form-control"
-                                                       v-model.trim="v$.price.$model"
-                                                       id="validationCustom02"
-                                                       :placeholder="$t('global.price')"
-                                                       :class="{'is-invalid':v$.price.$error,'is-valid':!v$.price.$invalid}"
+                                            <hr class="col-md-12 mb-3"/>
+
+                                            <!-----start product data----->
+
+                                            <!--start main_measurement_unit_id-->
+                                            <div class="col-md-6 mb-3">
+                                                <label>وحدة القياس الرئيسية</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.main_measurement_unit_id.$model"
+                                                    :class="{'is-invalid':v$.main_measurement_unit_id.$error,'is-valid':!v$.main_measurement_unit_id.$invalid}"
+                                                >
+                                                    <option value="">---</option>
+                                                    <option v-for="measure in measures" :key="measure.id" :value="measure.id" >
+                                                        {{ measure.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.main_measurement_unit_id.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end main_measurement_unit_id-->
+
+                                            <!---start count_unit-->
+                                            <div class="col-md-6 mb-3">
+                                                <label>عدد الوحدات داخل الفئة الفرعية</label>
+                                                <input
+                                                    type="number" class="form-control"
+                                                    v-model="v$.count_unit.$model"
+                                                    @input="subPrice"
+                                                    placeholder="عدد الوحدات داخل الفئة الفرعية"
+                                                    :class="{'is-invalid':v$.count_unit.$error,'is-valid':!v$.count_unit.$invalid}"
                                                 >
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
-                                                    <span v-if="v$.price.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.count_unit.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.count_unit.integer.$invalid"> يجب ان يكون رقم  <br /></span>
                                                 </div>
-                                            </div> -->
+                                            </div>
+                                            <!--end count_unit-->
 
+                                            <!--start sub_measurement_unit_id-->
                                             <div class="col-md-6 mb-3">
-                                                <label for="validationCustom03">{{ $t('global.Description') }}</label>
-                                                <textarea class="form-control"
+                                                <label >وحدة القياس الفرعية</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.sub_measurement_unit_id.$model"
+                                                    :class="{'is-invalid':v$.sub_measurement_unit_id.$error,'is-valid':!v$.sub_measurement_unit_id.$invalid}"
+                                                >
+                                                    <option value="">---</option>
+                                                    <option v-for="measure in measures" :key="measure.id" :value="measure.id" >
+                                                        {{ measure.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.sub_measurement_unit_id.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end sub_measurement_unit_id-->
+
+                                            <!--start selling_method-->
+                                            <div class="col-md-6 mb-3">
+                                                <label >طرق البيع</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    multiple
+                                                    v-model="v$.selling_method.$model"
+                                                    :class="{'is-invalid':v$.selling_method.$error,'is-valid':!v$.selling_method.$invalid}"
+                                                >
+                                                    <option v-for="sellingMethod in sellingMethods" :key="sellingMethod.id" :value="sellingMethod.id" >
+                                                        {{ sellingMethod.name }}
+                                                    </option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.selling_method.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end selling_method-->
+
+                                            <!--start Re_order_limit-->
+                                            <div class="col-md-6 mb-3">
+                                                <label>حد اعادة الطلب</label>
+                                                <input
+                                                    type="number" class="form-control"
+                                                    v-model.trim="v$.Re_order_limit.$model"
+                                                    placeholder="حد اعادة الطلب"
+                                                    :class="{'is-invalid':v$.Re_order_limit.$error,'is-valid':!v$.Re_order_limit.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.Re_order_limit.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.Re_order_limit.integer.$invalid"> يجب ان يكون رقم  <br /></span>
+                                                </div>
+                                            </div>
+                                            <!--end Re_order_limit-->
+
+                                            <!--start maximum_product-->
+                                            <div class="col-md-6 mb-3">
+                                                <label>اقصي كمية فى المخزن</label>
+                                                <input
+                                                    type="number" class="form-control"
+                                                    v-model.trim="v$.maximum_product.$model"
+                                                    placeholder="اقصي كمية فى المخزن"
+                                                    :class="{'is-invalid':v$.maximum_product.$error,'is-valid':!v$.maximum_product.$invalid}"
+                                                >
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.maximum_product.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.maximum_product.integer.$invalid"> يجب ان يكون رقم  <br /></span>
+                                                </div>
+                                            </div>
+                                            <!--end maximum_product-->
+
+                                            <!--start sell_app-->
+                                            <div class="col-md-6 mb-3">
+                                                <label>اماكن ظهور المنتج</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.sell_app.$model"
+                                                    :class="{'is-invalid':v$.sell_app.$error,'is-valid':!v$.sell_app.$invalid}"
+                                                >
+
+                                                    <option value="1">{{$t('global.OfferInDirectSellingAndApplication')}}</option>
+                                                    <option value="0">{{$t('global.OfferedForDirectSalesOnly')}}</option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.sell_app.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end sell_app-->
+
+                                            <!--start description-->
+                                            <div class="col-md-12 mb-3">
+                                                <label>الوصف</label>
+                                                <textarea type="text" class="form-control custom-textarea"
                                                           v-model.trim="v$.description.$model"
-                                                          id="validationCustom03"
-                                                          :placeholder="$t('global.Description')"
+                                                          placeholder="الوصف"
                                                           :class="{'is-invalid':v$.description.$error,'is-valid':!v$.description.$invalid}"
                                                 ></textarea>
                                                 <div class="valid-feedback">تبدو جيده</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="v$.description.required.$invalid"> هذا الحقل مطلوب<br /> </span>
-                                                </div>
                                             </div>
+                                            <!--end description-->
+                                            <!-----end product data----->
 
                                         </div>
 
@@ -120,6 +246,8 @@ export default {
         const {id} = toRefs(props)
         // get create Package
         let loading = ref(false);
+        let measures = ref([]);
+        let sellingMethods = ref([]);
 
 
         let getMeasure = () => {
@@ -130,7 +258,22 @@ export default {
                     let l = res.data.data;
                     addMeasure.data.name = l.sparePart.name;
                     addMeasure.data.price = l.sparePart.price;
-                    addMeasure.data.description = l.sparePart.description;
+                    //
+                    addMeasure.data.main_measurement_unit_id = l.product.main_measurement_unit_id;
+                    addMeasure.data.count_unit = l.product.count_unit;
+                    addMeasure.data.sub_measurement_unit_id = l.product.sub_measurement_unit_id;
+                    addMeasure.data.Re_order_limit= l.product.Re_order_limit;
+                    addMeasure.data.maximum_product= l.product.maximum_product;
+                    addMeasure.data.sell_app = l.product.sell_app;
+                    addMeasure.data.description = l.product.description;
+                    addMeasure.data.points= l.product.points;
+
+                    measures.value = l.measures;
+                    sellingMethods.value = l.sellingMethods;
+                    l.sellingMethodChange.forEach((e) => {
+                        addMeasure.data.selling_method.push(e.id);
+                    });
+                    //
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -150,7 +293,20 @@ export default {
             data:{
                 name : '',
                 price : 0,
-                description: ''
+                //
+                count_unit: null,
+                description: '',
+                maximum_product: null,
+                Re_order_limit: null,
+                main_measurement_unit_id: null,
+                sub_measurement_unit_id: null,
+                shipping: 0,
+                guarantee: 0,
+                selling_method: [],
+                sell_app: 1,
+                mainUnitMeasurement: '',
+                subUnitMeasurement: '',
+                //
             }
         });
 
@@ -165,9 +321,35 @@ export default {
                     maxLength:maxLength(70),
                     required
                 },
-                description: {
+                //
+                count_unit: {
+                    required,
+                    integer
+                },
+                Re_order_limit: {
+                    required,
+                    integer
+                },
+                maximum_product: {
+                    required,
+                    integer
+                },
+                description: {},
+                main_measurement_unit_id: {
+                    required,
+                    integer
+                },
+                sub_measurement_unit_id: {
+                    required,
+                    integer
+                },
+                selling_method: {
                     required
-                }
+                },
+                sell_app: {
+                    required
+                },
+                //
             }
         });
 
@@ -175,7 +357,13 @@ export default {
         const v$ = useVuelidate(rules,addMeasure.data);
 
 
-        return {loading,...toRefs(addMeasure),v$};
+        return {
+            loading,
+            ...toRefs(addMeasure),
+            v$,
+            measures,
+            sellingMethods,
+        };
     },
     methods: {
         editSellingMethod(){

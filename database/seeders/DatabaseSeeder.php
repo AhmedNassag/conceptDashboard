@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SubAccountTableSeeder::class);
         $this->call(SettingSeeder::class);
         $this->call(SuggestionSeeder::class);
+        $this->call(ComplaintSeeder::class);
         $this->call(TreasuryTableSeeder::class);
         $this->call(IncomeTableSeeder::class);
         $this->call(ExpenseTableSeeder::class);
@@ -37,6 +38,7 @@ class DatabaseSeeder extends Seeder
         $this->call(problemSellerCategorySeeder::class);
         $this->call(followSellerCategorySeeder::class);
         $this->call(CompanyProfileSeeder::class);
+        $this->call(KnowlegeWaySeeder::class);
 
         //$this->call(SupplierTableSeeder::class);
     }

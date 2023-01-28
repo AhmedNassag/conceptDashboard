@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <div class="card-header pt-0 mb-4">
                                 <router-link
-                                    :to="{name: 'indexPeriodicMaintenance'}"
+                                    :to="{name: 'nearPeriodicMaintenance'}"
                                     class="btn btn-custom btn-dark"
                                 >
                                     العوده للخلف

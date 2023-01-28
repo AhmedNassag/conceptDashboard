@@ -128,7 +128,7 @@ class KnowledgeWayController extends Controller
      */
     public function destroy(KnowledgeWay $knowledgeWay)
     {
-        if (count($knowledgeWay->complement) == 0)
+        if ($knowledgeWay)
         {
             $knowledgeWay->delete();
             return $this->sendResponse([],'Deleted successfully');

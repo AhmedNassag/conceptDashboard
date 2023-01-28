@@ -42,6 +42,7 @@
                                     <form @submit.prevent="storeClient" class="needs-validation">
                                         <div class="form-row row">
 
+                                            <!--start name-->
                                             <div class="col-md-6 mb-3">
                                                 <label>اسم </label>
                                                 <input type="text" class="form-control"
@@ -56,7 +57,9 @@
                                                     <span v-if="v$.name.minLength.$invalid">يجب ان يكون علي اكثر  {{ v$.name.maxLength.$params.max }} حرف</span>
                                                 </div>
                                             </div>
+                                            <!--end name-->
 
+                                            <!--start email-->
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom02">الاميل </label>
                                                 <input type="email" class="form-control"
@@ -70,7 +73,9 @@
                                                     <span v-if="v$.email.email.$invalid"> يجب ان يكون بريد الكترونى  <br /></span>
                                                 </div>
                                             </div>
+                                            <!--start email-->
 
+                                            <!--start phone-->
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom03">رقم التليفون </label>
                                                 <input type="text" class="form-control"
@@ -85,7 +90,9 @@
                                                     <span v-if="v$.phone.integer.$invalid"> يجب ان يكون رقم.  <br /></span>
                                                 </div>
                                             </div>
+                                            <!--end phone-->
 
+                                            <!--start province-->
                                             <div class="col-md-6 mb-3">
                                                 <label >المحافظه</label>
                                                 <select @change="getAreas(v$.province_id.$model)"
@@ -106,7 +113,9 @@
                                                     <span v-if="v$.province_id.$invalid"> هذا الحقل مطلوب<br /> </span>
                                                 </div>
                                             </div>
+                                            <!--end province-->
 
+                                            <!--start area-->
                                             <div class="col-md-6 mb-3">
                                                 <label >{{ $t('global.choseArea') }}</label>
                                                 <select
@@ -128,30 +137,9 @@
                                                     <span v-if="v$.area_id.integer.$invalid"> يجب ان يكون رقم  <br /></span>
                                                 </div>
                                             </div>
+                                            <!--end area-->
 
-                                            <!--Start selling_method_id-->
-<!--                                            <div class="col-md-6 mb-3">-->
-<!--                                                <label >{{ $t('global.SellingMethod') }}</label>-->
-<!--                                                <select-->
-<!--                                                    name="type"-->
-<!--                                                    class="form-control"-->
-<!--                                                    v-model="v$.selling_method_id.$model"-->
-<!--                                                    :class="{'is-invalid':v$.selling_method_id.$error,'is-valid':!v$.selling_method_id.$invalid}"-->
-<!--                                                >-->
-<!--                                                    <option-->
-<!--                                                        v-for="sellingMethod in sellingMethods"-->
-<!--                                                        :value=" sellingMethod.id"-->
-<!--                                                        :key=" sellingMethod.id"-->
-<!--                                                    >{{ sellingMethod.name }}</option>-->
-<!--                                                </select>-->
-<!--                                                <div class="valid-feedback">تبدو جيده</div>-->
-<!--                                                <div class="invalid-feedback">-->
-<!--                                                    <span v-if="v$.selling_method_id.$invalid"> هذا الحقل مطلوب<br /> </span>-->
-<!--                                                    <span v-if="v$.selling_method_id.integer.$invalid"> يجب ان يكون رقم  <br /></span>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-                                            <!--End selling_method_id-->
-
+                                            <!--start address-->
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom04">العنوان </label>
                                                 <input type="text" class="form-control"
@@ -163,6 +151,28 @@
                                                 <div class="valid-feedback">تبدو جيده</div>
                                                 <div class="invalid-feedback">
                                                     <span v-if="v$.address.required.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                </div>
+                                            </div>
+                                            <!--end area-->
+
+                                            <div class="col-md-6 mb-3">
+                                                <label>كيفية التعرف علينا</label>
+                                                <select
+                                                    name="type"
+                                                    class="form-control"
+                                                    v-model="v$.knowledge_way_id.$model"
+                                                    :class="{'is-invalid':v$.knowledge_way_id.$error,'is-valid':!v$.knowledge_way_id.$invalid}"
+                                                >
+                                                    <option
+                                                        v-for="knowledgeWay in knowledgeWays"
+                                                        :value=" knowledgeWay.id"
+                                                        :key=" knowledgeWay.id"
+                                                    >{{ knowledgeWay.name }}</option>
+                                                </select>
+                                                <div class="valid-feedback">تبدو جيده</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.knowledge_way_id.$invalid"> هذا الحقل مطلوب<br /> </span>
+                                                    <span v-if="v$.knowledge_way_id.integer.$invalid"> يجب ان يكون رقم  <br /></span>
                                                 </div>
                                             </div>
 
@@ -227,6 +237,7 @@ export default {
         let areas = ref([]);
         let selling_methods = ref([]);
         let provinces = ref([]);
+        let knowledgeWays = ref([]);
 
         //start design
         let addClient =  reactive({
@@ -237,6 +248,7 @@ export default {
                 address : '',
                 province_id : null,
                 area_id : null,
+                knowledge_way_id: null,
                 // selling_method_id : null,
                 amount: 0
             }
@@ -263,6 +275,7 @@ export default {
                 amount:{decimal},
                 province_id:{required,integer},
                 area_id:{required,integer},
+                knowledge_way_id:{required,integer}
                 // selling_method_id:{required,integer},
             }
         });
@@ -274,6 +287,7 @@ export default {
                 .then((res) => {
                     let l = res.data.data;
                     provinces.value = l.provinces;
+                    knowledgeWays.value = l.knowledgeWays;
                 })
                 .catch((err) => {
                     console.log(err.response);
@@ -322,7 +336,7 @@ export default {
 
         const v$ = useVuelidate(rules,addClient.data);
 
-        return {loading,...toRefs(addClient),areas,selling_methods,provinces,getAreas,v$};
+        return {loading,...toRefs(addClient),areas,selling_methods,provinces,knowledgeWays,getAreas,v$};
     },
     methods: {
         storeClient(){
@@ -363,6 +377,7 @@ export default {
             this.data.address = '';
             this.data.province_id = null;
             this.data.area_id = null;
+            this.data.knowledge_way_id = null;
             this.data.amount = 0;
         }
     }

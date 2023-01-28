@@ -72,6 +72,7 @@ class ClientController extends Controller
                 'email' => 'required|string|email|unique:users,email',
                 'province_id'  => 'required|integer|exists:provinces,id',
                 'area_id'  => 'required|integer|exists:areas,id',
+                'knowledge_way_id'  => 'required|integer|exists:knowledge_ways,id',
                 'phone' => 'required|string|unique:users',
                 'address' => 'required|string|min:5|max:255',
                 'amount' => 'nullable|numeric'
@@ -81,15 +82,19 @@ class ClientController extends Controller
                 return $this->sendError('There is an error in the data',$v->errors());
             }
 
+            $code = mt_rand(1000000000, 9999999999);
             // start create user
             $user = User::create([
                 "name" => $request->name,
                 "email" => $request->email,
                 "auth_id" => 2,
-                'role_name'=> ['client'],
-                "status" => 0,
-                'phone' => $request->phone,
-                "code" => '+2'
+                "role_name"=> ['client'],
+                "status" => 1,
+                "phone" => $request->phone,
+                "code" => '+2',
+                "user_code" => $code,
+                "password" => bcrypt($code),
+                'knowledge_way_id' => $request->knowledge_way_id,
             ]);
 
             $user->complement()->create([
@@ -203,7 +208,7 @@ class ClientController extends Controller
 
         $tokens = [];
         $tokens[] = $firebase_token;
-        $title = "شهبندر";
+        $title = "كونسبت";
         $body = $request->notification ;
         $type = "send notification";
         $productData = [];

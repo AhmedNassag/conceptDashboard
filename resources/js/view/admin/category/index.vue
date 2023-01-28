@@ -79,12 +79,14 @@
                                                 >
                                                     <i class="far fa-edit"></i>
                                                 </router-link>
-                                                <a href="#" @click="deleteCategory(item.id,index)"
-                                                    v-if="permission.includes('category delete')"
-                                                    data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2"
-                                                >
-                                                    <i class="far fa-trash-alt"></i>
-                                                </a>
+                                                <span v-if="item.id != 1 && item.id != 2 && item.id != 3 && item.id != 4">
+                                                    <a href="#" @click="deleteCategory(item.id,index)"
+                                                        v-if="permission.includes('category delete')"
+                                                        data-bs-target="#staticBackdrop" class="btn btn-sm btn-danger me-2"
+                                                    >
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </a>
+                                                </span>
                                             </td>
                                         </tr>
                                     </tbody>

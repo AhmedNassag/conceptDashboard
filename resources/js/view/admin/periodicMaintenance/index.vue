@@ -28,6 +28,36 @@
                         <div class="card-body">
                             <div class="card-header pt-0">
                                 <div class="row justify-content-between">
+                                    <div class="col-12 row justify-content-end">
+                                        <form @submit.prevent="getPeriodicMaintenance" class="needs-validation">
+                                            <div class="form-group row align-items-center justify-content-around">
+
+                                                <div class="col-md-2 p-0">
+                                                    <label >{{$t('global.FromDate')}}</label>
+                                                    <input type="date" class="form-control date-input" v-model="fromDate">
+                                                </div>
+
+                                                <div class="col-md-2 p-0">
+                                                    <label >{{$t('global.ToDate')}}</label>
+                                                    <input type="date" class="form-control date-input" v-model="toDate">
+                                                </div>
+
+                                                <div class="col-md-2 p-0">
+                                                    <label>{{ $t('global.orderStatus') }}</label>
+                                                    <select class="form-control date-input" v-model="status">
+                                                        <option value="0">لم تتم</option>
+                                                        <option value="1">تمت بالفعل</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-2 mt-4">
+                                                    <button class="btn btn-primary" type="submit">{{$t('global.Search')}}</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
                                     <div class="col-5">
                                         بحث :
                                         <input type="search" v-model="search" class="custom"/>
@@ -49,13 +79,14 @@
                                         <th class="text-center">#</th>
                                         <th class="text-center">رقم الطلب</th>
                                         <th class="text-center">اسم العميل</th>
+                                        <th class="text-center">تليفون العميل</th>
+                                        <th class="text-center">المنطقة</th>
                                         <th class="text-center">عدد الأجهزة</th>
                                         <th class="text-center">اسم الشمعة</th>
-                                        <!-- <th class="text-center">مبلغ التحصيل</th> -->
                                         <th class="text-center">موعد الصيانة القادم</th>
                                         <th class="text-center">ملاحظات</th>
                                         <th class="text-center">تاريخ التركيب</th>
-                                        <th class="text-center">حالة التفعيل</th>
+                                        <th class="text-center">حالة الصيانة</th>
                                         <th class="text-center">الاجراءات</th>
                                     </tr>
                                     </thead>
@@ -64,18 +95,17 @@
                                         <td class="text-center">{{ index + 1 }}</td>
                                         <td class="text-center">{{ item.order_id ? item.order_id : '---' }}</td>
                                         <td class="text-center">{{ item.name ? item.name : '---' }}</td>
+                                        <td class="text-center">{{ item.order && item.order.user.phone ? item.order.user.phone : '---' }}</td>
+                                        <td class="text-center">{{ item.user.client.area.name ? item.user.client.area.name : '---' }}</td>
                                         <td class="text-center">{{ item.quantity ? item.quantity : '---' }}</td>
                                         <td class="text-center">{{ item.price ? item.price : '---' }}</td>
-                                        <!-- <td class="text-center">{{ item.collector ? item.collector : '---' }}</td> -->
                                         <td class="text-center">{{ item.next_maintenance ? item.next_maintenance : '---' }}</td>
                                         <td class="text-center">{{ item.note ? item.note : '---' }}</td>
                                         <td class="text-center">{{ dateFormat(item.created_at) }}</td>
                                         <td class="text-center">
-                                            <a href="#" @click="activationPeriodicMaintenance(item.id,item.status,index)">
-                                                <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">
-                                                    {{ parseInt(item.status) ? 'تفعيل' : 'ايقاف تفعيل' }}
-                                                </span>
-                                            </a>
+                                            <span :class="[parseInt(item.status) ? 'text-success hover': 'text-danger hover']">
+                                                {{ parseInt(item.status) ? 'تمت بالفعل' : 'لم تتم بعد' }}
+                                            </span>
                                         </td>
                                         <td class="text-center">
 
@@ -133,6 +163,11 @@ export default {
         // get packages
         let periodicMaintenances = ref([]);
         let periodicMaintenancesPaginate = ref({});
+
+        let fromDate = ref('');
+        let toDate = ref('');
+        let status = ref('');
+
         let loading = ref(false);
         const search = ref('');
         let store = useStore();
@@ -142,7 +177,7 @@ export default {
         let getPeriodicMaintenance = (page = 1) => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/periodicMaintenance?page=${page}&search=${search.value}`)
+            adminApi.get(`/v1/dashboard/periodicMaintenance?page=${page}&search=${search.value}&status=${status.value}&from_date=${fromDate.value}&to_date=${toDate.value}`)
                 .then((res) => {
                     let l = res.data.data;
                     periodicMaintenancesPaginate.value = l.periodicMaintenances;
@@ -245,7 +280,19 @@ export default {
             });
         }
 
-        return {dateFormat,periodicMaintenances, loading,permission, getPeriodicMaintenance, search, deletePeriodicMaintenance, activationPeriodicMaintenance, periodicMaintenancesPaginate};
+        return {
+            dateFormat,
+            periodicMaintenances,
+            loading,permission,
+            getPeriodicMaintenance,
+            search,
+            deletePeriodicMaintenance,
+            activationPeriodicMaintenance,
+            periodicMaintenancesPaginate,
+            fromDate,
+            toDate,
+            status,
+        };
 
     },
     data() {

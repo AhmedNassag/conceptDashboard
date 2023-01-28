@@ -90,6 +90,7 @@
                                                 </div>
                                             </div>
 
+                                            <!--start start_date-->
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom06">{{ $t('global.startdate') }}</label>
                                                 <input type="date" class="form-control"
@@ -101,7 +102,9 @@
                                                 <div class="invalid-feedback">
                                                 </div>
                                             </div>
+                                            <!--end start_date-->
 
+                                            <!--start expire_date-->
                                             <div class="col-md-6 mb-3">
                                                 <label for="validationCustom07">{{ $t('global.enddate') }}</label>
                                                 <input type="date" class="form-control"
@@ -115,7 +118,7 @@
                                                     <span v-if="v$.expire_date.required.$invalid"> {{ $t('global.IsRequired') }}<br /> </span>
                                                 </div>
                                             </div>
-
+                                            <!--end expire_date-->
                                         </div>
 
                                         <button class="btn btn-primary" type="submit">{{$t('global.Submit')}}</button>

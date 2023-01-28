@@ -60,9 +60,11 @@ import treasuriesIncome from "./adminRoute/treasuriesIncome";
 import saleReport from "./adminRoute/saleReport";
 import CategoryProductReport from "./adminRoute/CategoryProductReport";
 import treasury from "./adminRoute/treasury";
-import suggestion from "./adminRoute/suggestion";
 import clientReport from "./adminRoute/clientReport";
+import suggestion from "./adminRoute/suggestion";
 import suggestionClient from "./adminRoute/suggestionClient";
+import complaint from "./adminRoute/complaint";
+import complaintClient from "./adminRoute/complaintClient";
 import areaReport from "./adminRoute/storeReport";
 import purchaseExpenses from "./adminRoute/purchaseExpenses";
 import supplierExpenses from "./adminRoute/supplierExpenses";
@@ -74,6 +76,7 @@ import orderOnline from "./adminRoute/orderOnline";
 import orderReturned from "./adminRoute/orderReturned";
 import orderDelivered from "./adminRoute/orderDelivered";
 import sparePart from "./adminRoute/sparePart";
+import spareAccessor from "./adminRoute/spareAccessor";
 import orderIncomes from "./adminRoute/orderIncomes";
 import SupplierAccountStatement from "./adminRoute/SupplierAccountStatement";
 import ClientAccountStatement from "./adminRoute/ClientAccountStatement";
@@ -113,6 +116,12 @@ import termsPrivacy from './adminRoute/termsPrivacy';
 import competition from './adminRoute/competition';
 //share
 import share from './adminRoute/share';
+//pointPrice
+import pointPrice from './adminRoute/pointPrice';
+//pointWelcome
+import pointWelcome from './adminRoute/pointWelcome';
+//wallet
+import wallet from './adminRoute/wallet';
 
 const routes = [
     {
@@ -219,6 +228,8 @@ const routes = [
             ...clientReport,
             ...suggestion,
             ...suggestionClient,
+            ...complaint,
+            ...complaintClient,
             ...areaReport,
             ...purchaseExpenses,
             ...supplierExpenses,
@@ -235,6 +246,7 @@ const routes = [
             ...addNotificationApp,
             ...filterWax,
             ...sparePart,
+            ...spareAccessor,
             ...knowledgeWay,
             ...userCompany,
             ...merchant,
@@ -269,7 +281,13 @@ const routes = [
             //competition
             ...competition,
             //share
-            ...share
+            ...share,
+            //pointPrice
+            ...pointPrice,
+            //pointWelcome
+            ...pointWelcome,
+            //wallet
+            ...wallet
         ]
     },
     {

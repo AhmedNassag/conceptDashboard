@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Area;
+use App\Models\FilterWax;
+use App\Models\KnowledgeWay;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\Store;
@@ -82,10 +84,14 @@ class StoreController extends Controller
 
             $provinces = Province::select('id', 'name')->get();
             $areas = Area::whereDoesntHave('store')->get();
+            $waxes = FilterWax::select('id', 'name')->get();
+            $knowledgeWays = KnowledgeWay::get();
 
             return $this->sendResponse([
                 'provinces' => $provinces,
                 'areas' => $areas,
+                'waxes' => $waxes,
+                'knowledgeWays' => $knowledgeWays,
             ], 'Data exited successfully');
 
         } catch (\Exception $e) {

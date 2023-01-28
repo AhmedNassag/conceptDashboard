@@ -32,6 +32,13 @@
                         <div class="card-body">
 
                             <router-link
+                                :to="{name: 'indexClient'}"
+                                class="btn btn-custom btn-dark me-2 mr-3"
+                            >
+                                العوده للخلف
+                            </router-link>
+
+                            <router-link
                                 :to="{name: 'editClient',params:{id}}"
                                 v-if="permission.includes('category edit')"
                                 class="btn btn-sm btn-success me-2 mr-3">
@@ -39,8 +46,7 @@
                             </router-link>
 
                             <a href="#" @click="activationClient(user.id,user.status)">
-                                                <span :class="[parseInt(user.status) ? 'text-success hover': 'text-danger hover']">{{
-                                                        parseInt(user.status) ? 'تفعيل' : 'ايقاف تفعيل' }}</span>
+                                <span :class="[parseInt(user.status) ? 'text-success hover': 'text-danger hover']">{{parseInt(user.status) ? 'تفعيل' : 'ايقاف تفعيل' }}</span>
                             </a>
 
                             <div class="text-center mb-5">
