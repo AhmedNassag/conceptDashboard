@@ -937,7 +937,8 @@ export default {
                         this.$nextTick(() => { this.v$.$reset() });
                     })
                     .catch((err) => {
-                        this.errors = err.response.data.errors;
+                        console.log(err.response);
+                        this.errors = err.response;
                     })
                     .finally(() => {
                         this.loading = false;

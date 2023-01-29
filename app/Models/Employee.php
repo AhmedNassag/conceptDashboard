@@ -36,6 +36,10 @@ class Employee extends Model
         return $this->belongsToMany(Store::class, 'employee_stores', 'employee_id','store_id', 'id', 'id');
     }
 
+    public function periodicMaintenances()
+    {
+        return $this->hasMany(PeriodicMaintenance::class, 'employee_id');
+    }
 
     // CRM relations
     public function sellerCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

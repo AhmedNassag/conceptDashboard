@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\ClientIncome;
+use App\Models\Employee;
 use App\Models\FilterWax;
 use App\Models\KnowledgeWay;
 use App\Models\PeriodicMaintenance;
@@ -27,7 +28,7 @@ class PeriodicMaintenanceController extends Controller
      */
     public function index(Request $request)
     {
-        $periodicMaintenances = PeriodicMaintenance::with(['user.client.area','order.user'])
+        $periodicMaintenances = PeriodicMaintenance::with(['user.client.area','order.user','employee.user'])
         ->when($request->search, function ($q) use ($request) {
             return $q->where('quantity', 'like', '%' . $request->search . '%')
             ->orWhere('name','like','%'.$request->search.'%')
@@ -36,7 +37,8 @@ class PeriodicMaintenanceController extends Controller
             ->orWhere('next_maintenance','like','%'.$request->search.'%')
             ->orWhere('note','like','%'.$request->search.'%')
             ->orWhereRelation('order','id','like','%'.$request->search.'%')
-            ->orWhereRelation('user.client.area','name','like','%'.$request->search.'%');
+            ->orWhereRelation('user.client.area','name','like','%'.$request->search.'%')
+            ->orWhereRelation('employee.user', 'name', 'like', '%' . $request->search . '%');
         })
         ->where(function ($q) use ($request) {
             $q->when($request->from_date && $request->to_date, function ($q) use ($request) {
@@ -51,6 +53,7 @@ class PeriodicMaintenanceController extends Controller
         })
         ->orderBy('next_maintenance','asc')->latest()->paginate(10);
 
+        return $periodicMaintenances;
         return $this->sendResponse([
             'periodicMaintenances' => $periodicMaintenances,
         ], 'Data exited successfully');
@@ -190,11 +193,8 @@ class PeriodicMaintenanceController extends Controller
                 'areas' => $areas,
                 'waxes' => $waxes,
             ], 'Data exited successfully');
-
         } catch (\Exception $e) {
-
             return $this->sendError('An error occurred in the system');
-
         }
     }
 
@@ -286,7 +286,7 @@ class PeriodicMaintenanceController extends Controller
 
     public function nearPeriodic(Request $request)
     {
-        $periodicMaintenances = PeriodicMaintenance::with(['user.client.area','order.user'])
+        $periodicMaintenances = PeriodicMaintenance::with(['user.client.area','order.user','employee.user'])
         ->where('status',0)
         ->where('next_maintenance', '<', Carbon::now()->addDays(1))
         /*->where('next_maintenance', '>', Carbon::now()->subDays(1))*/
@@ -345,6 +345,51 @@ class PeriodicMaintenanceController extends Controller
             return $this->sendResponse([],'Data exited successfully');
 
         }catch (\Exception $e){
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
+    }
+
+
+
+    public function changeEmployeeLead($id)
+    {
+        $lead = PeriodicMaintenance::find($id);
+        $employees = Employee::with('user:id,name')->whereRelation('user', 'status', 1)
+        ->whereHas('job', function ($q) {
+            $q->where('Allow_adding_to_sales_team', 1);
+        })->get();
+
+        return $this->sendResponse(['employees' => $employees, 'lead' => $lead], 'Data exited successfully');
+    }
+
+
+    public function updateEmployeeLead(Request $request, $id)
+    {
+        try
+        {
+            DB::beginTransaction();
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'employee_id' => 'required|integer|exists:employees,id',
+            ]);
+
+            if ($v->fails()) {
+                return $this->sendError('There is an error in the data', $v->errors());
+            }
+
+            $data = $request->only(['employee_id']);
+            $lead = PeriodicMaintenance::find($id);
+            $lead->update($data);
+
+            $user = Employee::find($request->employee_id)->user;
+            // $user->notify(new ChangeEmployeeNotification($lead->seller_category_id));
+
+            DB::commit();
+            return $this->sendResponse([], 'Data exited successfully');
+        }
+        catch (\Exception $e)
+        {
             DB::rollBack();
             return $this->sendError('An error occurred in the system');
         }

@@ -50,6 +50,7 @@
                                         <th class="text-center">موعد الصيانة القادم</th>
                                         <th class="text-center">تاريخ التركيب</th>
                                         <th class="text-center">حالة الصيانة</th>
+                                        <th class="text-center">موظف الصيانة</th>
                                         <th class="text-center">الاجراءات</th>
                                     </tr>
                                     </thead>
@@ -68,16 +69,20 @@
                                                     {{ parseInt(item.status) ? 'تمت بالفعل' : 'لم تتم بعد' }}
                                                 </span>
                                             </td>
+                                            <td class="text-center">{{ item.employee ? item.employee.user.name : "---" }}</td>
                                             <td class="text-center">
+                                                <router-link v-if="permission.includes('periodicMaintenance edit')" :to="{name: 'PeriodicChangeEmployee', params: {lang: locale || 'ar',id:item.id}}" class="btn btn-sm btn-warning me-2">
+                                                    <i class="fa fa-user-plus">تغيير الموظف</i>
+                                                </router-link>
                                                 <router-link
                                                    :to="{name: 'delayPeriodicMaintenance',params:{id:item.id}}"
                                                    v-if="permission.includes('periodicMaintenance edit')"
                                                    class="btn btn-sm btn-info me-2">
-                                                   <i class="far fa-edit"> تأجيل ميعاد الصيانة </i>
+                                                   <i class="far fa-edit"> تأجيل </i>
                                                 </router-link>
                                                 <a href="#" @click="confirmPeriodic(item.id)">
                                                 <span class="btn btn-sm btn-success me-2">
-                                                    <i class="fas fa-check-circle"> تأكيد عمل الصيانة </i>
+                                                    <i class="fas fa-check-circle"> تأكيد </i>
                                                 </span>
                                             </a>
                                             </td>

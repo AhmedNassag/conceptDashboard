@@ -234,7 +234,7 @@
                                             <div class="col-md-6 mb-12">
                                                 <label>المخزن</label>
 
-                                                <select multiple v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
+                                                <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
                                                     <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                 </select>
 
@@ -261,16 +261,9 @@
                                                         >
                                                         <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                         <div class="invalid-feedback">
-                                                <span
-                                                    v-if="v$.bank_name.required.$invalid">{{ $t('global.BankNameIsRequired') }} <br/></span>
-                                                            <span
-                                                                v-if="v$.bank_name.minLength.$invalid">{{ $t('global.BankNameIsMustHaveAtLeast') }} {{
-                                                                    v$.bank_name.minLength.$params.min
-                                                                }} {{ $t('global.Letters') }} <br/></span>
-                                                            <span
-                                                                v-if="v$.bank_name.maxLength.$invalid">{{ $t('global.BankNameIsMustHaveAtMost') }} {{
-                                                                    v$.bank_name.maxLength.$params.max
-                                                                }} {{ $t('global.Letters') }} </span>
+                                                            <span v-if="v$.bank_name.required.$invalid">{{ $t('global.BankNameIsRequired') }} <br/></span>
+                                                            <span v-if="v$.bank_name.minLength.$invalid">{{ $t('global.BankNameIsMustHaveAtLeast') }} {{ v$.bank_name.minLength.$params.min }} {{ $t('global.Letters') }} <br/></span>
+                                                            <span v-if="v$.bank_name.maxLength.$invalid">{{ $t('global.BankNameIsMustHaveAtMost') }} {{ v$.bank_name.maxLength.$params.max }} {{ $t('global.Letters') }} </span>
                                                         </div>
                                                     </div>
 
@@ -285,16 +278,9 @@
                                                         >
                                                         <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                         <div class="invalid-feedback">
-                                                <span
-                                                    v-if="v$.bank_address.required.$invalid">{{ $t('global.BankAddressIsRequired') }} <br/></span>
-                                                            <span
-                                                                v-if="v$.bank_address.minLength.$invalid">{{ $t('global.BankAddressIsMustHaveAtLeast') }} {{
-                                                                    v$.bank_address.minLength.$params.min
-                                                                }} {{ $t('global.Letters') }} <br/></span>
-                                                            <span
-                                                                v-if="v$.bank_address.maxLength.$invalid">{{ $t('global.BankAddressIsMustHaveAtMost') }} {{
-                                                                    v$.bank_address.maxLength.$params.max
-                                                                }} {{ $t('global.Letters') }} </span>
+                                                            <span v-if="v$.bank_address.required.$invalid">{{ $t('global.BankAddressIsRequired') }} <br/></span>
+                                                            <span v-if="v$.bank_address.minLength.$invalid">{{ $t('global.BankAddressIsMustHaveAtLeast') }} {{ v$.bank_address.minLength.$params.min }} {{ $t('global.Letters') }} <br/></span>
+                                                            <span v-if="v$.bank_address.maxLength.$invalid">{{ $t('global.BankAddressIsMustHaveAtMost') }} {{ v$.bank_address.maxLength.$params.max }} {{ $t('global.Letters') }} </span>
                                                         </div>
                                                     </div>
 
@@ -309,8 +295,7 @@
                                                         >
                                                         <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                         <div class="invalid-feedback">
-                                                <span
-                                                    v-if="v$.bank_iban.required.$invalid">{{ $t('global.IBANIsRequired') }} <br/></span>
+                                                            <span v-if="v$.bank_iban.required.$invalid">{{ $t('global.IBANIsRequired') }} <br/></span>
                                                             <span
                                                                 v-if="v$.bank_iban.minLength.$invalid">{{ $t('global.IBANIsMustHaveAtLeast') }} {{
                                                                     v$.bank_iban.minLength.$params.min
@@ -355,8 +340,8 @@
                                                         >
                                                         <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                         <div class="invalid-feedback">
-                                                        <span
-                                                            v-if="v$.email.required.$invalid">{{ $t('global.EmailIsRequired') }} <br/></span>
+                                                            <span
+                                                                v-if="v$.email.required.$invalid">{{ $t('global.EmailIsRequired') }} <br/></span>
                                                             <span
                                                                 v-if="v$.email.email.$invalid">{{ $t('global.ThisFieldMastBeEmail') }}  <br/></span>
                                                         </div>

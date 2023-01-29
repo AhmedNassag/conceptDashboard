@@ -4,6 +4,8 @@ import editPeriodicMaintenance from "../../view/admin/periodicMaintenance/edit";
 import nearPeriodicMaintenance from "../../view/admin/periodicMaintenance/near";
 import delayPeriodicMaintenance from "../../view/admin/periodicMaintenance/delay";
 import confirmPeriodicMaintenance from "../../view/admin/periodicMaintenance/confirm";
+import PeriodicChangeEmployee from "../../view/admin/periodicMaintenance/changeEmployee";
+
 import store from "../../store/admin";
 
 export default [
@@ -97,6 +99,21 @@ export default [
                         return next();
                     }else{
                         return next({name:'Page404'});
+                    }
+                }
+            },
+            {
+                path: 'periodicchangeEmployee/:id(\\d+)',
+                name: 'PeriodicChangeEmployee',
+                component: PeriodicChangeEmployee,
+                props: true,
+                beforeEnter: (to, from, next) => {
+                    let permission = store.state.authAdmin.permission;
+
+                    if (permission.includes('periodicMaintenance edit')) {
+                        return next();
+                    } else {
+                        return next({ name: 'Page404' });
                     }
                 }
             },

@@ -245,11 +245,14 @@
                                             <div class="col-md-6 mb-12">
                                                 <label>المخزن</label>
 
-                                                <select multiple v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
+                                                <select v-model="data.store_id" :class="['form-select',{'is-invalid':v$.store_id.$error,'is-valid':!v$.store_id.$invalid}]">
                                                     <option v-for="store in stores" :key="store.id" :value="store.id">{{store.name}}</option>
                                                 </select>
 
                                                 <div class="valid-feedback">{{$t('global.LooksGood')}}</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.store_id.required.$invalid">{{$t('global.JobIsRequired')}}<br /> </span>
+                                                </div>
                                             </div>
 
 
@@ -548,7 +551,7 @@ export default {
                 bank_iban: '',
                 bank_swift: '',
                 name: '',
-                store_id:[],
+                store_id: '',
                 email: '',
                 password: '',
                 confirmtion: '',
@@ -639,7 +642,9 @@ export default {
                 file:{
                     required
                 },
-                store_id:{}
+                store_id:{
+                    required
+                }
             }
         });
         const numberOfImage = ref(0);

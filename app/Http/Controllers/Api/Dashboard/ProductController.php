@@ -109,7 +109,7 @@ class ProductController extends Controller
         try {
 
             $companies = Company::select('id', 'name')->get();
-            $categories = Category::where('id','!=',2)->where('id','!=',3)->where('parent_id', 0)->select('id', 'name')->get();
+            $categories = Category::whereNotIn('id', [2, 3, 4])->where('parent_id', 0)->select('id', 'name')->get();
             $measures = MeasurementUnit::select('id', 'name')->get();
             $sellingMethods = SellingMethod::select('id', 'name')->get();
             $stores = Store::where('status',1 )->get();
@@ -310,7 +310,7 @@ class ProductController extends Controller
 
             $product = Product::with(['media:mediable_id,file_name,id','sparePart','filterWax','maintenance'])->find($id);
             $companies = Company::select('id', 'name')->get();
-            $categories = Category::where('id','!=',2)->where('id','!=',3)->where('parent_id', 0)->select('id', 'name')->get();
+            $categories = Category::whereNotIn('id', [2, 3, 4])->where('parent_id', 0)->select('id', 'name')->get();
             $measures = MeasurementUnit::select('id', 'name')->get();
             $sellingMethods = SellingMethod::select('id', 'name')->get();
             $filterWaxes = FilterWax::get();

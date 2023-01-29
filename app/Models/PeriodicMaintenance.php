@@ -19,4 +19,9 @@ class PeriodicMaintenance extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
 }

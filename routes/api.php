@@ -410,6 +410,8 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('activationPeriodicMaintenance/{id}','PeriodicMaintenanceController@activationPeriodic');
             Route::get('nearPeriodicMaintenance','PeriodicMaintenanceController@nearPeriodic');
             Route::post('confirmPeriodic/{id}','PeriodicMaintenanceController@confirmPeriodic');
+            Route::get('periodicchangeEmployeeLead/{id}','PeriodicMaintenanceController@changeEmployeeLead');
+            Route::put('periodicupdateEmployeeLead/{id}','PeriodicMaintenanceController@updateEmployeeLead');
 
             //companyProfile
             Route::resource('companyProfile', 'CompanyProfileController');

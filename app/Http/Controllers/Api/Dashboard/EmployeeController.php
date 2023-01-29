@@ -166,7 +166,7 @@ class EmployeeController extends Controller
             $user->employee()->create([
                 'department_id' => $request->department_id,
                 'job_id' => $request->job_id,
-                // 'store_id' => $request->store_id,
+                'store_id' => $request->store_id,
                 'address' => $request->address,
                 'National_ID' => $request->National_ID,
                 'birth_date' => $request->birth_date,
@@ -286,7 +286,7 @@ class EmployeeController extends Controller
                 'birth_date' => $request->birth_date,
                 'hiring_date' => $request->hiring_date,
                 'salary' => $request->salary,
-                // 'store_id' => $request->store_id,
+                'store_id' => $request->store_id,
             ]);
 
             $employee->user->banks->first()->update([

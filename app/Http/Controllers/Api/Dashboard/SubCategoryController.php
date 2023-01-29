@@ -34,7 +34,7 @@ class SubCategoryController extends Controller
         $main_categories = Category::where([
             ['parent_id', 0],
             ['status', 1],
-        ])->get();
+        ])->whereNotIn('id',[2,3,4])->get();
         return $this->sendResponse(['main_categories' => $main_categories], 'Data exited successfully');
     }
 
