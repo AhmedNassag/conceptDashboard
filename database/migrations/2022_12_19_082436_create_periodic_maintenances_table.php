@@ -17,6 +17,7 @@ class CreatePeriodicMaintenancesTable extends Migration
             $table->id();
             $table->foreignId('order_id')->nullable()->constrained('orders')->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('employee_id')->nullable()->constrained('employees')->cascadeOnDelete();
             $table->string('name')->nullable();
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();

@@ -418,10 +418,15 @@
                     <!-- End CRM Links -->
 
 
-                    <!--start customer service-->
+                    <!--start call Center-->
                     <li class="submenu">
                         <a href="#" ><i class="fas fa-boxes"></i> <span>إدارة خدمة العملاء</span><span :class="['menu-arrow menu-arrow-ar']"></span></a>
                         <ul>
+                            <li v-if="permission.includes('category read')" :class="[{'active': ['indexCallCenter'].includes($route.name)}]">
+                                <router-link :to="{name: 'indexCallCenter'}" :class="['sidebar-menu-rtl']">
+                                    {{ $t("global.CallCenter") }}
+                                </router-link>
+                            </li>
                             <!-- Start follow Links -->
                             <li class="submenu" v-if="permission.includes('CRM')">
                                 <a  href="#" :class="['drop-child',this.$i18n.locale == 'ar'?'menu-arrow-ar ml-4':'padding-en']">
@@ -505,7 +510,7 @@
                             <!--end PeriodicMaintenance-->
                         </ul>
                     </li>
-                    <!--end customer service-->
+                    <!--end call center-->
 
 
                     <li class="submenu" v-if="permission.includes('platform Accounts')">

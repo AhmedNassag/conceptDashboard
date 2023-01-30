@@ -413,6 +413,9 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('periodicchangeEmployeeLead/{id}','PeriodicMaintenanceController@changeEmployeeLead');
             Route::put('periodicupdateEmployeeLead/{id}','PeriodicMaintenanceController@updateEmployeeLead');
 
+            //callCenter
+            Route::get('callCenter','CallCenterController@callCenter');
+
             //companyProfile
             Route::resource('companyProfile', 'CompanyProfileController');
 

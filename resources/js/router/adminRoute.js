@@ -122,6 +122,7 @@ import pointPrice from './adminRoute/pointPrice';
 import pointWelcome from './adminRoute/pointWelcome';
 //wallet
 import wallet from './adminRoute/wallet';
+import callCenter from './adminRoute/callCenter';
 
 const routes = [
     {
@@ -287,7 +288,9 @@ const routes = [
             //pointWelcome
             ...pointWelcome,
             //wallet
-            ...wallet
+            ...wallet,
+            //callCenter
+            ...callCenter
         ]
     },
     {
