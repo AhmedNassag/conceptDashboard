@@ -691,7 +691,8 @@
         "addPointWelcome": "أضف نقاط الترحيب",
         "editPointWelcome": "تعديل نقاط الترحيب",
         "Wallet":"المحفظة",
-        "WalletPoints":"مسابقة المحفظة"
+        "WalletPoints":"مسابقة المحفظة",
+        "CallCenter": "شاشة خدمة العملاء"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",

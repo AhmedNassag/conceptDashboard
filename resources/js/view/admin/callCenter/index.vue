@@ -63,23 +63,36 @@
                                         <router-link
                                             v-if="permission.includes('category create')"
                                             :to="{name: 'indexComplaintClient'}"
-                                            class="btn btn-custom btn-warning col-1">
+                                            class="btn btn-custom btn-warning mr-1 col-1">
                                             عرض الشكاوى
+                                        </router-link>
+
+                                        <router-link
+                                            v-if="permission.includes('category create')"
+                                            :to="{name: 'indexLeadsManagement'}"
+                                            class="btn btn-custom btn-warning mr-1 col-1">
+                                            عملاء محتملين
                                         </router-link>
 
                                         <hr style="color:#FFF;">
 
-                                        <div class="col-4">
-                                            بحث :
+                                        <div class="col-5">
+                                            بحث بالإسم / الكود/ رقم الموبايل :
                                             <input type="search" v-model="search" class="custom"/>
                                         </div>
-                                        <div class="col-4">
-                                            بحث :
-                                            <input type="search" v-model="search" class="custom"/>
+                                        <div class="col-2">
+                                            <!-- بحث :
+                                            <input type="search" v-model="search" class="custom"/> -->
                                         </div>
-                                        <div class="col-4">
-                                            بحث :
-                                            <input type="search" v-model="search" class="custom"/>
+
+                                        <div class="col-5">
+                                            <!-- <form @submit.prevent="getCallCenter" class="needs-validation">
+                                                {{$t('global.PurchaseInvoiceNumber')}}
+                                                <input type="number" class="custom">
+                                                <button class="btn btn-primary" type="submit">{{$t('global.Search')}}</button>
+                                            </form> -->
+                                            بحث بالمخزن / المحافظة/ المنطقة :
+                                            <input type="search" v-model="search2" class="custom"/>
                                         </div>
                                     </div>
                                 </div>
@@ -108,10 +121,7 @@
                                         <tr v-for="(item,index) in callCenters" :key="item.id">
                                             <td class="text-center">{{ index + 1 }}</td>
                                             <td class="text-center">
-                                                <router-link
-                                                    :to="{name: 'editCategory',params:{id:item.id}}"
-                                                    v-if="permission.includes('category read')"
-                                                >
+                                                <router-link :to="{name: 'profileClient',params:{id:item.user.id}}" class="btn btn-sm btn-info me-2" >
                                                     {{ item.user && item.user.name ? item.user.name : '---' }}
                                                 </router-link>
                                             </td>
@@ -173,6 +183,7 @@ export default {
         let callCentersPaginate = ref({});
         let loading = ref(false);
         const search = ref('');
+        const search2 = ref('');
         let store = useStore();
         const {id} = toRefs(props)
 
@@ -181,7 +192,7 @@ export default {
         let getCallCenter = (page = 1) => {
             loading.value = true;
 
-            adminApi.get(`/v1/dashboard/callCenter?page=${page}&search=${search.value}`)
+            adminApi.get(`/v1/dashboard/callCenter?page=${page}&search=${search.value}&search2=${search2.value}`)
             .then((res) => {
                 let l = res.data.data;
                 callCentersPaginate.value = l.callCenters;
@@ -205,72 +216,11 @@ export default {
                 getCallCenter();
             }
         });
-
-
-        function deleteCallCenter(id, index) {
-            Swal.fire({
-                title: `هل تريد هذف هذا العنصر ؟ `,
-                text: `لن تتمكن من التراجع عن هذا`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    adminApi.delete(`/v1/dashboard/callCenter/${id}`)
-                    .then((res) => {
-                        callCenters.value.splice(index, 1);
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: `تم الحذف بنجاح`,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    })
-                    .catch((err) => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: `يوجد خطا`,
-                            text: `يوجد خطا في النظام!`,
-                        });
-                    });
-                }
-            });
-        }
-
-        function activationCallCenter(id, active,index) {
-            Swal.fire({
-                title: `${active ? 'هل انت متاكد من ايقاف التفعيل ؟' : 'هل انت متاكد من التفعيل  ؟'} `,
-                text: `لم تتمكن من التراجع عن هذا`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    adminApi.get(`/v1/dashboard/activationCallCenter/${id}`)
-                    .then((res) => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: `${active ? 'تم التفعيل بنجاح' :'تم ايقاف التفعيل بنجاح'}`,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        callCenters.value[index]['status'] =  active ? 0:1
-                    })
-                    .catch((err) => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: `يوجد خطا`,
-                            text: `يوجد خطا في النظام!`,
-                        });
-                    });
-                }
-            });
-        }
+        watch(search2, (search2, prevSearch2) => {
+            if (search2.length >= 0) {
+                getCallCenter();
+            }
+        });
 
         let dateFormat = (item) => {
             let now = new Date(item);
@@ -283,7 +233,7 @@ export default {
             return st;
         };
 
-        return {id, getCallCenter, loading,permission, search, dateFormat, deleteCallCenter, activationCallCenter, callCentersPaginate,callCenters};
+        return {id, getCallCenter, loading,permission, search, search2, dateFormat, callCentersPaginate,callCenters};
 
     },
     data() {

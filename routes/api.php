@@ -415,6 +415,7 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //callCenter
             Route::get('callCenter','CallCenterController@callCenter');
+            Route::get('callCenter/{id}', 'CallCenterController@profileClient');
 
             //companyProfile
             Route::resource('companyProfile', 'CompanyProfileController');
