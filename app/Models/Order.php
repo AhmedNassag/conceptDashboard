@@ -34,7 +34,7 @@ class Order extends Model
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetails::class,'order_id');
+        return $this->hasOne(OrderDetails::class,'order_id');
     }
 
     public function orderOtherOffer()
@@ -55,8 +55,14 @@ class Order extends Model
         return $this->belongsTo(OrderStatus::class,'order_status_id');
     }
 
+    /*
     public function representative(){
         return $this->belongsTo(User::class,'representative_id');
+    }
+    */
+
+    public function representative(){
+        return $this->belongsTo(Representative::class,'representative_id');
     }
 
     public function orderReturn(){

@@ -29,9 +29,9 @@ class CallCenterController extends Controller
         $callCenters = Order::with([
             'user',
             'store.area.province',
-            'orderDetails.product',
+            'orderDetails',
             'orderStatus',
-            'representative',
+            'representative.user',
             'orderReturn',
             'periodicMaintenance'
         ])
@@ -44,7 +44,7 @@ class CallCenterController extends Controller
         })
         ->where(function ($q) use ($request) {
             $q->when($request->search2, function ($q) use ($request) {
-                $q->whereRelation('store', 'name', 'like', $request->search2 . '%')
+                return $q->whereRelation('store', 'name', 'like', $request->search2 . '%')
                 ->orwhereRelation('store.area.province', 'name', 'like', $request->search2 . '%')
                 ->orwhereRelation('store.area', 'name', 'like', $request->search2 . '%');
             });
@@ -69,24 +69,23 @@ class CallCenterController extends Controller
         ->with([
             'user',
             'store.area.province',
-            'orderDetails.product',
-            'orderDetails.sellingMethod',
+            'orderDetails',
             'orderStatus',
-            'representative',
+            'representative.user',
             'orderReturn',
             'periodicMaintenance'
         ])->get();
 
         $maintenances = PeriodicMaintenance::where('user_id', $id)
         ->with([
-            'order',
+            'order.representative.user',
             'user',
             'employee'
         ])->get();
 
         $problems = problemLead::where('name', $user->name)
         ->with([
-            'employee',
+            'employee.user',
             'sellerCategory',
             'comments'
         ])->get();

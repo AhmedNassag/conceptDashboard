@@ -114,14 +114,13 @@
                                             <th class="text-center">حالة الطلب</th>
                                             <th class="text-center">تاريخ التركيب</th>
                                             <th class="text-center">اسم الفنى</th>
-                                            <th class="text-center">ملاحظات</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="callCenters.length">
                                         <tr v-for="(item,index) in callCenters" :key="item.id">
                                             <td class="text-center">{{ index + 1 }}</td>
                                             <td class="text-center">
-                                                <router-link :to="{name: 'profileClient',params:{id:item.user.id}}" class="btn btn-sm btn-info me-2" >
+                                                <router-link :to="{name: 'profileClient',params:{id:item.user.id}}" style="font-size:20px;">
                                                     {{ item.user && item.user.name ? item.user.name : '---' }}
                                                 </router-link>
                                             </td>
@@ -130,13 +129,12 @@
                                             <td class="text-center">{{ item.store && item.store.name ? item.store.name : '---' }}</td>
                                             <td class="text-center">{{ item.store && item.store.area.province.name ? item.store.area.province.name : '---' }}</td>
                                             <td class="text-center">{{ item.store && item.store.area.name ? item.store.area.name : '---' }}</td>
-                                            <td class="text-center">{{ item.orderDetails && item.orderDetails[0].product_id ? item.orderDetails[0].product_id : '---' }}</td>
+                                            <td class="text-center">{{ item.order_details.id }}</td>
                                             <td class="text-center">{{ item.total ? item.total : '---' }}</td>
                                             <td class="text-center">{{ dateFormat(item.created_at) }}</td>
                                             <td class="text-center">{{ item.order_status ? item.order_status.name : '---' }}</td>
                                             <td class="text-center">{{ item.periodic_maintenance && item.periodic_maintenance.created_at ? dateFormat(item.periodic_maintenance.created_at) : '---' }}</td>
-                                            <td class="text-center">{{ item.representative ? item.representative.name : '---' }}</td>
-                                            <td class="text-center">{{ item.id }}</td>
+                                            <td class="text-center">{{ item.representative ? item.representative.user.name : '---' }}</td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>

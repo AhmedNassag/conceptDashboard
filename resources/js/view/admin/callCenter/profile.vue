@@ -90,8 +90,6 @@
                                                         <thead>
                                                             <tr style="background-color:gainsboro">
                                                                 <th class="text-center">#</th>
-                                                                <th class="text-center">اسم العميل</th>
-                                                                <th class="text-center">رقم التليفون</th>
                                                                 <th class="text-center">نوع الجهاز</th>
                                                                 <th class="text-center">السعر</th>
                                                                 <th class="text-center">الكمية</th>
@@ -105,23 +103,19 @@
                                                         <tbody v-if="orders.length">
                                                             <tr v-for="(item,index) in orders" :key="item.id">
                                                                 <td class="text-center">{{ index + 1 }}</td>
-                                                                <td class="text-center">{{ item.user && item.user.name ? item.user.name : '---' }}</td>
-                                                                <td class="text-center">{{ item.user && item.user.phone ? item.user.phone : '---' }}</td>
-
                                                                 <td class="text-center">{{ item.order_details.id ? item.order_details.id : '---' }}</td>
-                                                                <td class="text-center">{{ item.order_details && item.order_details.id ? item.order_details.id : '---' }}</td>
                                                                 <td class="text-center">{{ item.total ? item.total : '---' }}</td>
                                                                 <td class="text-center">{{ item.order_details && item.order_details.quantity ? item.order_details.quantity : '---' }}</td>
                                                                 <td class="text-center">{{ item.created_at ? dateFormat(item.created_at) : '---' }}</td>
                                                                 <td class="text-center">{{ item.order_status ? item.order_status.name : '---' }}</td>
                                                                 <td class="text-center">{{ item.is_online == 1 ? 'أون لاين' : 'مباشر' }}</td>
                                                                 <td class="text-center">{{ item.order_details && item.order_details.id ? item.order_details.id : '---' }}</td>
-                                                                <td class="text-center">{{ item.representative ? item.representative.name : '---' }}</td>
+                                                                <td class="text-center">{{ item.representative ? item.representative.user.name : '---' }}</td>
                                                             </tr>
                                                         </tbody>
                                                         <tbody v-else>
                                                             <tr>
-                                                                <th class="text-center" colspan="5">لا يوجد بيانات</th>
+                                                                <th class="text-center" colspan="10">لا يوجد بيانات</th>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -139,9 +133,37 @@
                                                 <h5 class="text-center card-title">تاريخ الصيانات</h5>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <p>
-                                                    ---
-                                                </p>
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <tr style="background-color:gainsboro">
+                                                                <th class="text-center">#</th>
+                                                                <th class="text-center">رقم الطلب</th>
+                                                                <th class="text-center">عدد الأجهزة</th>
+                                                                <th class="text-center">اسم الشمعة</th>
+                                                                <th class="text-center">تاريخ الصيانة</th>
+                                                                <th class="text-center">حالة الصيانة</th>
+                                                                <th class="text-center">اسم الفنى</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody v-if="maintenances.length">
+                                                            <tr v-for="(item,index) in maintenances" :key="item.id">
+                                                                <td class="text-center">{{ index + 1 }}</td>
+                                                                <td class="text-center">{{ item.order_id }}</td>
+                                                                <td class="text-center">{{ item.quantity }}</td>
+                                                                <td class="text-center">{{ item.price }}</td>
+                                                                <td class="text-center">{{ item.next_maintenance }}</td>
+                                                                <td class="text-center">{{ item.status == 1 ? 'تمت بالفعل' : 'لم تتم بعد' }}</td>
+                                                                <td class="text-center">{{ item.order && item.order.representative ? item.order.representative.user.name : '---' }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tbody v-else>
+                                                            <tr>
+                                                                <th class="text-center" colspan="10">لا يوجد بيانات</th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -155,9 +177,35 @@
                                                 <h5 class="text-center card-title">تاريخ الأعطال</h5>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <p>
-                                                    ---
-                                                </p>
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0">
+                                                        <thead>
+                                                            <tr style="background-color:gainsboro">
+                                                                <th class="text-center">#</th>
+                                                                <th class="text-center">وصف العطل</th>
+                                                                <th class="text-center">تاريخ العطل</th>
+                                                                <th class="text-center">موظف الأعطال</th>
+                                                                <th class="text-center">كيفية التعامل</th>
+                                                                <th class="text-center">تاريخ التعامل</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody v-if="problems.length">
+                                                            <tr v-for="(item,index) in problems" :key="item.id">
+                                                                <td class="text-center">{{ index + 1 }}</td>
+                                                                <td class="text-center">{{ item.description }}</td>
+                                                                <td class="text-center">{{ item.created_at ? dateFormat(item.created_at) : '---' }}</td>
+                                                                <td class="text-center">{{ item.employee ? item.employee.user.name : '---' }}</td>
+                                                                <td class="text-center">{{ item.comments ? item.comments.id : '---' }}</td>
+                                                                <td class="text-center">{{ item.comments.id }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tbody v-else>
+                                                            <tr>
+                                                                <th class="text-center" colspan="10">لا يوجد بيانات</th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
