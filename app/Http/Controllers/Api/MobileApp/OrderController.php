@@ -389,6 +389,35 @@ class OrderController extends Controller
     }
 
 
+    public function rateOrder(Request $request,$id)
+    {
+        DB::beginTransaction();
+        try {
+            $order = OrderDetails::where('order_id', $id)->first();
+            // Validator request
+            $v = Validator::make($request->all(), [
+                'star' => ['required', 'numeric'],
+                'comment' => ['nullable', 'string']
+            ]);
+            if ($v->fails())
+            {
+                return $this->sendError('There is an error in the data', $v->errors());
+            }
+            $order->update([
+                'star' => $request->star,
+                'comment' => $request->comment ? $request->comment : null
+            ]);
+            DB::commit();
+            return $this->sendResponse([], 'Data exited successfully');
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            return $this->sendError('An error occurred in the system');
+        }
+    }
+
+
 
     public function companyOrder(Request  $request)
     {

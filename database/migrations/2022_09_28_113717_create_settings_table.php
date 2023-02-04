@@ -17,6 +17,7 @@ class CreateSettingsTable extends Migration
             $table->id();
             $table->boolean('close')->default(false);
             $table->string('phone');
+            $table->string('hotLine');
             $table->string('wats_app');
             $table->text('facebook');
             $table->text('twitter');

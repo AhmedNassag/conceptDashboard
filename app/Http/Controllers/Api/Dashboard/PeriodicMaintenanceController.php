@@ -180,7 +180,6 @@ class PeriodicMaintenanceController extends Controller
     public function edit($id)
     {
         try {
-
             $periodicMaintenance = PeriodicMaintenance::find($id);
             $user = User::with('client')->find($periodicMaintenance->user_id);
             $provinces = Province::select('id', 'name')->get();

@@ -692,7 +692,11 @@
         "editPointWelcome": "تعديل نقاط الترحيب",
         "Wallet":"المحفظة",
         "WalletPoints":"مسابقة المحفظة",
-        "CallCenter": "شاشة خدمة العملاء"
+        "CallCenter": "شاشة خدمة العملاء",
+        "twitter":"تويتر",
+        "instgram":"إنستجرام",
+        "linkedIn":"لينكد إن",
+        "hotLine":"الخط الساخن"
     },
     "treasury": {
         "TreasuryManagement":"ادارة الخزن",

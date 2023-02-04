@@ -24,6 +24,8 @@ class CreateOrderDetailsTable extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->double('price',8,2)->default(0);
             $table->double('sub_price',8,2)->default(0);
+            $table->integer('star')->default(0)->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

@@ -39,12 +39,13 @@
                                     <div class="alert alert-danger text-center" v-if="errors['wats_app']">{{ errors['wats_app'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['facebook']">{{ errors['facebook'][0] }}<br /> </div>
                                     <div class="alert alert-danger text-center" v-if="errors['phone']">{{ errors['phone'][0] }}<br /> </div>
+                                    <div class="alert alert-danger text-center" v-if="errors['hotLine']">{{ errors['hotLine'][0] }}<br /> </div>
                                     <form @submit.prevent="editJob" class="needs-validation">
                                         <div class="form-row row">
 
                                             <div class="col-md-4 mb-3">
                                                 <label>{{ $t('global.Phone') }}</label>
-                                                <input type="text"
+                                                <input type="number"
                                                        class="form-control"
                                                        v-model.trim="v$.phone.$model"
                                                        :class="{'is-invalid':v$.phone.$error,'is-valid':!v$.phone.$invalid}"
@@ -52,22 +53,29 @@
                                                 >
                                                 <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
                                                 <div class="invalid-feedback">
-                                                    <span
-                                                        v-if="v$.phone.required.$invalid">{{ $t('global.PhoneIsRequired') }} <br/></span>
-                                                    <span
-                                                        v-if="v$.phone.minLength.$invalid">{{ $t('global.PhoneIsMustHaveAtLeast') }} {{
-                                                            v$.phone.minLength.$params.min
-                                                        }} {{ $t('global.Letters') }} <br/></span>
-                                                    <span
-                                                        v-if="v$.phone.maxLength.$invalid">{{ $t('global.PhoneIsMustHaveAtMost') }} {{
-                                                            v$.phone.maxLength.$params.max
-                                                        }} {{ $t('global.Letters') }} </span>
+                                                    <span v-if="v$.phone.required.$invalid">{{ $t('global.PhoneIsRequired') }} <br/></span>
+                                                    <span v-if="v$.phone.minLength.$invalid">{{ $t('global.PhoneIsMustHaveAtLeast') }} {{v$.phone.minLength.$params.min}} {{ $t('global.Letters') }} <br/></span>
+                                                    <span v-if="v$.phone.maxLength.$invalid">{{ $t('global.PhoneIsMustHaveAtMost') }} {{v$.phone.maxLength.$params.max}} {{ $t('global.Letters') }} <br/></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label>{{ $t('global.hotLine') }}</label>
+                                                <input type="number"
+                                                       class="form-control"
+                                                       v-model.trim="v$.hotLine.$model"
+                                                       :class="{'is-invalid':v$.hotLine.$error,'is-valid':!v$.hotLine.$invalid}"
+                                                       :placeholder="$t('global.Phone')"
+                                                >
+                                                <div class="valid-feedback">{{ $t('global.LooksGood') }}</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="v$.hotLine.required.$invalid">{{ $t('global.PhoneIsRequired') }} <br/></span>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4 mb-3">
                                                 <label>{{ $t('global.watsApp') }}</label>
-                                                <input type="text"
+                                                <input type="number"
                                                        class="form-control"
                                                        v-model.trim="v$.wats_app.$model"
                                                        :class="{'is-invalid':v$.wats_app.$error,'is-valid':!v$.wats_app.$invalid}"
@@ -219,6 +227,7 @@ export default {
                     addJob.data.close = l.setting.close;
                     addJob.data.show_price = l.setting.show_price;
                     addJob.data.phone = l.setting.phone;
+                    addJob.data.hotLine = l.setting.hotLine;
                     addJob.data.wats_app = l.setting.wats_app;
                     addJob.data.facebook = l.setting.facebook;
                     addJob.data.twitter = l.setting.twitter;
@@ -242,6 +251,7 @@ export default {
                 close:0,
                 show_price:0,
                 phone: '',
+                hotLine: '',
                 wats_app: '',
                 facebook: '',
                 twitter: '',
@@ -256,6 +266,9 @@ export default {
                     required,
                     minLength: minLength(8),
                     maxLength: maxLength(20)
+                },
+                hotLine: {
+                    required,
                 },
                 wats_app: {
                     required,

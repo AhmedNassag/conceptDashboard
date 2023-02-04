@@ -41,15 +41,17 @@
                                         <th>{{$t('global.showPrice')}}</th>
                                         <th>{{ $t('global.closeApp') }}</th>
                                         <th>{{ $t('global.Phone') }}</th>
+                                        <th>{{ $t('global.hotLine') }}</th>
                                         <th>{{ $t('global.watsApp') }}</th>
                                         <th>{{ $t('global.Action') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody v-if="jobs.length">
-                                    <tr v-for="(item,index) in jobs" :key="item.id">
+                                    <tr v-for="(item) in jobs" :key="item.id">
                                         <td>{{ parseInt(item.show_price) ? $t('global.Yeas') : $t('global.No')}}</td>
                                         <td>{{ parseInt(item.close) ? $t('global.Yeas') : $t('global.No')}}</td>
                                         <td>{{item.phone}}</td>
+                                        <td>{{item.hotLine}}</td>
                                         <td>{{item.wats_app}}</td>
                                         <td>
 

@@ -35,7 +35,7 @@ class RegisterController extends Controller
             // Validator request
             $v = Validator::make($request->all(), [
                 'name' => 'required|string',
-                'email' => 'required|string|email|unique:users,email',
+                'email' => $request->email ? 'required|string|email|unique:users,email' : 'nullable',
                 'password' => 'required|string|min:8',
                 'repeat_password' => 'required|same:password',
                 'province'  => 'required|integer|exists:provinces,id',
@@ -52,7 +52,7 @@ class RegisterController extends Controller
             // start create user
             $user =  User::create([
                 "name" => $request->name,
-                "email" => $request->email,
+                "email" => $request->email ? $request->email : null,
                 "password" => $request->password,
                 "auth_id" => 2,
                 'role_name'=> ['client'],

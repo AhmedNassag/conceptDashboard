@@ -464,6 +464,9 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
         //setting
         Route::get('setting','SettingController@setting');
 
+        //termsPrivacy
+        Route::get('termsPrivacy', 'TermsPrivacyController@index');
+
         //check token
         Route::get('checkToken','AuthController@authorizeUser');
 
@@ -545,13 +548,16 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
             Route::get('trackingOrder','OrderController@trackingOrder');
             Route::get('pendingOrders','OrderController@pendingOrders');
             Route::get('clientsOrder/{id}', 'OrderController@clientsOrder');
+            Route::post('rateOrder/{id}', 'OrderController@rateOrder');
 
             //clientDebts
             Route::get('clientDebts','ClientDebtsController@clientDebts');
 
             //periodicMaintenance
             Route::get('periodicMaintenanceCreate','PeriodicMaintenanceController@create');
+            Route::get('clientFilters','PeriodicMaintenanceController@clientFilters');
             Route::post('periodicMaintenance','PeriodicMaintenanceController@store');
+            Route::post('oldPeriodicMaintenance', 'PeriodicMaintenanceController@oldPeriodicMaintenance');
             Route::post('delayPeriodicMaintenance','PeriodicMaintenanceController@update');
             Route::get('nextMaintenance', 'PeriodicMaintenanceController@nextMaintenance');
             Route::get('filterWaxes', 'CompanyPeriodicMaintenanceController@filterWaxes');
@@ -559,9 +565,6 @@ Route::group([ 'prefix' => 'v1','middleware' => ['secretAPI','changeLang']],func
 
             //problemLead
             Route::post('problemLead','ProblemLeadController@store');
-
-            //termsPrivacy
-            Route::get('termsPrivacy','TermsPrivacyController@index');
 
             //share
             Route::get('allCompetition','ShareController@allCompetition');

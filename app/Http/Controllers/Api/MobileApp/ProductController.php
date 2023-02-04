@@ -190,7 +190,7 @@ class ProductController extends Controller
                     ->orWhere('barcode', 'like', "%" . $request->search . "%");
             });
         })
-        ->latest("products.created_at")->paginate(15);
+        ->latest("products.created_at")->get();
 
         return $this->sendResponse(['products' => $products], trans('message.messageSuccessfully'));
     }

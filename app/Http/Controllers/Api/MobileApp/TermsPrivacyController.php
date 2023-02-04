@@ -14,6 +14,10 @@ class TermsPrivacyController extends Controller
     public function index()
     {
         $termsPrivacy = TermsPrivacy::first();
-        return $this->sendResponse(['termsPrivacy' => $termsPrivacy], trans('message.messageSuccessfully'));
+        if($termsPrivacy)
+        {
+            return $this->sendResponse(['termsPrivacy' => $termsPrivacy], trans('message.messageSuccessfully'));
+        }
+        return $this->sendResponse(['termsPrivacy' => ['term' => '', 'privacy' => '']], trans('message.messageSuccessfully'));
     }
 }
